@@ -3,18 +3,58 @@
 @prefix conexion:		<http://www.pizzas.fake/conexion/>				.
 
 
-_:motor					rdf:type				maquina:maquina			.
-_:motor					maquina:name			"Motor"					.
-_:motor					maquina:duracion		"60"					.
-_:motor					maquina:conexion		_:cmotortransmision		.
-_:motor					maquina:conexion		_:cmotorotracosa		.
+_:electronica					rdf:type				maquina:maquina				.
+_:electronica					maquina:name			"Electrónica"				.
+_:electronica					maquina:duracion		"60"						.
+
+_:carroceria					rdf:type				maquina:maquina				.
+_:carroceria					maquina:name			"Carrocería"				.
+_:carroceria					maquina:duracion		"60"						.
+
+_:motor							rdf:type				maquina:maquina				.
+_:motor							maquina:name			"Motor"						.
+_:motor							maquina:duracion		"60"						.
+
+_:interiores					rdf:type				maquina:maquina				.
+_:interiores					maquina:name			"Interiores"				.
+_:interiores					maquina:duracion		"60"						.
+_:interiores					maquina:padre			_:electronica				.
+_:interiores					maquina:padre			_:carroceria				.
+
+_:puertas						rdf:type				maquina:maquina				.
+_:puertas						maquina:name			"Puertas"					.
+_:puertas						maquina:duracion		"60"						.
+_:puertas						maquina:padre			_:carroceria				.
+_:puertas						maquina:padre			_:interiores				.
+
+_:transmision					rdf:type				maquina:maquina				.
+_:transmision					maquina:name			"Transmisión"				.
+_:transmision					maquina:duracion		"60"						.
+_:transmision					maquina:padre			_:motor						.
+
+_:pintura						rdf:type				maquina:maquina				.
+_:pintura						maquina:name			"Pintura"					.
+_:pintura						maquina:duracion		"60"						.
+_:pintura						maquina:padre			_:puertas					.
+
+_:ruedas						rdf:type				maquina:maquina				.
+_:ruedas						maquina:name			"Ruedas"					.
+_:ruedas						maquina:duracion		"60"						.
+_:ruedas						maquina:padre			_:transmision				.
+
+_:faros							rdf:type				maquina:maquina				.
+_:faros							maquina:name			"Faros"						.
+_:faros							maquina:duracion		"60"						.
+_:faros							maquina:padre			_:pintura					.
+
+_:cristales						rdf:type				maquina:maquina				.
+_:cristales						maquina:name			"Cristales"					.
+_:cristales						maquina:duracion		"60"						.
+_:cristales						maquina:padre			_:pintura					.
 
 
-_:cmotortransmision		rdf:type				conexion:conexion		.
-_:cmotortransmision		conexion:duracion		"60"					.
-_:cmotortransmision		conexion:maquina		_:transmision			.
+_:c_electronica_interiores		rdf:type				conexion:conexion		.
+_:c_electronica_interiores		conexion:duracion		"60"					.
+_:c_electronica_interiores		conexion:precedente		_:electronica			.
+_:c_electronica_interiores		conexion:siguiente		_:interiores			.
 
-
-_:cmotorotracosa		rdf:type				conexion:conexion		.
-_:cmotorotracosa		conexion:duracion		"60"					.
-_:cmotorotracosa		conexion:maquina		_:otracosa				.
