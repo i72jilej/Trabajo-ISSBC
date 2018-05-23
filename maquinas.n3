@@ -7,8 +7,14 @@ _:motor					rdf:type				maquina:maquina			.
 _:motor					maquina:name			"Motor"					.
 _:motor					maquina:duracion		"60"					.
 _:motor					maquina:conexion		_:cmotortransmision		.
+_:motor					maquina:conexion		_:cmotorotracosa		.
 
 
 _:cmotortransmision		rdf:type				conexion:conexion		.
 _:cmotortransmision		conexion:duracion		"60"					.
 _:cmotortransmision		conexion:maquina		_:transmision			.
+
+
+_:cmotorotracosa		rdf:type				conexion:conexion		.
+_:cmotorotracosa		conexion:duracion		"60"					.
+_:cmotorotracosa		conexion:maquina		_:otracosa				.
