@@ -32,8 +32,6 @@ class ventana_principal(QtGui.QMainWindow, ventana_compositor):
         else:
             super(ventana_principal, self).__init__()
 
-        # TODO: self.textEdit = editor()                            # Cargar el widget o la grid principal
-
         # TODO: self.setCentralWidget(self.textEdit)                # Establecer el widget central
 
         self.crearAcciones()                                # Crer los menús, barras de herramientas y acciones que éstos dispararán
@@ -43,7 +41,7 @@ class ventana_principal(QtGui.QMainWindow, ventana_compositor):
         if sys.version_info[0] >= 3:                        # Se establece la barra de estado, invocando al método correspondiente directamente
             self.statusBar().showMessage('Listo y esperando órdenes')
         else:
-            self.statusBar().showMessage('uListo y esperando órdenes')
+            self.statusBar().showMessage(u'Listo y esperando órdenes')
 
         self.setWindowTitle(TITULO_APP)                     # Se establece el título de la ventana
 
@@ -90,7 +88,7 @@ class ventana_principal(QtGui.QMainWindow, ventana_compositor):
                 else:
                     texto = archivo.read()
 
-                    self.textEdit.setText(texto)
+                    # FIXME: Así no self.textEdit.setText(texto)
 
                     self.modificado(False)
 
@@ -164,7 +162,7 @@ class ventana_principal(QtGui.QMainWindow, ventana_compositor):
 
         if self.modificado():
             if sys.version_info[0] >= 3:
-                return QtGui.QMessageBox.question(self, 'Aviso', u'El archivo ha sido modificado. ¿Desea guardarlo antes de salir?', QtGui.QMessageBox.Discard | QtGui.QMessageBox.Save | QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Cancel)
+                return QtGui.QMessageBox.question(self, 'Aviso', 'El archivo ha sido modificado. ¿Desea guardarlo antes de salir?', QtGui.QMessageBox.Discard | QtGui.QMessageBox.Save | QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Cancel)
             else:
                 return QtGui.QMessageBox.question(self, 'Aviso', u'El archivo ha sido modificado. ¿Desea guardarlo antes de salir?', QtGui.QMessageBox.Discard | QtGui.QMessageBox.Save | QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Cancel)
         else:
@@ -182,7 +180,7 @@ class ventana_principal(QtGui.QMainWindow, ventana_compositor):
 
 
         else:
-            archivo.write(self.textEdit.toPlainText())
+            # FIXME: Así tampoco archivo.write(self.textEdit.toPlainText())
 
             self.setWindowTitle(TITULO_APP + ': ' + self._nombre_archivo)
 
@@ -269,7 +267,4 @@ class ventana_principal(QtGui.QMainWindow, ventana_compositor):
         else:
             pass
 
-
-    def textoModificado(self):
-        self.modificado(True)
 
