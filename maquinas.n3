@@ -1,14 +1,9 @@
 @prefix rdf:			<http://www.w3.org/1999/02/22-rdf-syntax-ns>	.
 @prefix maquina:		<http://www.pizzas.fake/maquina/>				.
-@prefix conexion:		<http://www.pizzas.fake/conexion/>				.
 
 
-_:motor					rdf:type				maquina:maquina			.
-_:motor					maquina:name			"Motor"					.
-_:motor					maquina:duracion		"60"					.
-_:motor					maquina:conexion		_:cmotortransmision		.
-
-
-_:cmotortransmision		rdf:type				conexion:conexion		.
-_:cmotortransmision		conexion:duracion		"60"					.
-_:cmotortransmision		conexion:maquina		_:transmision			.
+_:motor			rdf:type					maquina:maquina		.
+_:motor			maquina:name				"Motor"				.
+_:motor			maquina:duracion			"60"				.
+_:motor			maquina:conexion			_:transmision		.
+_:motor			maquina:duracionconexion	"60"				.
