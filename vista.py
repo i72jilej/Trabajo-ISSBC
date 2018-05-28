@@ -181,22 +181,22 @@ class ventana_principal(QtGui.QMainWindow, ventana_controlador):
         # Rejillas de distribución
         self.principalLayout = QtGui.QGridLayout()
         self.principalLayout.addWidget(label_dominio, 0, 0)
-        self.principalLayout.addWidget(self._text_ruta, 0, 1)
-        self.principalLayout.addWidget(self._boton_abrir, 0, 2)
-        self.principalLayout.addWidget(label_solucion, 1, 0, 1, 3)
-        self.principalLayout.addWidget(self._text_solucion, 2, 0, 1, 3)
-        self.principalLayout.addWidget(label_desarrollo, 3, 0, 1, 3)
-        self.principalLayout.addWidget(self._text_desarrollo, 4, 0, 1, 3)
-        '''
+        self.principalLayout.addWidget(self._text_ruta, 0, 1, 1, 2)
+        self.principalLayout.addWidget(self._boton_abrir, 0, 3)
+        self.principalLayout.addWidget(label_solucion, 1, 0, 1, 4)
+        self.principalLayout.addWidget(self._text_solucion, 2, 0, 1, 4)
+        self.principalLayout.addWidget(label_desarrollo, 3, 0, 1, 4)
+        self.principalLayout.addWidget(self._text_desarrollo, 4, 0, 1, 4)
         self.principalLayout.addWidget(self._boton_calcular, 5, 0)
-        self.principalLayout.addWidget(self._boton_guardar_como, 5, 1) # FIXME Ocupa toda la linea (¿otro layout?)
+        self.principalLayout.addWidget(self._boton_guardar_como, 5, 1)
         '''
-
         self.botonesInferioresLayout = QtGui.QGridLayout()
         self.botonesInferioresLayout.addWidget(self._boton_calcular, 5, 0)
         self.botonesInferioresLayout.addWidget(self._boton_guardar_como, 5, 1)
 
         self.principalLayout.addItem(self.botonesInferioresLayout)
+        '''
+
 
     def guardado(self):
         try:
