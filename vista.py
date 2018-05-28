@@ -6,53 +6,50 @@
 # Description   : Vista del programa
 # Author        : Julio Domingo Jiménez Ledesma
 # Author        : Rafael Carlos Méndez Rodríguez
-# Date          : 23-05-2018
-# Version       : 0.0.1
+# Date          : 29-05-2018
+# Version       : 1.0.0
 # Usage         : import vista o from vista import ...
 # Notes         : 
 
 
-import sys                                                  # Funcionalidades varias del sistema
+TITULO_APP = 'Planificador de cadena de montaje'
+
+
+import sys                                                              # Funcionalidades varias del sistema
 
 from PyQt4 import QtCore, QtGui
 
 from controlador import ventana_controlador
 
 
-TITULO_APP = 'Planificador de cadena de montaje'
-
-
 class ventana_principal(QtGui.QMainWindow, ventana_controlador):
-    def __init__(self):                                     # Constructor de la clase; al ser una ventana, inicializa la misma
-        if sys.version_info[0] >= 3:                        # Llamada al constructor de la clase padre
+    def __init__(self):                                                 # Constructor de la clase; al ser una ventana, inicializa la misma
+        if sys.version_info[0] >= 3:                                    # Llamada al constructor de la clase padre
             super().__init__()
         else:
             super(ventana_principal, self).__init__()
 
-        self.setWindowIcon(QtGui.QIcon('./iconos/000-checklist.png'))
+        self.setWindowIcon(QtGui.QIcon('./iconos/000-checklist.png'))   # Establecer el icono de la ventana principal
 
-        self.widgetCentral = QtGui.QWidget(self)
+        self._widget_principal = QtGui.QWidget(self)                    # Establecer el widget principal
 
-        self.setCentralWidget(self.widgetCentral)           # Establecer el widget central
+        self.setCentralWidget(self._widget_principal)                   # Establecer el widget central
 
-        self.dibujar_interfaz()
+        self.dibujar_interfaz()                                         # Dibujar la interfaz
 
-        self.widgetCentral.setLayout(self._layout)
+        self._widget_principal.setLayout(self._disenyo)                 # Establecer el diseño del widget
 
-        self.crearAcciones()                                # Crer los menús, barras de herramientas y acciones que éstos dispararán
-                                                            # Es importante crear las acciones lo primero, ya que el resto de elementos dependen de ellas
+        self.crearAcciones()                                            # Crer los menús, barras de herramientas y acciones que éstos dispararán
+                                                                        # Es importante crear las acciones lo primero, ya que el resto de elementos dependen de ellas
         self.crearMenus()
 
         self.crearBarraDeHerramientas()
 
-        if sys.version_info[0] >= 3:                        # Se establece la barra de estado, invocando al método correspondiente directamente
-            self.statusBar().showMessage('Listo y esperando órdenes')
-        else:
-            self.statusBar().showMessage(u'Listo y esperando órdenes')
+        self.statusBar().showMessage('Esperando archivo')               # Se establece el mensaje para barra de estado
 
-        self.setWindowTitle(TITULO_APP)                     # Se establece el título de la ventana
+        self.setWindowTitle(TITULO_APP)                                 # Se establece el título de la ventana
 
-        self.setMinimumSize(640, 480)                       # Parámetros de tamaño
+        self.setMinimumSize(640, 480)                                   # Parámetros de tamaño
 
         self.resize(800, 600)
 
@@ -88,40 +85,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         pass
 
 
-    def apertura(self):
-        self._nombre_archivo = QtGui.QFileDialog.getOpenFileName(self, 'Abrir archivo', filter = 'Documentos de texto (*.txt);;Todos los archivos (*.*)')
-
-        try:
-            if self._nombre_archivo != '':
-                try:
-                    archivo = open(file = self._nombre_archivo, mode = 'r', encoding = 'utf-8')
-
-                except IOError:
-                    QtGui.QMessageBox.warning(self, 'Error de apertura', 'Error: Archivo <' + self._nombre_archivo + '> inaccesible')
-
-                else:
-                    texto = archivo.read()
-
-                    # FIXME: Así no self.textEdit.setText(texto)
-
-                    self.modificado(False)
-
-                    self.setWindowTitle(TITULO_APP + ': ' + self._nombre_archivo)
-
-                finally:
-                    try:
-                        archivo.close()
-
-                    except UnboundLocalError:
-                        pass
-
-                    return True
-
-        except AttributeError:
-            return False
-
-
-    def crearAcciones(self):                                # Se crean las acciones asociadas al menú y a la barra de herramientas
+    def crearAcciones(self):                                	       	# Se crean las acciones asociadas al menú y a la barra de herramientas
         self.nuevoAcc           = QtGui.QAction('&Nuevo',           self, shortcut = QtGui.QKeySequence.New,    statusTip = 'Crea un nuevo archivo',                                triggered = self.nuevo          )
         self.abrirAcc           = QtGui.QAction('&Abrir...',        self, shortcut = QtGui.QKeySequence.Open,   statusTip = 'Abre un archivo existente',                            triggered = self.abrir          )
         self.guardarAcc         = QtGui.QAction('&Guardar',         self, shortcut = QtGui.QKeySequence.Save,   statusTip = 'Guarda el archivo',                                    triggered = self.guardar        )
@@ -154,63 +118,47 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         self.acercaDeQtAcc.     setIcon(QtGui.QIcon('./iconos/009-presenter-talking-about-people-on-a-screen.png')  )
 
 
-    def crearBarraDeHerramientas(self):                     # Se crea la barra de herramientas
-        self.toolbar = self.addToolBar('Barra de herramientas')
-        self.toolbar.addAction(self.nuevoAcc)
-        self.toolbar.addAction(self.abrirAcc)
-        self.toolbar.addAction(self.guardarAcc)
-        self.toolbar.addAction(self.guardarComoAcc)
-        self.toolbar.addSeparator()
-        self.toolbar.addAction(self.calcularAcc)
-        self.toolbar.addSeparator()
-        self.toolbar.addAction(self.salirAcc)
+    def crearBarraDeHerramientas(self):                     	        # Se crea la barra de herramientas
+        self._toolbar = self.addToolBar('Barra de herramientas')
+        self._toolbar.addAction(self.nuevoAcc)
+        self._toolbar.addAction(self.abrirAcc)
+        self._toolbar.addAction(self.guardarAcc)
+        self._toolbar.addAction(self.guardarComoAcc)
+        self._toolbar.addSeparator()
+        self._toolbar.addAction(self.calcularAcc)
+        self._toolbar.addSeparator()
+        self._toolbar.addAction(self.salirAcc)
 
-        self.toolbar.setMovable(False)                      # Hace la barra inamovible
+        self._toolbar.setMovable(False)                                 # Hace la barra inamovible
 
 
-    def crearMenus(self):                                   # Se crean los menús
-        self.menuArchivo = self.menuBar().addMenu('&Archivo')
-        self.menuArchivo.addAction(self.nuevoAcc)
-        self.menuArchivo.addAction(self.abrirAcc)
-        self.menuArchivo.addAction(self.guardarAcc)
-        self.menuArchivo.addAction(self.guardarComoAcc)
-        self.menuArchivo.addSeparator()
-        self.menuArchivo.addAction(self.imprimirAcc)
-        self.menuArchivo.addSeparator()
-        self.menuArchivo.addAction(self.salirAcc)
+    def crearMenus(self):                                   	        # Se crean los menús
+        self._menu_archivo = self.menuBar().addMenu('&Archivo')
+        self._menu_archivo.addAction(self.nuevoAcc)
+        self._menu_archivo.addAction(self.abrirAcc)
+        self._menu_archivo.addAction(self.guardarAcc)
+        self._menu_archivo.addAction(self.guardarComoAcc)
+        self._menu_archivo.addSeparator()
+        self._menu_archivo.addAction(self.imprimirAcc)
+        self._menu_archivo.addSeparator()
+        self._menu_archivo.addAction(self.salirAcc)
 
         if sys.version_info[0] >= 3:
-            self.menuAccion = self.menuBar().addMenu('A&cción')
+            self._menu_accion = self.menuBar().addMenu('A&cción')
         else:
-            self.menuAccion = self.menuBar().addMenu(u'A&cción')
+            self._menu_accion = self.menuBar().addMenu(u'A&cción')
 
-        self.menuAccion.addAction(self.calcularAcc)
+        self._menu_accion.addAction(self.calcularAcc)
 
-        self.menuAyuda = self.menuBar().addMenu("A&yuda")
-        self.menuAyuda.addAction(self.acercaDeAcc)
-        self.menuAyuda.addAction(self.acercaDeQtAcc)
-
-
-    def confirmarModificado(self):
-        # TODO: Ponerle nombre a los botones
-
-        if self.modificado():
-            if sys.version_info[0] >= 3:
-                return QtGui.QMessageBox.question(self, 'Aviso', 'El archivo ha sido modificado. ¿Desea guardarlo antes de salir?', QtGui.QMessageBox.Discard | QtGui.QMessageBox.Save | QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Cancel)
-            else:
-                return QtGui.QMessageBox.question(self, 'Aviso', u'El archivo ha sido modificado. ¿Desea guardarlo antes de salir?', QtGui.QMessageBox.Discard | QtGui.QMessageBox.Save | QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Cancel)
-        else:
-            return True
+        self._menu_ayuda = self.menuBar().addMenu("A&yuda")
+        self._menu_ayuda.addAction(self.acercaDeAcc)
+        self._menu_ayuda.addAction(self.acercaDeQtAcc)
 
 
     def dibujar_interfaz(self):
-        mitad_inferior = self.dibujar_mitad_inferior()
-
-        mitad_superior = self.dibujar_mitad_superior()
-        
-        self._layout = QtGui.QVBoxLayout()
-        self._layout.addWidget(mitad_inferior)
-        self._layout.addWidget(mitad_superior)
+        self._disenyo = QtGui.QVBoxLayout()
+        self._disenyo.addWidget(self.dibujar_mitad_superior())
+        self._disenyo.addWidget(self.dibujar_mitad_inferior())
 
 
     def dibujar_mitad_inferior(self):
@@ -234,18 +182,18 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         self._text_solucion = QtGui.QTextEdit()
         self._text_solucion.setReadOnly(True)
 
-        # Layout
-        layout = QtGui.QVBoxLayout()
-        layout.addWidget(label_solucion)
-        layout.addWidget(self._text_solucion)
-        layout.addWidget(label_desarrollo)
-        layout.addWidget(self._text_desarrollo)
-        layout.addWidget(label_dominio)
-        layout.addWidget(self._text_dominio)
+        # Diseño
+        disenyo = QtGui.QVBoxLayout()
+        disenyo.addWidget(label_solucion)
+        disenyo.addWidget(self._text_solucion)
+        disenyo.addWidget(label_desarrollo)
+        disenyo.addWidget(self._text_desarrollo)
+        disenyo.addWidget(label_dominio)
+        disenyo.addWidget(self._text_dominio)
 
         # Widget
         mitad_inferior = QtGui.QGroupBox('Resultados')
-        mitad_inferior.setLayout(layout)
+        mitad_inferior.setLayout(disenyo)
 
         return mitad_inferior
 
@@ -264,89 +212,16 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         label_archivo = QtGui.QLabel('Archivo:')
         label_archivo.setMaximumWidth(42)
 
-        # Layout
-        layout = QtGui.QHBoxLayout()
-        layout.addWidget(label_archivo)
-        layout.addWidget(self._text_ruta)
-        layout.addWidget(self._boton_abrir)
+        # Diseño
+        disenyo = QtGui.QHBoxLayout()
+        disenyo.addWidget(label_archivo)
+        disenyo.addWidget(self._text_ruta)
+        disenyo.addWidget(self._boton_abrir)
 
         # Widget
         mitad_superior = QtGui.QGroupBox('Carga del archivo')
-        mitad_superior.setLayout(layout)
+        mitad_superior.setLayout(disenyo)
 
         return mitad_superior
 
-
-    def guardado(self):
-        try:
-            archivo = open(file = self._nombre_archivo, mode = 'w', encoding = 'utf-8')
-
-        except IOError:
-            QtGui.QMessageBox.warning(self, 'Error de apertura', 'Error: Archivo <' + self._nombre_archivo + '> inaccesible')
-
-            return False
-
-
-        else:
-            # FIXME: Así tampoco archivo.write(self.textEdit.toPlainText())
-
-            self.setWindowTitle(TITULO_APP + ': ' + self._nombre_archivo)
-
-            self.modificado(False)
-
-            return True
-
-        finally:
-            archivo.close()
-
-
-    def guardarComo(self):
-        self._nombre_archivo = QtGui.QFileDialog.getSaveFileName(self, 'Guardar archivo')
-
-        if self._nombre_archivo != '':
-            return self.guardado()
-        else:
-            return False
-
-
-    def imprimir(self):                                     # Acción de imprimir
-        impresion = QtGui.QPrintDialog()
-
-        if impresion.exec_() == QtGui.QDialog.Accepted:
-            # TODO: Establecer widget a imprimir self.textEdit.document().print_(impresion.printer())
-            pass
-
-        else:
-            pass
-
-
-    def nuevo(self):                                        # Acción de nuevo
-        respuesta = self.confirmarModificado()
-
-        if respuesta == QtGui.QMessageBox.Discard or respuesta == True:
-            self.textEdit.clear()
-
-            self.modificado(False)
-
-            self.setWindowTitle(TITULO_APP)
-
-            try:
-                del self._nombre_archivo
-
-            except AttributeError:
-                pass
-
-        elif respuesta == QtGui.QMessageBox.Save:
-            if self.guardar():
-                self.textEdit.clear()
-
-                self.setWindowTitle(TITULO_APP)
-
-                del self._nombre_archivo
-
-            else:
-                pass
-
-        else:
-            pass
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 
@@ -7,8 +7,8 @@
 # Author        : Julio Domingo Jiménez Ledesma
 # Author        : Rafael Carlos Méndez Rodríguez
 # Date          : 23-05-2018
-# Version       : 0.0.1
-# Usage         : python3 main.py
+# Version       : 1.0.0
+# Usage         : python main.py
 # Notes         : 
 
 
