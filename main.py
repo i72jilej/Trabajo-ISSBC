@@ -14,7 +14,7 @@
 
 import sys                                                  # Funcionalidades varias del sistema
 
-import controlador                                          # Módulo controlador
+import vista                                                # Módulo vista
 
 from PyQt4 import QtGui
 
@@ -22,7 +22,7 @@ from PyQt4 import QtGui
 def main(argv):
     aplicacion = QtGui.QApplication(argv)
 
-    ventana = controlador.ventana_principal()
+    ventana = vista.ventana_principal()
     ventana.show()
 
     sys.exit(aplicacion.exec_())
