@@ -18,6 +18,7 @@ from PyQt4 import QtGui
 
 from controlador import ventana_controlador
 
+
 TITULO_APP = 'Planificador de cadena de montaje'
 
 
@@ -34,7 +35,7 @@ class ventana_principal(QtGui.QMainWindow, ventana_controlador):
 
         self.dibujar_interfaz()
         
-        self.widgetCentral.setLayout(self.principalLayout)
+        self.widgetCentral.setLayout(self._layout)
         self.widgetCentral.setGeometry(300, 300, 350, 300)  # Los parámetros de tamaño vistos son suficientes
 
         self.crearAcciones()                                # Crer los menús, barras de herramientas y acciones que éstos dispararán
@@ -146,8 +147,45 @@ class ventana_principal(QtGui.QMainWindow, ventana_controlador):
 
 
     def dibujar_interfaz(self):
+        tercio_inferior = self.dibujar_tercio_inferior()
+
+        tercio_medio = self.dibujar_tercio_medio()
+
+        tercio_superior = self.dibujar_tercio_superior()
+        
+        self._layout = QtGui.QVBoxLayout()
+        self._layout.addWidget(tercio_superior)
+        self._layout.addWidget(tercio_medio)
+        self._layout.addWidget(tercio_inferior)
+        
+
+
+    def dibujar_tercio_inferior(self):
+        # Botones
+        self._boton_calcular = QtGui.QPushButton('Calcular')
+        # FIXME: self._boton_calcular.clicked.connect(self.)
+        self._boton_calcular.setMaximumWidth(84)
+
+        self._boton_guardar_como = QtGui.QPushButton('Guardar como')
+        self._boton_guardar_como.clicked.connect(self.guardarComo)
+        self._boton_guardar_como.setMaximumWidth(84)
+
+        # Layout
+        layout = QtGui.QHBoxLayout()
+        layout.addWidget(self._boton_guardar_como)
+        layout.addWidget(self._boton_calcular)
+
+        # Widget
+        tercio_inferior = QtGui.QGroupBox('Botones de acción')
+        tercio_inferior.setLayout(layout)
+
+        return tercio_inferior
+
+
+    def dibujar_tercio_medio(self):
         # Etiquetas
         label_desarrollo = QtGui.QLabel('Desarrollo:')
+
         label_dominio = QtGui.QLabel('Dominio:')
 
         if sys.version_info[0] >= 3:
@@ -156,46 +194,56 @@ class ventana_principal(QtGui.QMainWindow, ventana_controlador):
             label_solucion = QtGui.QLabel(u'Solución:')
 
         # Controles de edición
-        self._text_dominio = QtGui.QTextEdit()
-        self._text_dominio.setReadOnly(True)
-
         self._text_desarrollo = QtGui.QTextEdit()
         self._text_desarrollo.setReadOnly(True)
 
-        self._text_ruta = QtGui.QLineEdit()
-        self._text_ruta.setReadOnly(True)
+        self._text_dominio = QtGui.QTextEdit()
+        self._text_dominio.setReadOnly(True)
 
         self._text_solucion = QtGui.QTextEdit()
         self._text_solucion.setReadOnly(True)
 
+        # Layout
+        layout = QtGui.QVBoxLayout()
+        layout.addWidget(label_solucion)
+        layout.addWidget(self._text_solucion)
+        layout.addWidget(label_desarrollo)
+        layout.addWidget(self._text_desarrollo)
+        layout.addWidget(label_dominio)
+        layout.addWidget(self._text_dominio)
+
+        # Widget
+        tercio_medio = QtGui.QGroupBox('Resultados')
+        tercio_medio.setLayout(layout)
+
+        return tercio_medio
+
+
+    def dibujar_tercio_superior(self):
         # Botones
         self._boton_abrir = QtGui.QPushButton('Abrir')
         self._boton_abrir.clicked.connect(self.abrir)
+        self._boton_abrir.setMaximumWidth(84)
 
-        self._boton_guardar_como = QtGui.QPushButton('Guardar')
-        self._boton_guardar_como.clicked.connect(self.guardarComo)
+        # Controles de edición
+        self._text_ruta = QtGui.QLineEdit()
+        self._text_ruta.setReadOnly(True)
 
-        self._boton_calcular = QtGui.QPushButton('Calcular')
-        # FIXME: self._boton_calcular.clicked.connect(self.)
+        # Etiquetas
+        label_archivo = QtGui.QLabel('Archivo:')
+        label_archivo.setMaximumWidth(42)
 
-        # Rejillas de distribución
-        self.principalLayout = QtGui.QGridLayout()
-        self.principalLayout.addWidget(label_dominio,               0, 0, 1, 1)
-        self.principalLayout.addWidget(self._text_ruta,             0, 1, 1, 5)
-        self.principalLayout.addWidget(self._boton_abrir,           0, 6, 1, 2)
-        self.principalLayout.addWidget(label_solucion,              1, 0, 1, 8)
-        self.principalLayout.addWidget(self._text_solucion,         2, 0, 1, 8)
-        self.principalLayout.addWidget(label_desarrollo,            3, 0, 1, 8)
-        self.principalLayout.addWidget(self._text_desarrollo,       4, 0, 1, 8)
-        self.principalLayout.addWidget(self._boton_calcular,        5, 0, 1, 2)
-        self.principalLayout.addWidget(self._boton_guardar_como,    5, 2, 1, 2)
-        '''
-        self.botonesInferioresLayout = QtGui.QGridLayout()
-        self.botonesInferioresLayout.addWidget(self._boton_calcular, 5, 0)
-        self.botonesInferioresLayout.addWidget(self._boton_guardar_como, 5, 1)
+        # Layout
+        layout = QtGui.QHBoxLayout()
+        layout.addWidget(label_archivo)
+        layout.addWidget(self._text_ruta)
+        layout.addWidget(self._boton_abrir)
 
-        self.principalLayout.addItem(self.botonesInferioresLayout)
-        '''
+        # Widget
+        tercio_superior = QtGui.QGroupBox('Carga del archivo')
+        tercio_superior.setLayout(layout)
+
+        return tercio_superior
 
 
     def guardado(self):
