@@ -32,9 +32,10 @@ class ventana_principal(QtGui.QMainWindow, ventana_controlador):
 
         self.setCentralWidget(self.widgetCentral)           # Establecer el widget central
 
-        self.dibujar_iu()
+        self.dibujar_interfaz()
         
         self.widgetCentral.setLayout(self.principalLayout)
+        self.widgetCentral.setGeometry(300, 300, 350, 300)  # Los parámetros de tamaño vistos son suficientes
 
         self.crearAcciones()                                # Crer los menús, barras de herramientas y acciones que éstos dispararán
                                                             # Es importante crear las acciones lo primero, ya que el resto de elementos dependen de ellas
@@ -103,15 +104,15 @@ class ventana_principal(QtGui.QMainWindow, ventana_controlador):
         self.guardarComoAcc     = QtGui.QAction('Guardar c&omo',    self, shortcut = QtGui.QKeySequence.SaveAs, statusTip = 'Guarda el archivo con un nombre distinto',             triggered = self.guardarComo    )
         self.imprimirAcc        = QtGui.QAction('Im&primir',        self, shortcut = QtGui.QKeySequence.Print,  statusTip = 'Imprime el archivo',                                   triggered = self.imprimir       )
         if sys.version_info[0] >= 3:
-            self.salirAcc       = QtGui.QAction('&Salir',           self, shortcut = 'Alt+F4',                  statusTip = 'Sale de la aplicación',                                triggered = self.close          )
+            self.salirAcc = QtGui.QAction('&Salir', self, shortcut = 'Alt+F4', statusTip = 'Sale de la aplicación', triggered = self.close)
         else:
-            self.salirAcc       = QtGui.QAction('&Salir',           self, shortcut = 'Alt+F4',                  statusTip = u'Sale de la aplicación',                               triggered = self.close          )
+            self.salirAcc = QtGui.QAction('&Salir', self, shortcut = 'Alt+F4', statusTip = u'Sale de la aplicación', triggered = self.close)
 
         self.acercaDeAcc        = QtGui.QAction("&Acerca de",       self,                                       statusTip = 'Muestra la ventana "Acerca de"',                       triggered = self.acercaDe       )
         if sys.version_info[0] >= 3:
-            self.acercaDeQtAcc  = QtGui.QAction("Acerca de &Qt",    self,                                       statusTip = 'Muestra la ventana "Acerca de" de la librería Qt',     triggered = self.acercaDeQt     )
+            self.acercaDeQtAcc = QtGui.QAction("Acerca de &Qt", self, statusTip = 'Muestra la ventana "Acerca de" de la librería Qt', triggered = self.acercaDeQt)
         else:
-            self.acercaDeQtAcc  = QtGui.QAction("Acerca de &Qt",    self,                                       statusTip = u'Muestra la ventana "Acerca de" de la librería Qt',    triggered = self.acercaDeQt     )
+            self.acercaDeQtAcc = QtGui.QAction("Acerca de &Qt", self, statusTip = u'Muestra la ventana "Acerca de" de la librería Qt', triggered = self.acercaDeQt)
 
         self.acercaDeQtAcc.triggered.connect(QtGui.qApp.aboutQt)
 
@@ -144,65 +145,44 @@ class ventana_principal(QtGui.QMainWindow, ventana_controlador):
             return True
 
 
-    def dibujar_iu(self):
-        # TODO: Widgets self.textEdit = editor()
-
-        # TODO: ¿Eventos? self.textEdit.textChanged.connect(self.textoModificado)
-
+    def dibujar_interfaz(self):
         # Etiquetas
-        carpeta = QtGui.QLabel('Carpeta')
-        espacio = QtGui.QLabel('                   ')
+        label_desarrollo = QtGui.QLabel('Desarrollo:')
+        label_dominio = QtGui.QLabel('Dominio:')
+        label_solucion = QtGui.QLabel('Solución:')
 
         # Controles de edición
-        self._carpetaEdit = QtGui.QLineEdit()
-        self._carpetaEdit.setReadOnly(True)
+        self._text_dominio = QtGui.QTextEdit()
+        self._text_dominio.setReadOnly(True)
 
-        # Controles listWidget
-        self._listaArchivos = QtGui.QListWidget()           # Crea un listwidget
-        # self._listaArchivos.clicked.connect(self.cargado)
+        self._text_desarrollo = QtGui.QTextEdit()
+        self._text_desarrollo.setReadOnly(True)
+
+        self._text_ruta = QtGui.QLineEdit()
+        self._text_ruta.setReadOnly(True)
+
+        self._text_solucion = QtGui.QTextEdit()
+        self._text_solucion.setReadOnly(True)
 
         # Botones
-        self.folder = QtGui.QPushButton('Seleccionar')      # Crea el botón de seleccionar carpeta
-        self.folder.clicked.connect(self.abrir)             # Conecta el botón con su función
+        self._boton_abrir = QtGui.QPushButton('Abrir')
+        self._boton_abrir.clicked.connect(self.abrir)
 
-        buttonLayout = QtGui.QHBoxLayout()                  # Crea un contenedor de botones vertical
+        self._boton_guardar_como = QtGui.QPushButton('Guardar como')
+        self._boton_guardar_como.clicked.connect(self.guardarComo)
 
-        self.buttons = []                                   # Crea una lista para almacenar los botones
-
-        for text, slot in (('Guardar', self.guardar),
-                           ('Guardar como', self.guardarComo)):
-            self.buttons.append(QtGui.QPushButton(text))    # Añade a la lista el botón
-
-            buttonLayout.addStretch()
-            buttonLayout.addWidget(self.buttons[-1])        # Añade el botón a la rejilla
-            self.buttons[-1].clicked.connect(slot)          # Conecta el botón con el slot
+        self._boton_calcular = QtGui.QPushButton('Calcular')
+        # FIXME: self._boton_calcular.clicked.connect(self.)
 
         # Rejillas de distribución
-        grid = QtGui.QGridLayout()
-        grid.setSpacing(10)
-
-        grid.addWidget(espacio, 0, 0)
-        grid.addWidget(espacio, 0, 1)
-        grid.addWidget(espacio, 0, 2)
-        grid.addWidget(espacio, 0, 3)
-        grid.addWidget(espacio, 0, 4)
-
-        grid.addWidget(carpeta, 1, 0)
-        grid.addWidget(self._carpetaEdit, 1, 1, 1, 3)
-        grid.addWidget(self.folder, 1, 4)
-
-        grid.addWidget(self._listaArchivos, 3, 0)
-        # grid.addWidget(self.textEdit, 3, 1, 1, 4)
-
-        editionLayout = QtGui.QVBoxLayout()                 # Crea una rejilla de botones vertical
-        editionLayout.addItem(grid)
-
-        self.principalLayout = QtGui.QVBoxLayout()          # Crea una rejilla de botones Horizoontal
-        self.principalLayout.addStretch()
-        self.principalLayout.addLayout(editionLayout)
-        self.principalLayout.addLayout(buttonLayout)
-
-        # self.setGeometry(300, 300, 350, 300)                # Los parámetros de tamaño vistos son suficientes
+        self.principalLayout = QtGui.QGridLayout()
+        self.principalLayout.addWidget(label_dominio, 0, 0)
+        self.principalLayout.addWidget(self._text_ruta, 0, 1)
+        self.principalLayout.addWidget(self._boton_abrir, 0, 2)
+        self.principalLayout.addWidget(label_solucion, 1, 0, 1, 3)
+        self.principalLayout.addWidget(self._text_solucion, 2, 0, 1, 3)
+        self.principalLayout.addWidget(label_desarrollo, 3, 0, 1, 3)
+        self.principalLayout.addWidget(self._text_desarrollo, 4, 0, 1, 3)
 
 
     def guardado(self):
