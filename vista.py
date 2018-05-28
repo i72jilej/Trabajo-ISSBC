@@ -48,9 +48,9 @@ class ventana_principal(QtGui.QMainWindow, ventana_controlador):
 
         self.setWindowTitle(TITULO_APP)                     # Se establece el título de la ventana
 
-        self.setMinimumSize(160, 160)                       # Parámetros de tamaño
+        self.setMinimumSize(480, 320)                       # Parámetros de tamaño
 
-        self.resize(480, 320)
+        self.resize(800, 600)
 
 
     def acercaDe(self):
@@ -172,7 +172,7 @@ class ventana_principal(QtGui.QMainWindow, ventana_controlador):
         self._boton_abrir = QtGui.QPushButton('Abrir')
         self._boton_abrir.clicked.connect(self.abrir)
 
-        self._boton_guardar_como = QtGui.QPushButton('Guardar como')
+        self._boton_guardar_como = QtGui.QPushButton('Guardar')
         self._boton_guardar_como.clicked.connect(self.guardarComo)
 
         self._boton_calcular = QtGui.QPushButton('Calcular')
@@ -187,7 +187,16 @@ class ventana_principal(QtGui.QMainWindow, ventana_controlador):
         self.principalLayout.addWidget(self._text_solucion, 2, 0, 1, 3)
         self.principalLayout.addWidget(label_desarrollo, 3, 0, 1, 3)
         self.principalLayout.addWidget(self._text_desarrollo, 4, 0, 1, 3)
+        '''
+        self.principalLayout.addWidget(self._boton_calcular, 5, 0)
+        self.principalLayout.addWidget(self._boton_guardar_como, 5, 1) # FIXME Ocupa toda la linea (¿otro layout?)
+        '''
 
+        self.botonesInferioresLayout = QtGui.QGridLayout()
+        self.botonesInferioresLayout.addWidget(self._boton_calcular, 5, 0)
+        self.botonesInferioresLayout.addWidget(self._boton_guardar_como, 5, 1)
+
+        self.principalLayout.addItem(self.botonesInferioresLayout)
 
     def guardado(self):
         try:
