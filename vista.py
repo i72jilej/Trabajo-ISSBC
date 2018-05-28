@@ -149,7 +149,11 @@ class ventana_principal(QtGui.QMainWindow, ventana_controlador):
         # Etiquetas
         label_desarrollo = QtGui.QLabel('Desarrollo:')
         label_dominio = QtGui.QLabel('Dominio:')
-        label_solucion = QtGui.QLabel('Solución:')
+
+        if sys.version_info[0] >= 3:
+            label_solucion = QtGui.QLabel('Solución:')
+        else:
+            label_solucion = QtGui.QLabel(u'Solución:')
 
         # Controles de edición
         self._text_dominio = QtGui.QTextEdit()
