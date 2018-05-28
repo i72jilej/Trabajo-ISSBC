@@ -32,7 +32,13 @@ class ventana_principal(QtGui.QMainWindow, ventana_compositor):
         else:
             super(ventana_principal, self).__init__()
 
-        # TODO: self.setCentralWidget(self.textEdit)                # Establecer el widget central
+        self.widgetCentral = QtGui.QWidget(self)
+
+        self.setCentralWidget(self.widgetCentral)           # Establecer el widget central
+
+        self.dibujar_iu()
+        
+        self.widgetCentral.setLayout(self.principalLayout)
 
         self.crearAcciones()                                # Crer los menús, barras de herramientas y acciones que éstos dispararán
                                                             # Es importante crear las acciones lo primero, ya que el resto de elementos dependen de ellas

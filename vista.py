@@ -34,7 +34,7 @@ class ventana_compositor():
 
         # Controles listWidget
         self._listaArchivos = QtGui.QListWidget()           # Crea un listwidget
-        self._listaArchivos.clicked.connect(self.cargado)
+        # self._listaArchivos.clicked.connect(self.cargado)
 
         # Botones
         self.folder = QtGui.QPushButton('Seleccionar')      # Crea el botón de seleccionar carpeta
@@ -67,18 +67,14 @@ class ventana_compositor():
         grid.addWidget(self.folder, 1, 4)
 
         grid.addWidget(self._listaArchivos, 3, 0)
-        grid.addWidget(self.textEdit, 3, 1, 1, 4)
+        # grid.addWidget(self.textEdit, 3, 1, 1, 4)
 
         editionLayout = QtGui.QVBoxLayout()                 # Crea una rejilla de botones vertical
         editionLayout.addItem(grid)
 
-        principalLayout = QtGui.QVBoxLayout()               # Crea una rejilla de botones Horizoontal
-        principalLayout.addStretch()
-        principalLayout.addLayout(editionLayout)
-        principalLayout.addLayout(buttonLayout)
+        self.principalLayout = QtGui.QVBoxLayout()          # Crea una rejilla de botones Horizoontal
+        self.principalLayout.addStretch()
+        self.principalLayout.addLayout(editionLayout)
+        self.principalLayout.addLayout(buttonLayout)
 
-        self.setWindowTitle(TITULO_APP)                     # Establecemos el título de la ventana
-
-        self.setLayout(principalLayout)
-
-        self.setGeometry(300, 300, 350, 300)                # Los parámetros de tamaño vistos son suficientes
+        # self.setGeometry(300, 300, 350, 300)                # Los parámetros de tamaño vistos son suficientes
