@@ -34,6 +34,12 @@ class ventana_controlador():
             pass
 
 
+    def calcular(self):                                     # Realiza los cálculos necesarios
+        #FTODO: Por hacer
+        
+        pass
+
+
     def closeEvent(self, event):                            # Se pregunta al usuario si quiere salir
         respuesta = self.confirmarModificado()
 

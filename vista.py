@@ -14,7 +14,7 @@
 
 import sys                                                  # Funcionalidades varias del sistema
 
-from PyQt4 import QtGui
+from PyQt4 import QtCore, QtGui
 
 from controlador import ventana_controlador
 
@@ -29,18 +29,21 @@ class ventana_principal(QtGui.QMainWindow, ventana_controlador):
         else:
             super(ventana_principal, self).__init__()
 
+        self.setWindowIcon(QtGui.QIcon('./iconos/000-checklist.png'))
+
         self.widgetCentral = QtGui.QWidget(self)
 
         self.setCentralWidget(self.widgetCentral)           # Establecer el widget central
 
         self.dibujar_interfaz()
-        
+
         self.widgetCentral.setLayout(self._layout)
-        self.widgetCentral.setGeometry(300, 300, 350, 300)  # Los parámetros de tamaño vistos son suficientes
 
         self.crearAcciones()                                # Crer los menús, barras de herramientas y acciones que éstos dispararán
                                                             # Es importante crear las acciones lo primero, ya que el resto de elementos dependen de ellas
         self.crearMenus()
+
+        self.crearBarraDeHerramientas()
 
         if sys.version_info[0] >= 3:                        # Se establece la barra de estado, invocando al método correspondiente directamente
             self.statusBar().showMessage('Listo y esperando órdenes')
@@ -49,16 +52,36 @@ class ventana_principal(QtGui.QMainWindow, ventana_controlador):
 
         self.setWindowTitle(TITULO_APP)                     # Se establece el título de la ventana
 
-        self.setMinimumSize(480, 320)                       # Parámetros de tamaño
+        self.setMinimumSize(640, 480)                       # Parámetros de tamaño
 
         self.resize(800, 600)
 
 
     def acercaDe(self):
+        acerca_de = QtGui.QMessageBox()
+        acerca_de.setWindowTitle('Acerca de')
+        acerca_de.setTextFormat(QtCore.Qt.RichText)
+
         if sys.version_info[0] >= 3:
-            QtGui.QMessageBox.about(self, 'Acerca de', 'Trabajo de planificación creada por Julio Domingo Jiménez Ledesma (i72jilej) y Rafael Carlos Méndez Rodríguez (i82meror)')
+            acerca_de.setText('''<p>Trabajo de planificación creada por Julio Domingo Jiménez Ledesma (i72jilej) y Rafael Carlos Méndez Rodríguez (i82meror)</p>
+<p>Icono usado en "Nuevo" por <a href="https://www.flaticon.com/authors/yannick">Yannick</a><br />
+Icono usado en "Abrir" por <a href="https://www.flaticon.com/authors/simpleicon">SimpleIcon</a><br />
+Iconos usados en la ventana principal, "Guardar", "Calcular", "Acerca de" y "Acerca de Qt" por <a href="https://www.flaticon.com/authors/freepik">Freepic</a><br />
+Iconos usados en "Guardar como" y "Salir" por <a href="https://www.flaticon.com/authors/smashicons">Smashicons</a><br />
+Icono usado en "Imprimir" por <a href="https://www.flaticon.com/authors/dave-gandy">Dave Gandy</a><br />
+Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a></p>
+''')
         else:
-            QtGui.QMessageBox.about(self, 'Acerca de', u'Trabajo de planificación creada por Julio Domingo Jiménez Ledesma (i72jilej) y Rafael Carlos Méndez Rodríguez (i82meror)')
+            acerca_de.setText(u'''<p>Trabajo de planificación creada por Julio Domingo Jiménez Ledesma (i72jilej) y Rafael Carlos Méndez Rodríguez (i82meror)</p>
+<p>Icono usado en "Nuevo" por <a href="https://www.flaticon.com/authors/yannick">Yannick</a><br />
+Icono usado en "Abrir" por <a href="https://www.flaticon.com/authors/simpleicon">SimpleIcon</a><br />
+Iconos usados en la ventana principal, "Guardar", "Calcular", "Acerca de" y "Acerca de Qt" por <a href="https://www.flaticon.com/authors/freepik">Freepic</a><br />
+Iconos usados en "Guardar como" y "Salir" por <a href="https://www.flaticon.com/authors/smashicons">Smashicons</a><br />
+Icono usado en "Imprimir" por <a href="https://www.flaticon.com/authors/dave-gandy">Dave Gandy</a><br />
+Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a></p>
+''')
+
+        acerca_de.exec()
 
 
     def acercaDeQt(self):
@@ -104,18 +127,45 @@ class ventana_principal(QtGui.QMainWindow, ventana_controlador):
         self.guardarAcc         = QtGui.QAction('&Guardar',         self, shortcut = QtGui.QKeySequence.Save,   statusTip = 'Guarda el archivo',                                    triggered = self.guardar        )
         self.guardarComoAcc     = QtGui.QAction('Guardar c&omo',    self, shortcut = QtGui.QKeySequence.SaveAs, statusTip = 'Guarda el archivo con un nombre distinto',             triggered = self.guardarComo    )
         self.imprimirAcc        = QtGui.QAction('Im&primir',        self, shortcut = QtGui.QKeySequence.Print,  statusTip = 'Imprime el archivo',                                   triggered = self.imprimir       )
-        if sys.version_info[0] >= 3:
-            self.salirAcc = QtGui.QAction('&Salir', self, shortcut = 'Alt+F4', statusTip = 'Sale de la aplicación', triggered = self.close)
-        else:
-            self.salirAcc = QtGui.QAction('&Salir', self, shortcut = 'Alt+F4', statusTip = u'Sale de la aplicación', triggered = self.close)
 
-        self.acercaDeAcc        = QtGui.QAction("&Acerca de",       self,                                       statusTip = 'Muestra la ventana "Acerca de"',                       triggered = self.acercaDe       )
         if sys.version_info[0] >= 3:
-            self.acercaDeQtAcc = QtGui.QAction("Acerca de &Qt", self, statusTip = 'Muestra la ventana "Acerca de" de la librería Qt', triggered = self.acercaDeQt)
+            self.salirAcc       = QtGui.QAction('&Salir',           self, shortcut = 'Alt+F4',                  statusTip = 'Sale de la aplicación',                                triggered = self.close          )
         else:
-            self.acercaDeQtAcc = QtGui.QAction("Acerca de &Qt", self, statusTip = u'Muestra la ventana "Acerca de" de la librería Qt', triggered = self.acercaDeQt)
+            self.salirAcc       = QtGui.QAction('&Salir',           self, shortcut = 'Alt+F4',                  statusTip = u'Sale de la aplicación',                               triggered = self.close          )
+
+        self.calcularAcc        = QtGui.QAction("&Calcular",        self, shortcut = 'F4',                      statusTip = 'Comienza los cálculos',                                triggered = self.calcular       )
+        self.acercaDeAcc        = QtGui.QAction("&Acerca de",       self, shortcut = 'F1',                      statusTip = 'Muestra la ventana "Acerca de"',                       triggered = self.acercaDe       )
+
+        if sys.version_info[0] >= 3:
+            self.acercaDeQtAcc  = QtGui.QAction("Acerca de &Qt",    self,                                       statusTip = 'Muestra la ventana "Acerca de" de la librería Qt',     triggered = self.acercaDeQt     )
+        else:
+            self.acercaDeQtAcc  = QtGui.QAction("Acerca de &Qt",    self,                                       statusTip = u'Muestra la ventana "Acerca de" de la librería Qt',    triggered = self.acercaDeQt     )
 
         self.acercaDeQtAcc.triggered.connect(QtGui.qApp.aboutQt)
+
+        self.nuevoAcc.          setIcon(QtGui.QIcon('./iconos/001-add-new-document.png')                            )
+        self.abrirAcc.          setIcon(QtGui.QIcon('./iconos/002-folder-black-open-shape.png')                     )
+        self.guardarAcc.        setIcon(QtGui.QIcon('./iconos/003-save-icon.png')                                   )
+        self.guardarComoAcc.    setIcon(QtGui.QIcon('./iconos/004-technology.png')                                  )
+        self.imprimirAcc.       setIcon(QtGui.QIcon('./iconos/005-printing-tool.png')                               )
+        self.salirAcc.          setIcon(QtGui.QIcon('./iconos/006-logout.png')                                      )
+        self.calcularAcc.       setIcon(QtGui.QIcon('./iconos/007-calculator.png')                                  )
+        self.acercaDeAcc.       setIcon(QtGui.QIcon('./iconos/008-about-us.png')                                    )
+        self.acercaDeQtAcc.     setIcon(QtGui.QIcon('./iconos/009-presenter-talking-about-people-on-a-screen.png')  )
+
+
+    def crearBarraDeHerramientas(self):                     # Se crea la barra de herramientas
+        self.toolbar = self.addToolBar('Barra de herramientas')
+        self.toolbar.addAction(self.nuevoAcc)
+        self.toolbar.addAction(self.abrirAcc)
+        self.toolbar.addAction(self.guardarAcc)
+        self.toolbar.addAction(self.guardarComoAcc)
+        self.toolbar.addSeparator()
+        self.toolbar.addAction(self.calcularAcc)
+        self.toolbar.addSeparator()
+        self.toolbar.addAction(self.salirAcc)
+
+        self.toolbar.setMovable(False)                      # Hace la barra inamovible
 
 
     def crearMenus(self):                                   # Se crean los menús
@@ -128,6 +178,13 @@ class ventana_principal(QtGui.QMainWindow, ventana_controlador):
         self.menuArchivo.addAction(self.imprimirAcc)
         self.menuArchivo.addSeparator()
         self.menuArchivo.addAction(self.salirAcc)
+
+        if sys.version_info[0] >= 3:
+            self.menuAccion = self.menuBar().addMenu('A&cción')
+        else:
+            self.menuAccion = self.menuBar().addMenu(u'A&cción')
+
+        self.menuAccion.addAction(self.calcularAcc)
 
         self.menuAyuda = self.menuBar().addMenu("A&yuda")
         self.menuAyuda.addAction(self.acercaDeAcc)
@@ -147,42 +204,16 @@ class ventana_principal(QtGui.QMainWindow, ventana_controlador):
 
 
     def dibujar_interfaz(self):
-        tercio_inferior = self.dibujar_tercio_inferior()
+        mitad_inferior = self.dibujar_mitad_inferior()
 
-        tercio_medio = self.dibujar_tercio_medio()
-
-        tercio_superior = self.dibujar_tercio_superior()
+        mitad_superior = self.dibujar_mitad_superior()
         
         self._layout = QtGui.QVBoxLayout()
-        self._layout.addWidget(tercio_superior)
-        self._layout.addWidget(tercio_medio)
-        self._layout.addWidget(tercio_inferior)
-        
+        self._layout.addWidget(mitad_inferior)
+        self._layout.addWidget(mitad_superior)
 
 
-    def dibujar_tercio_inferior(self):
-        # Botones
-        self._boton_calcular = QtGui.QPushButton('Calcular')
-        # FIXME: self._boton_calcular.clicked.connect(self.)
-        self._boton_calcular.setMaximumWidth(84)
-
-        self._boton_guardar_como = QtGui.QPushButton('Guardar como')
-        self._boton_guardar_como.clicked.connect(self.guardarComo)
-        self._boton_guardar_como.setMaximumWidth(84)
-
-        # Layout
-        layout = QtGui.QHBoxLayout()
-        layout.addWidget(self._boton_guardar_como)
-        layout.addWidget(self._boton_calcular)
-
-        # Widget
-        tercio_inferior = QtGui.QGroupBox('Botones de acción')
-        tercio_inferior.setLayout(layout)
-
-        return tercio_inferior
-
-
-    def dibujar_tercio_medio(self):
+    def dibujar_mitad_inferior(self):
         # Etiquetas
         label_desarrollo = QtGui.QLabel('Desarrollo:')
 
@@ -213,13 +244,13 @@ class ventana_principal(QtGui.QMainWindow, ventana_controlador):
         layout.addWidget(self._text_dominio)
 
         # Widget
-        tercio_medio = QtGui.QGroupBox('Resultados')
-        tercio_medio.setLayout(layout)
+        mitad_inferior = QtGui.QGroupBox('Resultados')
+        mitad_inferior.setLayout(layout)
 
-        return tercio_medio
+        return mitad_inferior
 
 
-    def dibujar_tercio_superior(self):
+    def dibujar_mitad_superior(self):
         # Botones
         self._boton_abrir = QtGui.QPushButton('Abrir')
         self._boton_abrir.clicked.connect(self.abrir)
@@ -240,10 +271,10 @@ class ventana_principal(QtGui.QMainWindow, ventana_controlador):
         layout.addWidget(self._boton_abrir)
 
         # Widget
-        tercio_superior = QtGui.QGroupBox('Carga del archivo')
-        tercio_superior.setLayout(layout)
+        mitad_superior = QtGui.QGroupBox('Carga del archivo')
+        mitad_superior.setLayout(layout)
 
-        return tercio_superior
+        return mitad_superior
 
 
     def guardado(self):

@@ -23,7 +23,8 @@ def main(argv):
     aplicacion = QtGui.QApplication(argv)
 
     ventana = vista.ventana_principal()
-    ventana.show()
+    # ventana.show()
+    ventana.showMaximized()                                 # Mejor maximizada
 
     sys.exit(aplicacion.exec_())
 
