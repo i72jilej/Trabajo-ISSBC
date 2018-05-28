@@ -16,14 +16,12 @@ import sys                                                  # Funcionalidades va
 
 from PyQt4 import QtGui
 
+from controlador import ventana_controlador
 
 TITULO_APP = 'Planificador de cadena de montaje'
 
 
-class ventana_principal(QtGui.QMainWindow):
-    # Inicialización de variables de clase
-    _modificado = False
-
+class ventana_principal(QtGui.QMainWindow, ventana_controlador):
     def __init__(self):                                     # Constructor de la clase; al ser una ventana, inicializa la misma
         if sys.version_info[0] >= 3:                        # Llamada al constructor de la clase padre
             super().__init__()
@@ -50,23 +48,10 @@ class ventana_principal(QtGui.QMainWindow):
         self.setWindowTitle(TITULO_APP)                     # Se establece el título de la ventana
 
         self.setMinimumSize(160, 160)                       # Parámetros de tamaño
+
         self.resize(480, 320)
 
 
-    def abrir(self):
-        respuesta = self.confirmarModificado()
-
-        if respuesta == QtGui.QMessageBox.Discard or respuesta == True:
-            self.apertura()
-        elif respuesta == QtGui.QMessageBox.Save:
-            if self.guardar():
-                self.apertura()
-            else:
-                pass
-        else:
-            pass
-
-    
     def acercaDe(self):
         if sys.version_info[0] >= 3:
             QtGui.QMessageBox.about(self, 'Acerca de', 'Trabajo de planificación creada por Julio Domingo Jiménez Ledesma (i72jilej) y Rafael Carlos Méndez Rodríguez (i82meror)')
@@ -109,20 +94,6 @@ class ventana_principal(QtGui.QMainWindow):
 
         except AttributeError:
             return False
-
-
-    def closeEvent(self, event):                            # Se pregunta al usuario si quiere salir
-        respuesta = self.confirmarModificado()
-
-        if respuesta == QtGui.QMessageBox.Discard or respuesta == True:
-            event.accept()
-        elif respuesta == QtGui.QMessageBox.Save:
-            if self.guardar():
-                event.accept()
-            else:
-                event.ignore()
-        else:
-            event.ignore()
 
 
     def crearAcciones(self):                                # Se crean las acciones asociadas al menú y a la barra de herramientas
@@ -257,22 +228,6 @@ class ventana_principal(QtGui.QMainWindow):
             archivo.close()
 
 
-    def guardar(self):
-        try:
-            self._nombre_archivo
-
-        except AttributeError:
-            return self.guardarComo()
-
-        else:
-            return self.guardado()
-
-        finally:
-            pass
-
-        return True
-
-
     def guardarComo(self):
         self._nombre_archivo = QtGui.QFileDialog.getSaveFileName(self, 'Guardar archivo')
 
@@ -291,15 +246,6 @@ class ventana_principal(QtGui.QMainWindow):
 
         else:
             pass
-
-
-    def modificado(self, *args):
-        if args != ():
-            self._modificado = args[0]
-
-            return True
-        else:
-            return self._modificado
 
 
     def nuevo(self):                                        # Acción de nuevo
@@ -331,7 +277,4 @@ class ventana_principal(QtGui.QMainWindow):
 
         else:
             pass
-
-
-
 
