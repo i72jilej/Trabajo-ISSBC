@@ -17,7 +17,7 @@ TITULO_APP = 'Planificador de cadena de montaje'
 
 import sys                                                              # Funcionalidades varias del sistema
 
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtGui                                                 # Módulo de interfaz de usuario de PyQt4
 
 from controlador import ventana_controlador
 
@@ -28,8 +28,6 @@ class ventana_principal(QtGui.QMainWindow, ventana_controlador):
             super().__init__()
         else:
             super(ventana_principal, self).__init__()
-
-        self._nombre_archivo = '';                                      # Inicializando
 
         self.setWindowIcon(QtGui.QIcon('./iconos/000-checklist.png'))   # Establecer el icono de la ventana principal
 
@@ -82,60 +80,9 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         pass
 
 
-    def apertura(self):
-        respuesta = self.confirmar_modificado()
-
-        if respuesta == QtGui.QMessageBox.Discard:
-            self.abrir()
-
-        elif respuesta == QtGui.QMessageBox.Save:
-            if self.guardar():
-                self.abrir()
-
-            else:
-                pass
-
-        else:
-            pass
-
-
-    '''
-    def apertura(self):
-        self._nombre_archivo = QtGui.QFileDialog.getOpenFileName(self, 'Abrir archivo', filter = 'Documentos de texto (*.txt);;Todos los archivos (*.*)')
-
-        try:
-            if self._nombre_archivo != '':
-                try:
-                    archivo = open(file = self._nombre_archivo, mode = 'r', encoding = 'utf-8')
-
-                except IOError:
-                    QtGui.QMessageBox.warning(self, 'Error de apertura', 'Error: Archivo <' + self._nombre_archivo + '> inaccesible')
-
-                else:
-                    texto = archivo.read()
-
-                    # FIXME: Así no self.textEdit.setText(texto)
-
-                    self.modificado(False)
-
-                    self.setWindowTitle(TITULO_APP + ': ' + self._nombre_archivo)
-
-                finally:
-                    try:
-                        archivo.close()
-
-                    except UnboundLocalError:
-                        pass
-
-                    return True
-
-        except AttributeError:
-            return False
-    '''
-
     def crearAcciones(self):                                	       	# Se crean las acciones asociadas al menú y a la barra de herramientas
         self.nuevoAcc           = QtGui.QAction('&Nuevo',           self, shortcut = QtGui.QKeySequence.New,    statusTip = 'Crea un nuevo archivo',                                triggered = self.nuevo          )
-        self.abrirAcc           = QtGui.QAction('&Abrir...',        self, shortcut = QtGui.QKeySequence.Open,   statusTip = 'Abre un archivo existente',                            triggered = self.apertura       )
+        self.abrirAcc           = QtGui.QAction('&Abrir...',        self, shortcut = QtGui.QKeySequence.Open,   statusTip = 'Abre un archivo existente',                            triggered = self.abrir          )
         self.guardarAcc         = QtGui.QAction('&Guardar',         self, shortcut = QtGui.QKeySequence.Save,   statusTip = 'Guarda el archivo',                                    triggered = self.guardar        )
         self.guardarComoAcc     = QtGui.QAction('Guardar c&omo',    self, shortcut = QtGui.QKeySequence.SaveAs, statusTip = 'Guarda el archivo con un nombre distinto',             triggered = self.guardarComo    )
         self.imprimirAcc        = QtGui.QAction('Im&primir',        self, shortcut = QtGui.QKeySequence.Print,  statusTip = 'Imprime el archivo',                                   triggered = self.imprimir       )
@@ -232,7 +179,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
         # Botones
         self._boton_abrir = QtGui.QPushButton('Abrir')
-        self._boton_abrir.clicked.connect(self.apertura)
+        self._boton_abrir.clicked.connect(self.abrir)
 
         # Diseño
         disenyo = QtGui.QVBoxLayout()
@@ -253,7 +200,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
     def dibujar_mitad_superior(self):
         # Botones
         self._boton_abrir = QtGui.QPushButton('Abrir')
-        self._boton_abrir.clicked.connect(self.apertura)
+        self._boton_abrir.clicked.connect(self.abrir)
         self._boton_abrir.setMaximumWidth(84)
 
         # Controles de edición

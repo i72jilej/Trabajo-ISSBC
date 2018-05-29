@@ -29,6 +29,23 @@ class ventana_controlador():
 
 
     def abrir(self):
+        respuesta = self.confirmar_modificado()
+
+        if respuesta == QtGui.QMessageBox.Discard:
+            self.apertura()
+
+        elif respuesta == QtGui.QMessageBox.Save:
+            if self.guardar():
+                self.apertura()
+
+            else:
+                pass
+
+        else:
+            pass
+
+
+    def apertura(self):
         nombre_archivo = QtGui.QFileDialog.getOpenFileName(self, 'Abrir archivo', filter = 'Base de conocimiento NTriples (*.nt);;Todos los archivos (*.*)')
 
         if nombre_archivo != '':                                        # Comprobando si se ha elegido algún archivo
@@ -62,18 +79,37 @@ class ventana_controlador():
 
 
     '''
-    def abrir(self):
-        respuesta = self.confirmarModificado()
+    def apertura(self):
+        self._nombre_archivo = QtGui.QFileDialog.getOpenFileName(self, 'Abrir archivo', filter = 'Documentos de texto (*.txt);;Todos los archivos (*.*)')
 
-        if respuesta == QtGui.QMessageBox.Discard:
-            self.apertura()
-        elif respuesta == QtGui.QMessageBox.Save:
-            if self.guardar():
-                self.apertura()
-            else:
-                pass
-        else:
-            pass
+        try:
+            if self._nombre_archivo != '':
+                try:
+                    archivo = open(file = self._nombre_archivo, mode = 'r', encoding = 'utf-8')
+
+                except IOError:
+                    QtGui.QMessageBox.warning(self, 'Error de apertura', 'Error: Archivo <' + self._nombre_archivo + '> inaccesible')
+
+                else:
+                    texto = archivo.read()
+
+                    # FIXME: Así no self.textEdit.setText(texto)
+
+                    self.modificado(False)
+
+                    self.setWindowTitle(TITULO_APP + ': ' + self._nombre_archivo)
+
+                finally:
+                    try:
+                        archivo.close()
+
+                    except UnboundLocalError:
+                        pass
+
+                    return True
+
+        except AttributeError:
+            return False
     '''
 
 
