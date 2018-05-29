@@ -23,13 +23,22 @@ from PyQt4 import QtGui
 class ventana_controlador():
     _modificado = False                                     # Inicialización de variables de clase
 
+    def abrir(self, archivo):
+        try:
+            f = open(archivo, 'r')
+            contenido = f.read()
+            f.close()
+            #TODO Interpretar archivo (rdflib) y controlar si es correcto
+            return True
+        except:
+            return False
+        
 
     def __init__(self):                                     # Constructor de la clase
         pass
-
-
-    def abrir(self):                                        # Acción de abrir
-        respuesta = self.confirmar_modificado()
+    '''
+    def abrir(self):
+        respuesta = self.confirmarModificado()
 
         if respuesta == QtGui.QMessageBox.Discard:
             self.apertura()
@@ -40,48 +49,7 @@ class ventana_controlador():
                 pass
         else:
             pass
-
-
-    def apertura(self):
-        nombre_archivo = QtGui.QFileDialog.getOpenFileName(self, 'Abrir archivo', filter = 'Archivo N-Triples (*.nt);;Todos los archivos (*.*)')
-
-        # try:
-        if nombre_archivo != '':
-            try:
-                archivo = open(file = nombre_archivo, mode = 'r', encoding = 'utf-8')
-
-            except IOError:
-                QtGui.QMessageBox.warning(self, 'Error de apertura', 'Error: Archivo <' + nombre_archivo + '> inaccesible')
-
-            else:
-                self._texto = archivo.read()
-
-                # FIXME: Así no
-                self._text_desarrollo.setText(self._texto)
-                
-                self._text_ruta.setText(nombre_archivo)
-
-                self.modificado(False)
-
-                if sys.version_info[0] >= 3:
-                    self.setWindowTitle(TITULO_APP + ' ➡ ' + nombre_archivo)
-                else:
-                    self.setWindowTitle(TITULO_APP + u' ➡ ' + nombre_archivo)
-
-            finally:
-                try:
-                    archivo.close()
-
-                except UnboundLocalError:
-                    pass
-
-                return True
-
-        # except AttributeError:
-            # return False
-
-        pass
-
+    '''
 
     def calcular(self):                                     # Realiza los cálculos necesarios
         try:

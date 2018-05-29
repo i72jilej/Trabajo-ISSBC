@@ -29,6 +29,8 @@ class ventana_principal(QtGui.QMainWindow, ventana_controlador):
         else:
             super(ventana_principal, self).__init__()
 
+        self._nombre_archivo = '';                          # Inicializando 
+
         self.setWindowIcon(QtGui.QIcon('./iconos/000-checklist.png'))   # Establecer el icono de la ventana principal
 
         self._widget_principal = QtGui.QWidget(self)                    # Establecer el widget principal
@@ -85,9 +87,67 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         pass
 
 
+    def apertura(self):
+        #self._nombre_archivo = "HOLA" #Para probar con un fichero ya abierto
+
+        #Inicializando variables
+        respuesta = QtGui.QMessageBox.Yes
+        
+        # Comprobando si ya hay algun archivo abierto
+        if self._nombre_archivo != '':
+            # Si ya hay uno abierto
+            respuesta = QtGui.QMessageBox.question(self, 'Aviso', u'Ya hay un dominio cargado. ¿Desea cargar uno nuevo?', QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
+
+        # Si se ha respondido sí o no había ninguno cargado
+        if respuesta == QtGui.QMessageBox.Yes:
+            self._nombre_archivo = QtGui.QFileDialog.getOpenFileName(self, 'Abrir archivo', filter = 'Documentos NTriples (*.nt);;Archivos NTriples (*.*)')
+
+            # Comprobando si se ha elegido algún archivo
+            if self._nombre_archivo != '':
+                #Si se ha elegido un archivo
+                if self.abrir(self._nombre_archivo) == True: #Abriendo archivo
+                    print("CORRECTO") #FIXME DELETEME
+                else:
+                    print("FALLO") #FIXME DELETEME
+
+
+        '''
+    def apertura(self):
+        self._nombre_archivo = QtGui.QFileDialog.getOpenFileName(self, 'Abrir archivo', filter = 'Documentos de texto (*.txt);;Todos los archivos (*.*)')
+
+        try:
+            if self._nombre_archivo != '':
+                try:
+                    archivo = open(file = self._nombre_archivo, mode = 'r', encoding = 'utf-8')
+
+                except IOError:
+                    QtGui.QMessageBox.warning(self, 'Error de apertura', 'Error: Archivo <' + self._nombre_archivo + '> inaccesible')
+
+                else:
+                    texto = archivo.read()
+
+                    # FIXME: Así no self.textEdit.setText(texto)
+
+                    self.modificado(False)
+
+                    self.setWindowTitle(TITULO_APP + ': ' + self._nombre_archivo)
+
+                finally:
+                    try:
+                        archivo.close()
+
+                    except UnboundLocalError:
+                        pass
+
+                    return True
+
+        except AttributeError:
+            return False
+    '''
+
     def crearAcciones(self):                                	       	# Se crean las acciones asociadas al menú y a la barra de herramientas
         self.nuevoAcc           = QtGui.QAction('&Nuevo',           self, shortcut = QtGui.QKeySequence.New,    statusTip = 'Crea un nuevo archivo',                                triggered = self.nuevo          )
-        self.abrirAcc           = QtGui.QAction('&Abrir...',        self, shortcut = QtGui.QKeySequence.Open,   statusTip = 'Abre un archivo existente',                            triggered = self.abrir          )
+        self.abrirAcc           = QtGui.QAction('&Abrir...',        self, shortcut = QtGui.QKeySequence.Open,   statusTip = 'Abre un archivo existente',                            triggered = self.apertura          )
         self.guardarAcc         = QtGui.QAction('&Guardar',         self, shortcut = QtGui.QKeySequence.Save,   statusTip = 'Guarda el archivo',                                    triggered = self.guardar        )
         self.guardarComoAcc     = QtGui.QAction('Guardar c&omo',    self, shortcut = QtGui.QKeySequence.SaveAs, statusTip = 'Guarda el archivo con un nombre distinto',             triggered = self.guardarComo    )
         self.imprimirAcc        = QtGui.QAction('Im&primir',        self, shortcut = QtGui.QKeySequence.Print,  statusTip = 'Imprime el archivo',                                   triggered = self.imprimir       )
@@ -181,6 +241,10 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
         self._text_solucion = QtGui.QTextEdit()
         self._text_solucion.setReadOnly(True)
+
+        # Botones
+        self._boton_abrir = QtGui.QPushButton('Abrir')
+        self._boton_abrir.clicked.connect(self.apertura)
 
         # Diseño
         disenyo = QtGui.QVBoxLayout()
