@@ -19,7 +19,18 @@ class ventana_controlador():
     # Inicialización de variables de clase
     _modificado = False
 
+    def abrir(self, archivo):
+        try:
+            f = open(archivo, 'r')
+            contenido = f.read()
+            f.close()
+            #TODO Interpretar archivo (rdflib) y controlar si es correcto
+            return True
+        except:
+            return False
+        
 
+    '''
     def abrir(self):
         respuesta = self.confirmarModificado()
 
@@ -32,7 +43,7 @@ class ventana_controlador():
                 pass
         else:
             pass
-
+    '''
 
     def closeEvent(self, event):                            # Se pregunta al usuario si quiere salir
         respuesta = self.confirmarModificado()
