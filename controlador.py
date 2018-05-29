@@ -23,19 +23,44 @@ from PyQt4 import QtGui
 class ventana_controlador():
     _modificado = False                                     # Inicialización de variables de clase
 
-    def abrir(self, archivo):
-        try:
-            f = open(archivo, 'r')
-            contenido = f.read()
-            f.close()
-            #TODO Interpretar archivo (rdflib) y controlar si es correcto
-            return True
-        except:
-            return False
-        
 
     def __init__(self):                                     # Constructor de la clase
         pass
+
+
+    def abrir(self):
+        nombre_archivo = QtGui.QFileDialog.getOpenFileName(self, 'Abrir archivo', filter = 'Base de conocimiento NTriples (*.nt);;Todos los archivos (*.*)')
+
+        if nombre_archivo != '':                                        # Comprobando si se ha elegido algún archivo
+            #Si se ha elegido un archivo
+
+            try:
+                archivo = open(file = nombre_archivo, mode = 'r', encoding = 'utf-8')
+
+            except IOError:
+                res = False
+
+            else:
+                texto = archivo.read()
+
+                # TODO: Interpretar archivo (rdflib) y controlar si es correcto
+
+                # FIXME: Borrar
+                self._text_desarrollo.setText(texto)
+                self._grafo = texto
+
+                res = True
+
+            finally:
+                try:
+                    archivo.close()
+
+                except UnboundLocalError:
+                    pass
+
+                return res
+
+
     '''
     def abrir(self):
         respuesta = self.confirmarModificado()
@@ -51,9 +76,10 @@ class ventana_controlador():
             pass
     '''
 
+
     def calcular(self):                                     # Realiza los cálculos necesarios
         try:
-            self._texto
+            self._grafo
 
         except AttributeError:
             QtGui.QMessageBox.information(self, 'Error de cálculo', 'Error: No se ha cargado ningún archivo')
@@ -177,7 +203,6 @@ class ventana_controlador():
 
         except AttributeError:
             pass
-
 
 
     def modificado(self, *args):                            # Función "sobrecargada": modificador / observador de la variable self._modificado
