@@ -28,7 +28,7 @@ class ventana_controlador():
         pass
 
 
-    def abrir(self):
+    def abrir(self):                                        # Acción de abrir 
         respuesta = self.confirmar_modificado()
 
         if respuesta == QtGui.QMessageBox.Discard:
@@ -49,9 +49,7 @@ class ventana_controlador():
         nombre_archivo = QtGui.QFileDialog.getOpenFileName(self, 'Abrir archivo', filter = 'Base de conocimiento NTriples (*.nt);;Todos los archivos (*.*)')
 
         if nombre_archivo != '':                                        # Comprobando si se ha elegido algún archivo
-            #Si se ha elegido un archivo
-
-            try:
+            try:                                                        #Si se ha elegido un archivo
                 archivo = open(file = nombre_archivo, mode = 'r', encoding = 'utf-8')
 
             except IOError:
@@ -60,11 +58,18 @@ class ventana_controlador():
             else:
                 texto = archivo.read()
 
+                self.modificado(False)
+
                 # TODO: Interpretar archivo (rdflib) y controlar si es correcto
 
                 # FIXME: Borrar
                 self._text_desarrollo.setText(texto)
                 self._grafo = texto
+
+                if sys.version_info[0] >= 3: 
+                    self.setWindowTitle(TITULO_APP + ' ➡ ' + nombre_archivo) 
+                else: 
+                    self.setWindowTitle(TITULO_APP + u' ➡ ' + nombre_archivo) 
 
                 res = True
 
@@ -76,41 +81,6 @@ class ventana_controlador():
                     pass
 
                 return res
-
-
-    '''
-    def apertura(self):
-        self._nombre_archivo = QtGui.QFileDialog.getOpenFileName(self, 'Abrir archivo', filter = 'Documentos de texto (*.txt);;Todos los archivos (*.*)')
-
-        try:
-            if self._nombre_archivo != '':
-                try:
-                    archivo = open(file = self._nombre_archivo, mode = 'r', encoding = 'utf-8')
-
-                except IOError:
-                    QtGui.QMessageBox.warning(self, 'Error de apertura', 'Error: Archivo <' + self._nombre_archivo + '> inaccesible')
-
-                else:
-                    texto = archivo.read()
-
-                    # FIXME: Así no self.textEdit.setText(texto)
-
-                    self.modificado(False)
-
-                    self.setWindowTitle(TITULO_APP + ': ' + self._nombre_archivo)
-
-                finally:
-                    try:
-                        archivo.close()
-
-                    except UnboundLocalError:
-                        pass
-
-                    return True
-
-        except AttributeError:
-            return False
-    '''
 
 
     def calcular(self):                                     # Realiza los cálculos necesarios
