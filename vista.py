@@ -57,21 +57,8 @@ class ventana_principal(QtGui.QMainWindow, ventana_controlador):
 
 
     def acercaDe(self):
-        acerca_de = QtGui.QMessageBox()
-        acerca_de.setWindowTitle('Acerca de')
-        acerca_de.setTextFormat(QtCore.Qt.RichText)
-
         if sys.version_info[0] >= 3:
-            acerca_de.setText('''<p>Trabajo de planificación creada por Julio Domingo Jiménez Ledesma (i72jilej) y Rafael Carlos Méndez Rodríguez (i82meror)</p>
-<p>Icono usado en "Nuevo" por <a href="https://www.flaticon.com/authors/yannick">Yannick</a><br />
-Icono usado en "Abrir" por <a href="https://www.flaticon.com/authors/simpleicon">SimpleIcon</a><br />
-Iconos usados en la ventana principal, "Guardar", "Calcular", "Acerca de" y "Acerca de Qt" por <a href="https://www.flaticon.com/authors/freepik">Freepic</a><br />
-Iconos usados en "Guardar como" y "Salir" por <a href="https://www.flaticon.com/authors/smashicons">Smashicons</a><br />
-Icono usado en "Imprimir" por <a href="https://www.flaticon.com/authors/dave-gandy">Dave Gandy</a><br />
-Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a></p>
-''')
-        else:
-            acerca_de.setText(u'''<p>Trabajo de planificación creada por Julio Domingo Jiménez Ledesma (i72jilej) y Rafael Carlos Méndez Rodríguez (i82meror)</p>
+            QtGui.QMessageBox.about(self, 'Acerca de', '''<p>Trabajo de planificación creada por Julio Domingo Jiménez Ledesma (i72jilej) y Rafael Carlos Méndez Rodríguez (i82meror)</p>
 <p>Icono usado en "Nuevo" por <a href="https://www.flaticon.com/authors/yannick">Yannick</a><br />
 Icono usado en "Abrir" por <a href="https://www.flaticon.com/authors/simpleicon">SimpleIcon</a><br />
 Iconos usados en la ventana principal, "Guardar", "Calcular", "Acerca de" y "Acerca de Qt" por <a href="https://www.flaticon.com/authors/freepik">Freepic</a><br />
@@ -80,7 +67,15 @@ Icono usado en "Imprimir" por <a href="https://www.flaticon.com/authors/dave-gan
 Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a></p>
 ''')
 
-        acerca_de.exec()
+        else:
+            QtGui.QMessageBox.about(self, 'Acerca de', u'''<p>Trabajo de planificación creada por Julio Domingo Jiménez Ledesma (i72jilej) y Rafael Carlos Méndez Rodríguez (i82meror)</p>
+<p>Icono usado en "Nuevo" por <a href="https://www.flaticon.com/authors/yannick">Yannick</a><br />
+Icono usado en "Abrir" por <a href="https://www.flaticon.com/authors/simpleicon">SimpleIcon</a><br />
+Iconos usados en la ventana principal, "Guardar", "Calcular", "Acerca de" y "Acerca de Qt" por <a href="https://www.flaticon.com/authors/freepik">Freepic</a><br />
+Iconos usados en "Guardar como" y "Salir" por <a href="https://www.flaticon.com/authors/smashicons">Smashicons</a><br />
+Icono usado en "Imprimir" por <a href="https://www.flaticon.com/authors/dave-gandy">Dave Gandy</a><br />
+Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a></p>
+''')
 
 
     def acercaDeQt(self):
