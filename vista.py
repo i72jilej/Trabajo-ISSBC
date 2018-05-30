@@ -93,7 +93,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         if sys.version_info[0] < 3:
             texto = texto.decode('utf-8')
 
-        QtGui.QMessageBox.information(self, texto, 'Error: No se ha cargado ningún archivo')
+        QtGui.QMessageBox.warning(self, texto, 'Aviso: No se ha cargado ningún archivo')
 
 
     def confirmar_modificado(self, accion):
