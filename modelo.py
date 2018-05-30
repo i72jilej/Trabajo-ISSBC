@@ -21,6 +21,35 @@ DEBUG = True
 from rdflib import Graph
 
 
+class Element():                                        # Representacion de un nodo en el grafo
+    def __init__(self, identificador, nombre):          # Constructor de la clase
+        self._id = identificador
+
+        self._nombre = nombre
+
+        self._conexiones = []
+
+        self._padre = ''
+
+    
+    def __repr__(self):                                 # Método "mágico" usado para la representación de la clase
+        return str(self._nombre)
+
+
+    def conexiones(self, conexion = None):              # Método "sobrecargado":
+        if conexion != None:                            #     Modificador de la variable
+            self._conexiones.append(conexion)
+
+        return self._conexiones                         #     Observador de la variable
+
+
+    def padre(self, padre = None):                      # Método "sobrecargado":
+        if padre != None:                               #     Modificador de la variable
+            self._padre = padre
+
+        return self._padre                              #     Observador de la variable
+
+
 class ventana_modelo():
     @staticmethod
     def interpretar(grafo):
