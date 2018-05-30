@@ -12,7 +12,7 @@
 # Notes         : 
 
 
-DEBUG_REMOTO    = True
+DEBUG_REMOTO    = False
 
 
 import sys                                                  # Funcionalidades varias del sistema
