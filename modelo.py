@@ -51,6 +51,8 @@ class Element():                                        # Representacion de un n
 class ventana_modelo():
     @staticmethod                                       # Método estático
     def interpretar(grafo):                             # Interpreta un grafo dado: extrae la información necesaria para su posterior uso
+        elementos = []
+
         query = '''
                     PREFIX    rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns>
                     PREFIX    maquina:  <http://www.factory.fake/maquina/>
@@ -70,6 +72,10 @@ class ventana_modelo():
         for fila in resultado:
             if DEBUG:
                 print(fila.name, 'es una máquina', 'con duración', fila.duracion)
+
+            elemento = Element(fila.name)
+
+            elementos.append(elemento)
 
         if DEBUG:
             print()
