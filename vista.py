@@ -105,7 +105,25 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
             if sys.version_info[0] < 3:
                 texto = texto.decode('utf-8')
 
-            return QtGui.QMessageBox.question(self, 'Aviso', texto, QtGui.QMessageBox.Discard | QtGui.QMessageBox.Save | QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Cancel)
+            mensaje = QtGui.QMessageBox()
+            mensaje.setIcon(QtGui.QMessageBox.Question)
+            mensaje.setWindowTitle('Aviso')
+            mensaje.setText(texto)
+            mensaje.setStandardButtons(QtGui.QMessageBox.Discard | QtGui.QMessageBox.Save | QtGui.QMessageBox.Cancel)
+            mensaje.setDefaultButton(QtGui.QMessageBox.Cancel)
+
+            boton_descartar = mensaje.button(QtGui.QMessageBox.Discard)
+            boton_descartar.setText('Descartar')
+
+            boton_guardar = mensaje.button(QtGui.QMessageBox.Save)
+            boton_guardar.setText('Guardar')
+
+            boton_cancelar = mensaje.button(QtGui.QMessageBox.Cancel)
+            boton_cancelar.setText('Cancelar')
+
+            return mensaje.exec_()
+
+            # return QtGui.QMessageBox.question(self, 'Aviso', texto, QtGui.QMessageBox.Discard | QtGui.QMessageBox.Save | QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Cancel)
 
         else:
             return QtGui.QMessageBox.Discard
