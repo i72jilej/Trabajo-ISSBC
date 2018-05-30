@@ -162,13 +162,13 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
             self._nombre_archivo
 
         except AttributeError:
-            return self.guardarComo()
+            return self.guardar_como()
 
         else:
             if self._nombre_archivo == '':
                 del self._nombre_archivo
 
-                return self.guardarComo()
+                return self.guardar_como()
 
             else:
                 return self.guardado()
