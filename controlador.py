@@ -16,6 +16,9 @@ import sys                                                  # Funcionalidades va
 
 import vista
 
+if sys.version_info[0] < 3:
+    from io import open
+
 # from PyQt4 import QtGui
 
 
