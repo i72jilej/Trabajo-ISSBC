@@ -12,7 +12,7 @@
 # Notes         : 
 
 
-import sys
+import sys                                                  # Funcionalidades varias del sistema
 
 import vista
 

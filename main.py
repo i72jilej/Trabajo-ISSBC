@@ -12,7 +12,13 @@
 # Notes         : 
 
 
+DEBUG_REMOTO    = True
+
+
 import sys                                                  # Funcionalidades varias del sistema
+
+if DEBUG_REMOTO:
+    import pydevd                                           # Depuración remota
 
 import controlador                                          # Módulo controlador
 
@@ -20,6 +26,9 @@ from PyQt4 import QtGui
 
 
 def main(argv):
+    if DEBUG_REMOTO:
+        pydevd.settrace('127.0.0.1')
+
     aplicacion = QtGui.QApplication(argv)
 
     ventana = controlador.ventana_principal()
