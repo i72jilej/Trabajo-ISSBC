@@ -18,6 +18,8 @@ from __future__ import print_function
 DEBUG = True
 
 
+import sys                                              # Funcionalidades varias del sistema
+
 from rdflib import Graph
 
 
@@ -30,15 +32,18 @@ class Element():                                        # Representacion de un n
         self._padres = []
 
     
-    def __repr__(self):                                 # Método "mágico" usado para la representación de la clase
-        return str(self._nombre)
-
-
     def conexiones(self, conexion = None):              # Método "sobrecargado":
         if conexion != None:                            #     Modificador de la variable
             self._conexiones.append(conexion)
 
         return self._conexiones                         #     Observador de la variable
+
+
+    def nombre(self, nombre = None):                    # Método "sobrecargado":
+        if nombre != None:                              #     Modificador de la variable
+            self._nombre = nombre
+
+        return self._nombre                             #     Observador de la variable
 
 
     def padres(self, padre = None):                     # Método "sobrecargado":
@@ -92,7 +97,7 @@ class ventana_modelo():
 
             for fila in subresultado:
                 if DEBUG:
-                    print('Padre de ', elemento, ': ', fila.padreName, sep = '') # FIXME: Usando ?padreName, ver si usar ?padre
+                    print('Padre de ', elemento.nombre(), ': ', fila.padreName, sep = '') # FIXME: Usando ?padreName, ver si usar ?padre
 
                 elemento.padres(fila.padre)
 
