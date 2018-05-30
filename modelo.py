@@ -27,7 +27,7 @@ class Element():                                        # Representacion de un n
 
         self._conexiones = []
 
-        self._padre = ''
+        self._padres = []
 
     
     def __repr__(self):                                 # Método "mágico" usado para la representación de la clase
@@ -41,11 +41,11 @@ class Element():                                        # Representacion de un n
         return self._conexiones                         #     Observador de la variable
 
 
-    def padre(self, padre = None):                      # Método "sobrecargado":
+    def padres(self, padre = None):                     # Método "sobrecargado":
         if padre != None:                               #     Modificador de la variable
-            self._padre = padre
+            self._padres.append(padre)
 
-        return self._padre                              #     Observador de la variable
+        return self._padres                             #     Observador de la variable
 
 
 class ventana_modelo():
