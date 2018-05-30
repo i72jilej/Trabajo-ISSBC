@@ -88,7 +88,12 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
 
     def calcular(self):                                                 # Realiza los cálculos necesarios
-        QtGui.QMessageBox.information(self, 'Error de cálculo', 'Error: No se ha cargado ningún archivo')
+        texto = 'Error de cálculo'
+
+        if sys.version_info[0] < 3:
+            texto = texto.decode('utf-8')
+
+        QtGui.QMessageBox.information(self, texto, 'Error: No se ha cargado ningún archivo')
 
 
     def confirmar_modificado(self):
