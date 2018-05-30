@@ -1,6 +1,6 @@
 @prefix rdf:			<http://www.w3.org/1999/02/22-rdf-syntax-ns>	.
-@prefix maquina:		<http://www.pizzas.fake/maquina/>				.
-@prefix conexion:		<http://www.pizzas.fake/conexion/>				.
+@prefix maquina:		<http://www.factory.fake/maquina/>				.
+@prefix conexion:		<http://www.factory.fake/conexion/>				.
 
 
 _:electronica					rdf:type				maquina:maquina			.

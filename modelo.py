@@ -12,13 +12,54 @@
 # Notes         : 
 
 
+from __future__ import print_function
+
+
+DEBUG = True
+
+
 from rdflib import Graph
 
 
 class ventana_modelo():
-    def procesar(self, texto):
+    @staticmethod
+    def interpretar(grafo):
+        query = '''
+                    PREFIX    rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns>
+                    PREFIX    maquina:  <http://www.factory.fake/maquina/>
+                    SELECT    ?name ?duracion
+
+                    WHERE {
+                        ?x    rdf:type            maquina:maquina    .
+                        ?x    maquina:name        ?name              .
+                        ?x    maquina:duracion    ?duracion          .
+                        }
+
+                    # ORDER BY ?name
+                '''
+
+        resultado = grafo.query(query)
+
+        for fila in resultado:
+            if DEBUG:
+                print(fila.name, 'es una máquina', 'con duración', fila.duracion)
+
+        if DEBUG:
+            print()
+
+
+    @staticmethod
+    def procesar(texto):
         grafo = Graph()
 
-        grafo.parse(data = texto, format = 'n3')
+        try:
+            grafo.parse(data = texto, format = 'n3')
 
-        return grafo
+        except:
+            res = None
+
+        else:
+            res = grafo
+
+        finally:
+            return res

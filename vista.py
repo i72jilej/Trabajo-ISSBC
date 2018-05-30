@@ -242,7 +242,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
         # Etiquetas
         label_archivo = QtGui.QLabel('Archivo:')
-        #label_archivo.setMaximumWidth(45)
+        # label_archivo.setMaximumWidth(45)
 
         # Diseño
         disenyo = QtGui.QHBoxLayout()
