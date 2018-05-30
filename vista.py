@@ -96,11 +96,11 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         QtGui.QMessageBox.information(self, texto, 'Error: No se ha cargado ningún archivo')
 
 
-    def confirmar_modificado(self):
+    def confirmar_modificado(self, accion):
         # TODO: Ponerle nombre a los botones
 
         if self.modificado():
-            texto = 'Hay cálculos no guardados. ¿Desea guardarlos antes de salir?'
+            texto = 'Hay cálculos no guardados. ¿Desea guardarlos antes de ' + accion + '?'
     
             if sys.version_info[0] < 3:
                 texto = texto.decode('utf-8')

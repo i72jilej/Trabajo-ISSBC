@@ -35,7 +35,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
 
     def abrir(self):                                        # Acción de abrir 
-        respuesta = self.confirmar_modificado()
+        respuesta = self.confirmar_modificado('cargar uno nuevo')
 
         if respuesta == vista.respuestas.diccionario[vista.respuestas.DESCARTAR]:
             self.apertura()
@@ -120,7 +120,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
 
     def closeEvent(self, event):                            # Se pregunta al usuario si quiere salir
-        respuesta = self.confirmar_modificado()
+        respuesta = self.confirmar_modificado('salir')
 
         if respuesta == vista.respuestas.diccionario[vista.respuestas.DESCARTAR]:
             event.accept()
@@ -224,7 +224,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
 
     def nuevo(self):                                        # Acción de nuevo
-        respuesta = self.confirmar_modificado()
+        respuesta = self.confirmar_modificado('cargar un modelo nuevo')
 
         if respuesta == vista.respuestas.diccionario[vista.respuestas.DESCARTAR]:
             self.limpiar()
