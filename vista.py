@@ -84,7 +84,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
 
     def apertura(self):                                                 # Procedimiento de apertura
-        return QtGui.QFileDialog.getOpenFileName(self, 'Abrir archivo', filter = 'Base de conocimiento NTriples (*.nt);;Todos los archivos (*.*)')
+        return str(QtGui.QFileDialog.getOpenFileName(self, 'Abrir archivo', filter = 'Base de conocimiento NTriples (*.nt);;Todos los archivos (*.*)'))
 
 
     def calcular(self):                                                 # Realiza los cálculos necesarios
