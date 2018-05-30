@@ -51,8 +51,8 @@ class Element():                                        # Representacion de un n
 
 
 class ventana_modelo():
-    @staticmethod
-    def interpretar(grafo):
+    @staticmethod                                       # Método estático
+    def interpretar(grafo):                             # Interpreta un grafo dado: extrae la información necesaria para su posterior uso
         query = '''
                     PREFIX    rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns>
                     PREFIX    maquina:  <http://www.factory.fake/maquina/>
@@ -77,8 +77,8 @@ class ventana_modelo():
             print()
 
 
-    @staticmethod
-    def procesar(texto):
+    @staticmethod                                       # Método estático
+    def procesar(texto):                                # Procesa un texto: convierte un texto en formato NTriples a grafo
         grafo = Graph()
 
         try:
