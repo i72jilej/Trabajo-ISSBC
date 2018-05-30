@@ -75,6 +75,17 @@ class ventana_modelo():
 
             elemento = Element(fila.name)
 
+            query = '''
+                    '''
+
+            resultado = grafo.query(query)
+
+            for fila in resultado:
+                if DEBUG:
+                    print('Padre de ', elemento, ': ', fila.padre, sep = '')
+
+                elemento.padres(fila.padre)
+
             elementos.append(elemento)
 
         if DEBUG:
