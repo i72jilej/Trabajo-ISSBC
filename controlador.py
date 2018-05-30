@@ -69,14 +69,15 @@ class ventana_principal(vista.ventana_vista):
                 res = False
 
             else:
-                texto = archivo.read()
+                texto_archivo = archivo.read()
 
                 self.modificado(False)
 
                 # TODO: Interpretar archivo (rdflib) y controlar si es correcto
+                self._grafo = self.procesar(texto_archivo)
 
                 # FIXME: Borrar
-                self._text_desarrollo.setText(texto)
+                self._text_desarrollo.setText(texto_archivo)
                 self._grafo = texto
 
                 self.setWindowTitle(self._TITULO_APP + texto + nombre_archivo) 
