@@ -6,7 +6,7 @@
 # Description   : Lanzador del programa
 # Author        : Julio Domingo Jiménez Ledesma
 # Author        : Rafael Carlos Méndez Rodríguez
-# Date          : 23-05-2018
+# Date          : 30-05-2018
 # Version       : 1.0.0
 # Usage         : python main.py
 # Notes         : 
