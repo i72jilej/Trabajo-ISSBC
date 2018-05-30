@@ -12,29 +12,31 @@
 # Notes         : 
 
 
-TITULO_APP = 'Planificador de cadena de montaje'
-
-
 import sys
 
-from PyQt4 import QtGui
+import vista
+
+# from PyQt4 import QtGui
 
 
-class ventana_controlador():
+class ventana_principal(vista.ventana_vista):
     _modificado = False                                     # Inicialización de variables de clase
 
 
     def __init__(self):                                     # Constructor de la clase
-        pass
+        if sys.version_info[0] >= 3:                        # Llamada al método equivalente de la clase padre
+            super().__init__()
+        else:
+            super(ventana_principal, self).__init__()
 
 
     def abrir(self):                                        # Acción de abrir 
         respuesta = self.confirmar_modificado()
 
-        if respuesta == QtGui.QMessageBox.Discard:
+        if respuesta == vista.respuestas.diccionario[vista.respuestas.DESCARTAR]:
             self.apertura()
 
-        elif respuesta == QtGui.QMessageBox.Save:
+        elif respuesta == vista.respuestas.diccionario[vista.respuestas.GUARDAR]:
             if self.guardar():
                 self.apertura()
 
@@ -45,8 +47,11 @@ class ventana_controlador():
             pass
 
 
-    def apertura(self):
-        nombre_archivo = QtGui.QFileDialog.getOpenFileName(self, 'Abrir archivo', filter = 'Base de conocimiento NTriples (*.nt);;Todos los archivos (*.*)')
+    def apertura(self):                                     # Procedimiento de apertura
+        if sys.version_info[0] >= 3:                        # Llamada al método equivalente de la clase padre
+            nombre_archivo = super().apertura()
+        else:
+            nombre_archivo = super(ventana_principal, self).apertura()
 
         if nombre_archivo != '':                                        # Comprobando si se ha elegido algún archivo
             try:                                                        #Si se ha elegido un archivo
@@ -67,9 +72,9 @@ class ventana_controlador():
                 self._grafo = texto
 
                 if sys.version_info[0] >= 3: 
-                    self.setWindowTitle(TITULO_APP + ' ➡ ' + nombre_archivo) 
+                    self.setWindowTitle(self._TITULO_APP + ' ➡ ' + nombre_archivo) 
                 else: 
-                    self.setWindowTitle(TITULO_APP + u' ➡ ' + nombre_archivo) 
+                    self.setWindowTitle(self._TITULO_APP + u' ➡ ' + nombre_archivo) 
 
                 res = True
 
@@ -88,7 +93,10 @@ class ventana_controlador():
             self._grafo
 
         except AttributeError:
-            QtGui.QMessageBox.information(self, 'Error de cálculo', 'Error: No se ha cargado ningún archivo')
+            if sys.version_info[0] >= 3:                    # Llamada al método equivalente de la clase padre
+                super().calcular()
+            else:
+                super(ventana_principal, self).calcular()
 
         else:
             #TODO: Por hacer
@@ -102,10 +110,10 @@ class ventana_controlador():
     def closeEvent(self, event):                            # Se pregunta al usuario si quiere salir
         respuesta = self.confirmar_modificado()
 
-        if respuesta == QtGui.QMessageBox.Discard:
+        if respuesta == vista.respuestas.diccionario[vista.respuestas.DESCARTAR]:
             event.accept()
 
-        elif respuesta == QtGui.QMessageBox.Save:
+        elif respuesta == vista.respuestas.diccionario[vista.respuestas.GUARDAR]:
             if self.guardar():
                 event.accept()
 
@@ -116,25 +124,15 @@ class ventana_controlador():
             event.ignore()
 
 
-    def confirmar_modificado(self):
-        # TODO: Ponerle nombre a los botones
-
-        if self.modificado():
-            if sys.version_info[0] >= 3:
-                return QtGui.QMessageBox.question(self, 'Aviso', 'Hay cálculos no guardados. ¿Desea guardarlos antes de salir?', QtGui.QMessageBox.Discard | QtGui.QMessageBox.Save | QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Cancel)
-            else:
-                return QtGui.QMessageBox.question(self, 'Aviso', u'Hay cálculos no guardados. ¿Desea guardarlos antes de salir?', QtGui.QMessageBox.Discard | QtGui.QMessageBox.Save | QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Cancel)
-
-        else:
-            return QtGui.QMessageBox.Discard
-
-
-    def guardado(self):
+    def guardado(self):                                     # Procedimiento de guardado
         try:
             archivo = open(file = self._nombre_archivo, mode = 'w', encoding = 'utf-8')
 
         except IOError:
-            QtGui.QMessageBox.warning(self, 'Error de apertura', 'Error: Archivo <' + self._nombre_archivo + '> inaccesible')
+            if sys.version_info[0] >= 3:                    # Llamada al método equivalente de la clase padre
+                super().guardado()
+            else:
+                super(ventana_principal, self).guardado()
 
             return False
 
@@ -174,24 +172,16 @@ class ventana_controlador():
         return True
 
 
-    def guardarComo(self):
-        self._nombre_archivo = QtGui.QFileDialog.getSaveFileName(self, 'Guardar archivo')
+    def guardar_como(self):                                 # Acción de guardar cómo
+        if sys.version_info[0] >= 3:                        # Llamada al método equivalente de la clase padre
+            self._nombre_archivo = super().guardar_como()
+        else:
+            self._nombre_archivo = super(ventana_principal, self).guardar_como()
 
         if self._nombre_archivo != '':
             return self.guardado()
         else:
             return False
-
-
-    def imprimir(self):                                     # Acción de imprimir
-        impresion = QtGui.QPrintDialog()
-
-        if impresion.exec_() == QtGui.QDialog.Accepted:
-            # TODO: Establecer widget a imprimir self.textEdit.document().print_(impresion.printer())
-            pass
-
-        else:
-            pass
 
 
     def limpiar(self):                                      # Acción de limpiar
@@ -202,7 +192,7 @@ class ventana_controlador():
 
         self.modificado(False)
 
-        self.setWindowTitle(TITULO_APP)
+        self.setWindowTitle(self._TITULO_APP)
 
         try:
             del self._nombre_archivo
@@ -224,10 +214,10 @@ class ventana_controlador():
     def nuevo(self):                                        # Acción de nuevo
         respuesta = self.confirmar_modificado()
 
-        if respuesta == QtGui.QMessageBox.Discard:
+        if respuesta == vista.respuestas.diccionario[vista.respuestas.DESCARTAR]:
             self.limpiar()
 
-        elif respuesta == QtGui.QMessageBox.Save:
+        elif respuesta == vista.respuestas.diccionario[vista.respuestas.GUARDAR]:
             if self.guardar():
                 self.limpiar()
 

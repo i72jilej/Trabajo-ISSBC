@@ -12,22 +12,31 @@
 # Notes         : 
 
 
-TITULO_APP = 'Planificador de cadena de montaje'
-
-
 import sys                                                              # Funcionalidades varias del sistema
 
 from PyQt4 import QtGui                                                 # Módulo de interfaz de usuario de PyQt4
 
-from controlador import ventana_controlador
+
+class respuestas():
+    DESCARTAR               = 0
+    CANCELAR                = 1
+    GUARDAR                 = 2
+
+    diccionario             = []
+    diccionario.append(QtGui.QMessageBox.Discard)
+    diccionario.append(QtGui.QMessageBox.Cancel)
+    diccionario.append(QtGui.QMessageBox.Save)
 
 
-class ventana_principal(QtGui.QMainWindow, ventana_controlador):
+class ventana_vista(QtGui.QMainWindow):
+    _TITULO_APP = 'Planificador de cadena de montaje'
+
+
     def __init__(self):                                                 # Constructor de la clase; al ser una ventana, inicializa la misma
         if sys.version_info[0] >= 3:                                    # Llamada al constructor de la clase padre
             super().__init__()
         else:
-            super(ventana_principal, self).__init__()
+            super(ventana_vista, self).__init__()
 
         self.setWindowIcon(QtGui.QIcon('./iconos/000-checklist.png'))   # Establecer el icono de la ventana principal
 
@@ -47,7 +56,7 @@ class ventana_principal(QtGui.QMainWindow, ventana_controlador):
 
         self.statusBar().showMessage('Esperando archivo')               # Se establece el mensaje para barra de estado
 
-        self.setWindowTitle(TITULO_APP)                                 # Se establece el título de la ventana
+        self.setWindowTitle(self._TITULO_APP)                           # Se establece el título de la ventana
 
         self.setMinimumSize(640, 480)                                   # Parámetros de tamaño
 
@@ -80,11 +89,32 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         pass
 
 
+    def apertura(self):                                                 # Procedimiento de apertura
+        return QtGui.QFileDialog.getOpenFileName(self, 'Abrir archivo', filter = 'Base de conocimiento NTriples (*.nt);;Todos los archivos (*.*)')
+
+
+    def calcular(self):                                                 # Realiza los cálculos necesarios
+        QtGui.QMessageBox.information(self, 'Error de cálculo', 'Error: No se ha cargado ningún archivo')
+
+
+    def confirmar_modificado(self):
+        # TODO: Ponerle nombre a los botones
+
+        if self.modificado():
+            if sys.version_info[0] >= 3:
+                return QtGui.QMessageBox.question(self, 'Aviso', 'Hay cálculos no guardados. ¿Desea guardarlos antes de salir?', QtGui.QMessageBox.Discard | QtGui.QMessageBox.Save | QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Cancel)
+            else:
+                return QtGui.QMessageBox.question(self, 'Aviso', u'Hay cálculos no guardados. ¿Desea guardarlos antes de salir?', QtGui.QMessageBox.Discard | QtGui.QMessageBox.Save | QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Cancel)
+
+        else:
+            return QtGui.QMessageBox.Discard
+
+
     def crearAcciones(self):                                	       	# Se crean las acciones asociadas al menú y a la barra de herramientas
         self.nuevoAcc           = QtGui.QAction('&Nuevo',           self, shortcut = QtGui.QKeySequence.New,    statusTip = 'Crea un nuevo archivo',                                triggered = self.nuevo          )
         self.abrirAcc           = QtGui.QAction('&Abrir...',        self, shortcut = QtGui.QKeySequence.Open,   statusTip = 'Abre un archivo existente',                            triggered = self.abrir          )
         self.guardarAcc         = QtGui.QAction('&Guardar',         self, shortcut = QtGui.QKeySequence.Save,   statusTip = 'Guarda el archivo',                                    triggered = self.guardar        )
-        self.guardarComoAcc     = QtGui.QAction('Guardar c&omo',    self, shortcut = QtGui.QKeySequence.SaveAs, statusTip = 'Guarda el archivo con un nombre distinto',             triggered = self.guardarComo    )
+        self.guardarComoAcc     = QtGui.QAction('Guardar c&omo',    self, shortcut = QtGui.QKeySequence.SaveAs, statusTip = 'Guarda el archivo con un nombre distinto',             triggered = self.guardar_como   )
         self.imprimirAcc        = QtGui.QAction('Im&primir',        self, shortcut = QtGui.QKeySequence.Print,  statusTip = 'Imprime el archivo',                                   triggered = self.imprimir       )
 
         if sys.version_info[0] >= 3:
@@ -222,5 +252,24 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         mitad_superior.setLayout(disenyo)
 
         return mitad_superior
+
+
+    def guardado(self):                                                 # Procedimiento de guardado
+            QtGui.QMessageBox.warning(self, 'Error de apertura', 'Error: Archivo <' + self._nombre_archivo + '> inaccesible')
+
+
+    def guardar_como(self):                                             # Acción de guardar cómo
+        return QtGui.QFileDialog.getSaveFileName(self, 'Guardar archivo')
+
+
+    def imprimir(self):                                                 # Acción de imprimir
+        impresion = QtGui.QPrintDialog()
+
+        if impresion.exec_() == QtGui.QDialog.Accepted:
+            # TODO: Establecer widget a imprimir self.textEdit.document().print_(impresion.printer())
+            pass
+
+        else:
+            pass
 
 
