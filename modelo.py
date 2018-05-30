@@ -22,9 +22,7 @@ from rdflib import Graph
 
 
 class Element():                                        # Representacion de un nodo en el grafo
-    def __init__(self, identificador, nombre):          # Constructor de la clase
-        self._id = identificador
-
+    def __init__(self, nombre):                         # Constructor de la clase
         self._nombre = nombre
 
         self._conexiones = []
