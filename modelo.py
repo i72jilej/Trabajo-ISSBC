@@ -76,13 +76,23 @@ class ventana_modelo():
             elemento = Element(fila.name)
 
             query = '''
+                        PREFIX    rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns>
+                        PREFIX    maquina:  <http://www.factory.fake/maquina/>
+                        SELECT    ?padre ?padreName
+
+                        WHERE {
+                            ?x      maquina:name        "%s"          .
+                            ?x      maquina:padre       ?padre        .
+                            ?padre  maquina:name        ?padreName    .
+                            }
                     '''
+                    # FIXME: Ver si nos vale así (usar solo ?padre, que es la ID interna o ?padreName que es el nombre de la maquina)
 
-            resultado = grafo.query(query)
+            subresultado = grafo.query(query % fila.name)
 
-            for fila in resultado:
+            for fila in subresultado:
                 if DEBUG:
-                    print('Padre de ', elemento, ': ', fila.padre, sep = '')
+                    print('Padre de ', elemento, ': ', fila.padreName, sep = '') # FIXME: Usando ?padreName, ver si usar ?padre
 
                 elemento.padres(fila.padre)
 
