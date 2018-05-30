@@ -64,25 +64,19 @@ class ventana_vista(QtGui.QMainWindow):
 
 
     def acercaDe(self):
-        if sys.version_info[0] >= 3:
-            QtGui.QMessageBox.about(self, 'Acerca de', '''<p>Trabajo de planificación creada por Julio Domingo Jiménez Ledesma (i72jilej) y Rafael Carlos Méndez Rodríguez (i82meror)</p>
+        texto = '''<p>Trabajo de planificación creada por Julio Domingo Jiménez Ledesma (i72jilej) y Rafael Carlos Méndez Rodríguez (i82meror)</p>
 <p>Icono usado en "Nuevo" por <a href="https://www.flaticon.com/authors/yannick">Yannick</a><br />
 Icono usado en "Abrir" por <a href="https://www.flaticon.com/authors/simpleicon">SimpleIcon</a><br />
 Iconos usados en la ventana principal, "Guardar", "Calcular", "Acerca de" y "Acerca de Qt" por <a href="https://www.flaticon.com/authors/freepik">Freepic</a><br />
 Iconos usados en "Guardar como" y "Salir" por <a href="https://www.flaticon.com/authors/smashicons">Smashicons</a><br />
 Icono usado en "Imprimir" por <a href="https://www.flaticon.com/authors/dave-gandy">Dave Gandy</a><br />
 Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a></p>
-''')
+'''
 
-        else:
-            QtGui.QMessageBox.about(self, 'Acerca de', u'''<p>Trabajo de planificación creada por Julio Domingo Jiménez Ledesma (i72jilej) y Rafael Carlos Méndez Rodríguez (i82meror)</p>
-<p>Icono usado en "Nuevo" por <a href="https://www.flaticon.com/authors/yannick">Yannick</a><br />
-Icono usado en "Abrir" por <a href="https://www.flaticon.com/authors/simpleicon">SimpleIcon</a><br />
-Iconos usados en la ventana principal, "Guardar", "Calcular", "Acerca de" y "Acerca de Qt" por <a href="https://www.flaticon.com/authors/freepik">Freepic</a><br />
-Iconos usados en "Guardar como" y "Salir" por <a href="https://www.flaticon.com/authors/smashicons">Smashicons</a><br />
-Icono usado en "Imprimir" por <a href="https://www.flaticon.com/authors/dave-gandy">Dave Gandy</a><br />
-Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a></p>
-''')
+        if sys.version_info[0] < 3:
+            texto = texto.decode('utf-8')
+
+        QtGui.QMessageBox.about(self, 'Acerca de', texto)
 
 
     def acercaDeQt(self):
@@ -101,34 +95,35 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         # TODO: Ponerle nombre a los botones
 
         if self.modificado():
-            if sys.version_info[0] >= 3:
-                return QtGui.QMessageBox.question(self, 'Aviso', 'Hay cálculos no guardados. ¿Desea guardarlos antes de salir?', QtGui.QMessageBox.Discard | QtGui.QMessageBox.Save | QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Cancel)
-            else:
-                return QtGui.QMessageBox.question(self, 'Aviso', u'Hay cálculos no guardados. ¿Desea guardarlos antes de salir?', QtGui.QMessageBox.Discard | QtGui.QMessageBox.Save | QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Cancel)
+            texto = 'Hay cálculos no guardados. ¿Desea guardarlos antes de salir?'
+    
+            if sys.version_info[0] < 3:
+                texto = texto.decode('utf-8')
+
+            return QtGui.QMessageBox.question(self, 'Aviso', texto, QtGui.QMessageBox.Discard | QtGui.QMessageBox.Save | QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Cancel)
 
         else:
             return QtGui.QMessageBox.Discard
 
 
     def crearAcciones(self):                                	       	# Se crean las acciones asociadas al menú y a la barra de herramientas
+        textos = []
+        textos.append('Sale de la aplicación')
+        textos.append('Muestra la ventana "Acerca de" de la librería Qt')
+
+        if sys.version_info[0] < 3:
+            for texto in textos:
+                texto = texto.decode('utf-8')
+
         self.nuevoAcc           = QtGui.QAction('&Nuevo',           self, shortcut = QtGui.QKeySequence.New,    statusTip = 'Crea un nuevo archivo',                                triggered = self.nuevo          )
         self.abrirAcc           = QtGui.QAction('&Abrir...',        self, shortcut = QtGui.QKeySequence.Open,   statusTip = 'Abre un archivo existente',                            triggered = self.abrir          )
         self.guardarAcc         = QtGui.QAction('&Guardar',         self, shortcut = QtGui.QKeySequence.Save,   statusTip = 'Guarda el archivo',                                    triggered = self.guardar        )
         self.guardarComoAcc     = QtGui.QAction('Guardar c&omo',    self, shortcut = QtGui.QKeySequence.SaveAs, statusTip = 'Guarda el archivo con un nombre distinto',             triggered = self.guardar_como   )
         self.imprimirAcc        = QtGui.QAction('Im&primir',        self, shortcut = QtGui.QKeySequence.Print,  statusTip = 'Imprime el archivo',                                   triggered = self.imprimir       )
-
-        if sys.version_info[0] >= 3:
-            self.salirAcc       = QtGui.QAction('&Salir',           self, shortcut = 'Alt+F4',                  statusTip = 'Sale de la aplicación',                                triggered = self.close          )
-        else:
-            self.salirAcc       = QtGui.QAction('&Salir',           self, shortcut = 'Alt+F4',                  statusTip = u'Sale de la aplicación',                               triggered = self.close          )
-
-        self.calcularAcc        = QtGui.QAction("&Calcular",        self, shortcut = 'F4',                      statusTip = 'Comienza los cálculos',                                triggered = self.calcular       )
-        self.acercaDeAcc        = QtGui.QAction("&Acerca de",       self, shortcut = 'F1',                      statusTip = 'Muestra la ventana "Acerca de"',                       triggered = self.acercaDe       )
-
-        if sys.version_info[0] >= 3:
-            self.acercaDeQtAcc  = QtGui.QAction("Acerca de &Qt",    self,                                       statusTip = 'Muestra la ventana "Acerca de" de la librería Qt',     triggered = self.acercaDeQt     )
-        else:
-            self.acercaDeQtAcc  = QtGui.QAction("Acerca de &Qt",    self,                                       statusTip = u'Muestra la ventana "Acerca de" de la librería Qt',    triggered = self.acercaDeQt     )
+        self.salirAcc           = QtGui.QAction('&Salir',           self, shortcut = 'Alt+F4',                  statusTip = textos[0],                                              triggered = self.close          )
+        self.calcularAcc        = QtGui.QAction('&Calcular',        self, shortcut = 'F4',                      statusTip = 'Comienza los cálculos',                                triggered = self.calcular       )
+        self.acercaDeAcc        = QtGui.QAction('&Acerca de',       self, shortcut = 'F1',                      statusTip = 'Muestra la ventana "Acerca de"',                       triggered = self.acercaDe       )
+        self.acercaDeQtAcc      = QtGui.QAction('Acerca de &Qt',    self,                                       statusTip = textos[1],                                              triggered = self.acercaDeQt     )
 
         self.acercaDeQtAcc.triggered.connect(QtGui.qApp.aboutQt)
 
@@ -158,6 +153,11 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
 
     def crearMenus(self):                                   	        # Se crean los menús
+        texto = 'A&cción'
+
+        if sys.version_info[0] < 3:
+            texto = texto.decode('utf-8')
+
         self._menu_archivo = self.menuBar().addMenu('&Archivo')
         self._menu_archivo.addAction(self.nuevoAcc)
         self._menu_archivo.addAction(self.abrirAcc)
@@ -168,11 +168,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         self._menu_archivo.addSeparator()
         self._menu_archivo.addAction(self.salirAcc)
 
-        if sys.version_info[0] >= 3:
-            self._menu_accion = self.menuBar().addMenu('A&cción')
-        else:
-            self._menu_accion = self.menuBar().addMenu(u'A&cción')
-
+        self._menu_accion = self.menuBar().addMenu(texto)
         self._menu_accion.addAction(self.calcularAcc)
 
         self._menu_ayuda = self.menuBar().addMenu("A&yuda")
@@ -187,15 +183,17 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
 
     def dibujar_mitad_inferior(self):
+        texto = 'Solución:'
+
+        if sys.version_info[0] < 3:
+            texto = texto.decode('utf-8')
+
         # Etiquetas
         label_desarrollo = QtGui.QLabel('Desarrollo:')
 
         label_dominio = QtGui.QLabel('Dominio:')
 
-        if sys.version_info[0] >= 3:
-            label_solucion = QtGui.QLabel('Solución:')
-        else:
-            label_solucion = QtGui.QLabel(u'Solución:')
+        label_solucion = QtGui.QLabel(texto)
 
         # Controles de edición
         self._text_desarrollo = QtGui.QTextEdit()
