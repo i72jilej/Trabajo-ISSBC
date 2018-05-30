@@ -14,7 +14,8 @@
 
 import sys                                                  # Funcionalidades varias del sistema
 
-import vista
+import modelo                                               # Modelo del programa
+import vista                                                # Vista del programa
 
 if sys.version_info[0] < 3:
     from io import open
@@ -22,7 +23,7 @@ if sys.version_info[0] < 3:
 # from PyQt4 import QtGui
 
 
-class ventana_principal(vista.ventana_vista):
+class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
     _modificado = False                                     # Inicialización de variables de clase
 
 
@@ -61,8 +62,8 @@ class ventana_principal(vista.ventana_vista):
         else:
             nombre_archivo = super(ventana_principal, self).apertura()
 
-        if nombre_archivo != '':                                        # Comprobando si se ha elegido algún archivo
-            try:                                                        #Si se ha elegido un archivo
+        if nombre_archivo != '':                            # Comprobando si se ha elegido algún archivo
+            try:                                            # Si se ha elegido un archivo
                 archivo = open(file = nombre_archivo, mode = 'r', encoding = 'utf-8')
 
             except IOError:
