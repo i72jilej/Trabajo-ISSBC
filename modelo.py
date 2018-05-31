@@ -22,8 +22,10 @@ from rdflib import Graph
 
 
 class Element():                                        # Representacion de un nodo en el grafo
-    def __init__(self, nombre):                         # Constructor de la clase
+    def __init__(self, nombre, duracion):               # Constructor de la clase
         self._nombre = nombre
+
+        self._duracion = duracion
 
         self._conexiones = []
 
@@ -35,6 +37,13 @@ class Element():                                        # Representacion de un n
             self._conexiones.append(conexion)
 
         return self._conexiones                         #     Observador de la variable
+
+
+    def duracion(self, duracion = None):                # Método "sobrecargado":
+        if duracion != None:                            #     Modificador de la variable
+            self._duracion = duracion
+
+        return self._duracion                           #     Observador de la variable
 
 
     def nombre(self, nombre = None):                    # Método "sobrecargado":
@@ -74,9 +83,9 @@ class ventana_modelo():
 
         for fila in resultado:
             if DEBUG:
-                print(fila.name, 'es una máquina', 'con duración', fila.duracion)
+                print(fila.name, 'es una máquina con duración', fila.duracion)
 
-            elemento = Element(fila.name)
+            elemento = Element(fila.name, fila.duracion)
 
             query = '''
                         PREFIX    rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns>
