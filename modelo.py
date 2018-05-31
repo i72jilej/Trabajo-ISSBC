@@ -18,8 +18,6 @@ from __future__ import print_function
 DEBUG = True
 
 
-import sys                                              # Funcionalidades varias del sistema
-
 from rdflib import Graph
 
 
