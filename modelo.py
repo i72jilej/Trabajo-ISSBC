@@ -118,16 +118,14 @@ class ventana_modelo():
                         PREFIX    maquina:  <http://www.factory.fake/maquina/>
                         PREFIX    conexion: <http://www.factory.fake/conexion/>
 
-                        # SELECT    ?nombre_siguiente ?duracion
-                        SELECT    ?siguiente ?duracion
+                        SELECT    ?nombre_siguiente ?duracion
 
                         WHERE {
-                            ?maquina_1  maquina:nombre      "%s"              .
-                            ?conexion   conexion:precedente ?maquina_1        .
+                            ?maquina    maquina:nombre      "%s"              .
+                            ?conexion   conexion:precedente ?maquina          .
                             ?conexion   conexion:siguiente  ?siguiente        .
                             ?conexion   conexion:duracion   ?duracion         .
-                            # ?maquina_2  maquina:maquina     ?siguiente        .
-                            # ?maquina_2  maquina:nombre      ?nombre_siguiente .
+                            ?siguiente  maquina:nombre      ?nombre_siguiente .
                             }
                     '''
 
@@ -135,8 +133,7 @@ class ventana_modelo():
 
             for subfila in subresultado:
                 if DEBUG:
-                    # print("\tConexión de ", elemento.nombre(), ': ', subfila.nombre_siguiente, ', ', subfila.duracion, sep = '')
-                    print("\tConexión de ", elemento.nombre(), ': ', subfila.siguiente, ', ', subfila.duracion, sep = '')
+                    print("\tConexión de ", elemento.nombre(), ': ', subfila.nombre_siguiente, ', ', subfila.duracion, sep = '')
 
                 # elemento.padres(subfila.nombre_padre)
 
