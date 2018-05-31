@@ -53,9 +53,13 @@ class Element():                                        # Representacion de un n
         return self._nombre                             #     Observador de la variable
 
 
-    def padres(self, padre = None):                     # Método "sobrecargado":
+    def padres(self, padre = None, multiples = False):  # Método "sobrecargado":
         if padre != None:                               #     Modificador de la variable
-            self._padres.append(padre)
+            if multiples == True:
+                self._padres = padre
+
+            else:
+                self._padres.append(padre)
 
         return self._padres                             #     Observador de la variable
 
@@ -90,28 +94,60 @@ class ventana_modelo():
             query = '''
                         PREFIX    rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns>
                         PREFIX    maquina:  <http://www.factory.fake/maquina/>
-                        SELECT    ?padre ?padreName
+                        SELECT    ?nombrePadre
 
                         WHERE {
                             ?x      maquina:name        "%s"          .
                             ?x      maquina:padre       ?padre        .
-                            ?padre  maquina:name        ?padreName    .
+                            ?padre  maquina:name        ?nombrePadre  .
                             }
                     '''
-                    # FIXME: Ver si nos vale así (usar solo ?padre, que es la ID interna o ?padreName que es el nombre de la maquina)
 
             subresultado = grafo.query(query % fila.name)
 
             for fila in subresultado:
                 if DEBUG:
-                    print('Padre de ', elemento.nombre(), ': ', fila.padreName, sep = '') # FIXME: Usando ?padreName, ver si usar ?padre
+                    print("\tPadre de ", elemento.nombre(), ': ', fila.nombrePadre, sep = '')
 
-                elemento.padres(fila.padre)
+                elemento.padres(fila.nombrePadre)
 
             elementos.append(elemento)
 
+        for elemento in elementos:
+            padres = elemento.padres()
+
+            if padres != []:
+                elemento.padres(ventana_modelo.padres_a_ids(elementos, padres), True)
+
         if DEBUG:
             print()
+            print()
+
+            for elemento in elementos:
+                print(elemento.nombre(), 'es una máquina con duración', elemento.duracion())
+
+                for i in elemento.padres():
+                    print("\tPadre de ", elemento.nombre(), ': ', elementos[i].nombre(), sep = '')
+
+            print()
+
+
+    @staticmethod
+    def padres_a_ids(elementos, padres):
+        res = []
+
+        for padre in padres:
+            id_padre = -1
+
+            for id_elemento in range(len(elementos)):
+                if elementos[id_elemento].nombre() == padre:
+                    id_padre = id_elemento
+
+                    break
+
+            res.append(id_padre)
+
+        return res
 
 
     @staticmethod                                       # Método estático
