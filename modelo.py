@@ -72,12 +72,13 @@ class ventana_modelo():
         query = '''
                     PREFIX    rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns>
                     PREFIX    maquina:  <http://www.factory.fake/maquina/>
-                    SELECT    ?name ?duracion
+
+                    SELECT    ?nombre ?duracion
 
                     WHERE {
-                        ?x    rdf:type            maquina:maquina    .
-                        ?x    maquina:name        ?name              .
-                        ?x    maquina:duracion    ?duracion          .
+                        ?maquina    rdf:type            maquina:maquina        .
+                        ?maquina    maquina:nombre      ?nombre                .
+                        ?maquina    maquina:duracion    ?duracion              .
                         }
 
                     # ORDER BY ?name
@@ -87,31 +88,35 @@ class ventana_modelo():
 
         for fila in resultado:
             if DEBUG:
-                print(fila.name, 'es una máquina con duración', fila.duracion)
+                print(fila.nombre, 'es una máquina con duración', fila.duracion)
 
-            elemento = Element(fila.name, fila.duracion)
+            elemento = Element(fila.nombre, fila.duracion)
 
             query = '''
-                        PREFIX    rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns>
                         PREFIX    maquina:  <http://www.factory.fake/maquina/>
-                        SELECT    ?nombrePadre
+
+                        SELECT    ?nombre_padre
 
                         WHERE {
-                            ?x      maquina:name        "%s"          .
-                            ?x      maquina:padre       ?padre        .
-                            ?padre  maquina:name        ?nombrePadre  .
+                            ?maquina    maquina:nombre      "%s"              .
+                            ?maquina    maquina:padre       ?padre            .
+                            ?padre      maquina:nombre      ?nombre_padre     .
                             }
                     '''
 
-            subresultado = grafo.query(query % fila.name)
+            subresultado = grafo.query(query % fila.nombre)
 
-            for fila in subresultado:
+            for subfila in subresultado:
                 if DEBUG:
-                    print("\tPadre de ", elemento.nombre(), ': ', fila.nombrePadre, sep = '')
+                    print("\tPadre de ", elemento.nombre(), ': ', subfila.nombre_padre, sep = '')
 
-                elemento.padres(fila.nombrePadre)
+                elemento.padres(subfila.nombre_padre)
 
             elementos.append(elemento)
+
+        if DEBUG:
+            print()
+            print()
 
         for elemento in elementos:
             padres = elemento.padres()
@@ -120,9 +125,6 @@ class ventana_modelo():
                 elemento.padres(ventana_modelo.padres_a_ids(elementos, padres), True)
 
         if DEBUG:
-            print()
-            print()
-
             for elemento in elementos:
                 print(elemento.nombre(), 'es una máquina con duración', elemento.duracion())
 
@@ -130,6 +132,8 @@ class ventana_modelo():
                     print("\tPadre de ", elemento.nombre(), ': ', elementos[i].nombre(), sep = '')
 
             print()
+            print()
+
 
 
     @staticmethod

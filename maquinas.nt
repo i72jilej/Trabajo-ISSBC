@@ -4,51 +4,51 @@
 
 
 _:electronica					rdf:type				maquina:maquina			.
-_:electronica					maquina:name			"Electrónica"			.
+_:electronica					maquina:nombre			"Electrónica"			.
 _:electronica					maquina:duracion		"60"					.
 
 _:carroceria					rdf:type				maquina:maquina			.
-_:carroceria					maquina:name			"Carrocería"			.
+_:carroceria					maquina:nombre			"Carrocería"			.
 _:carroceria					maquina:duracion		"60"					.
 
 _:motor							rdf:type				maquina:maquina			.
-_:motor							maquina:name			"Motor"					.
+_:motor							maquina:nombre			"Motor"					.
 _:motor							maquina:duracion		"60"					.
 
 _:interiores					rdf:type				maquina:maquina			.
-_:interiores					maquina:name			"Interiores"			.
+_:interiores					maquina:nombre			"Interiores"			.
 _:interiores					maquina:duracion		"60"					.
 _:interiores					maquina:padre			_:electronica			.
 _:interiores					maquina:padre			_:carroceria			.
 
 _:transmision					rdf:type				maquina:maquina			.
-_:transmision					maquina:name			"Transmisión"			.
+_:transmision					maquina:nombre			"Transmisión"			.
 _:transmision					maquina:duracion		"60"					.
 _:transmision					maquina:padre			_:motor					.
 
 _:puertas						rdf:type				maquina:maquina			.
-_:puertas						maquina:name			"Puertas"				.
+_:puertas						maquina:nombre			"Puertas"				.
 _:puertas						maquina:duracion		"60"					.
 _:puertas						maquina:padre			_:carroceria			.
 _:puertas						maquina:padre			_:interiores			.
 
 _:ruedas						rdf:type				maquina:maquina			.
-_:ruedas						maquina:name			"Ruedas"				.
+_:ruedas						maquina:nombre			"Ruedas"				.
 _:ruedas						maquina:duracion		"60"					.
 _:ruedas						maquina:padre			_:transmision			.
 
 _:pintura						rdf:type				maquina:maquina			.
-_:pintura						maquina:name			"Pintura"				.
+_:pintura						maquina:nombre			"Pintura"				.
 _:pintura						maquina:duracion		"60"					.
 _:pintura						maquina:padre			_:puertas				.
 
 _:faros							rdf:type				maquina:maquina			.
-_:faros							maquina:name			"Faros"					.
+_:faros							maquina:nombre			"Faros"					.
 _:faros							maquina:duracion		"60"					.
 _:faros							maquina:padre			_:pintura				.
 
 _:cristales						rdf:type				maquina:maquina			.
-_:cristales						maquina:name			"Cristales"				.
+_:cristales						maquina:nombre			"Cristales"				.
 _:cristales						maquina:duracion		"60"					.
 _:cristales						maquina:padre			_:pintura				.
 
