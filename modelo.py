@@ -114,6 +114,36 @@ class ventana_modelo():
 
             elementos.append(elemento)
 
+            query = '''
+                        PREFIX    maquina:  <http://www.factory.fake/maquina/>
+                        PREFIX    conexion: <http://www.factory.fake/conexion/>
+
+                        # SELECT    ?nombre_siguiente ?duracion
+                        SELECT    ?siguiente ?duracion
+
+                        WHERE {
+                            ?maquina_1  maquina:nombre      "%s"              .
+                            ?conexion   conexion:precedente ?maquina_1        .
+                            ?conexion   conexion:siguiente  ?siguiente        .
+                            ?conexion   conexion:duracion   ?duracion         .
+                            # ?maquina_2  maquina:maquina     ?siguiente        .
+                            # ?maquina_2  maquina:nombre      ?nombre_siguiente .
+                            }
+                    '''
+
+            subresultado = grafo.query(query % fila.nombre)
+
+            for subfila in subresultado:
+                if DEBUG:
+                    # print("\tConexión de ", elemento.nombre(), ': ', subfila.nombre_siguiente, ', ', subfila.duracion, sep = '')
+                    print("\tConexión de ", elemento.nombre(), ': ', subfila.siguiente, ', ', subfila.duracion, sep = '')
+
+                # elemento.padres(subfila.nombre_padre)
+
+
+
+
+
         if DEBUG:
             print()
             print()
