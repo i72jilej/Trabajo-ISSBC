@@ -82,7 +82,7 @@ class ventana_modelo():                                         # Parte del mode
 
                     break
 
-            res.append((id_padre, conexion.duracion))
+            res.append((id_conexion, conexion.duracion))
 
         return res
 
