@@ -89,6 +89,9 @@ class ventana_modelo():                                         # Parte del mode
 
     @staticmethod                                               # Método estático
     def interpretar(grafo):                                     # Interpreta un grafo dado: extrae la información necesaria para su posterior uso
+        if DEBUG:
+            print('Listando datos antes de ser almacenados en memoria...')
+
         elementos = []
 
         query = '''
@@ -175,11 +178,16 @@ class ventana_modelo():                                         # Parte del mode
                 elemento.conexiones(ventana_modelo.conexiones_a_ids(elementos, conexiones), True)
 
         if DEBUG:
-            for elemento in elementos:
-                print(elemento.nombre(), 'es una máquina con duración', elemento.duracion())
+            print('Listando datos después de ser almacenados en memoria...')
 
-                for i in elemento.padres():
-                    print("\tPadre de ", elemento.nombre(), ': ', elementos[i].nombre(), sep = '')
+            for i in range(len(elementos)):
+                print(elementos[i].nombre(), 'es una máquina con duración', elementos[i].duracion())
+
+                for j in elemento.padres():
+                    print("\tPadre de ", elemento.nombre(), ': ', elementos[j].nombre(), sep = '')
+
+                for (j, duracion) in elemento.conexiones():
+                    print("\tConexión de ", elemento.nombre(), ': ', elementos[j].nombre(), ', ', duracion, sep = '')
 
             print()
             print()
