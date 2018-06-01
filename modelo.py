@@ -86,6 +86,7 @@ class ventana_modelo():                                         # Parte del mode
 
         return res
 
+
     @staticmethod                                               # Método estático
     def interpretar(grafo):                                     # Interpreta un grafo dado: extrae la información necesaria para su posterior uso
         elementos = []
@@ -164,12 +165,12 @@ class ventana_modelo():                                         # Parte del mode
 
         for elemento in elementos:
             padres = elemento.padres()
-            
+
             conexiones = elemento.conexiones()
 
             if padres != []:
                 elemento.padres(ventana_modelo.padres_a_ids(elementos, padres), True)
-                
+
             if conexiones != []:
                 elemento.conexiones(ventana_modelo.conexiones_a_ids(elementos, conexiones), True)
 
