@@ -21,9 +21,9 @@ DEBUG = True
 from rdflib import Graph
 
 
-class Element():                                        # Representacion de un nodo en el grafo
-    def __init__(self, nombre, duracion):               # Constructor de la clase
-        self._nombre = nombre
+class Element():                                                # Representacion de un nodo en el grafo
+    def __init__(self, nombre, duracion):                       # Constructor de la clase
+        self._nombre = nombre                                   # Inicialización de variables
 
         self._duracion = duracion
 
@@ -31,46 +31,46 @@ class Element():                                        # Representacion de un n
 
         self._padres = []
 
-    
-    def conexiones(self, conexion = None, multiples = False):              # Método "sobrecargado":
-        if conexion != None:                            #     Modificador de la variable
-            if multiples == True:
+
+    def conexiones(self, conexion = None, multiples = False):   # Método "sobrecargado":
+        if conexion != None:                                    #     Modificador de la variable
+            if multiples == True:                               #     Modificador múltiple
                 self._conexiones = conexion
-                
-            else:
+
+            else:                                               #     Modificador simple
                 self._conexiones.append(conexion)
 
-        return self._conexiones                         #     Observador de la variable
+        return self._conexiones                                 #     Observador de la variable
 
 
-    def duracion(self, duracion = None):                # Método "sobrecargado":
-        if duracion != None:                            #     Modificador de la variable
+    def duracion(self, duracion = None):                        # Método "sobrecargado":
+        if duracion != None:                                    #     Modificador de la variable
             self._duracion = duracion
 
-        return self._duracion                           #     Observador de la variable
+        return self._duracion                                   #     Observador de la variable
 
 
-    def nombre(self, nombre = None):                    # Método "sobrecargado":
-        if nombre != None:                              #     Modificador de la variable
+    def nombre(self, nombre = None):                            # Método "sobrecargado":
+        if nombre != None:                                      #     Modificador de la variable
             self._nombre = nombre
 
-        return self._nombre                             #     Observador de la variable
+        return self._nombre                                     #     Observador de la variable
 
 
-    def padres(self, padre = None, multiples = False):  # Método "sobrecargado":
-        if padre != None:                               #     Modificador de la variable
-            if multiples == True:
+    def padres(self, padre = None, multiples = False):          # Método "sobrecargado":
+        if padre != None:                                       #     Modificador de la variable
+            if multiples == True:                               #     Modificador múltiple
                 self._padres = padre
 
-            else:
+            else:                                               #     Modificador simple
                 self._padres.append(padre)
 
-        return self._padres                             #     Observador de la variable
+        return self._padres                                     #     Observador de la variable
 
 
-class ventana_modelo():
-    @staticmethod
-    def conexiones_a_ids(elementos, conexiones):
+class ventana_modelo():                                         # Parte del modelo de la ventana
+    @staticmethod                                               # Método estático
+    def conexiones_a_ids(elementos, conexiones):                # Conversor de nombres a ids aplicado a conexiones
         res = []
 
         for conexion in conexiones:
@@ -86,8 +86,8 @@ class ventana_modelo():
 
         return res
 
-    @staticmethod                                       # Método estático
-    def interpretar(grafo):                             # Interpreta un grafo dado: extrae la información necesaria para su posterior uso
+    @staticmethod                                               # Método estático
+    def interpretar(grafo):                                     # Interpreta un grafo dado: extrae la información necesaria para su posterior uso
         elementos = []
 
         query = '''
@@ -184,9 +184,8 @@ class ventana_modelo():
             print()
 
 
-
-    @staticmethod
-    def padres_a_ids(elementos, padres):
+    @staticmethod                                               # Método estático
+    def padres_a_ids(elementos, padres):                        # Conversor de nombres a ids aplicado a padres
         res = []
 
         for padre in padres:
@@ -203,8 +202,8 @@ class ventana_modelo():
         return res
 
 
-    @staticmethod                                       # Método estático
-    def procesar(texto):                                # Procesa un texto: convierte un texto en formato NTriples a grafo
+    @staticmethod                                               # Método estático
+    def procesar(texto):                                        # Procesa un texto: convierte un texto en formato NTriples a grafo
         grafo = Graph()
 
         try:

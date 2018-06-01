@@ -28,7 +28,7 @@ class respuestas():
     diccionario.append(QtGui.QMessageBox.Save)
 
 
-class ventana_vista(QtGui.QMainWindow):
+class ventana_vista(QtGui.QMainWindow):                                 # Parte de la vista de la ventana
     _TITULO_APP = 'Planificador de cadena de montaje'
 
 
