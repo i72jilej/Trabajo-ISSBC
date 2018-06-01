@@ -27,9 +27,9 @@ class Element():                                                # Representacion
 
         self._duracion = duracion
 
-        self._conexiones = []
-
         self._padres = []
+
+        self._conexiones = []
 
 
     def conexiones(self, conexion = None, multiples = False):   # Método "sobrecargado":
@@ -77,12 +77,12 @@ class ventana_modelo():                                         # Parte del mode
             id_conexion = -1
 
             for id_elemento in range(len(elementos)):
-                if elementos[id_elemento].nombre() == conexion.siguiente:
+                if elementos[id_elemento].nombre() == conexion[0]:
                     id_conexion = id_elemento
 
                     break
 
-            res.append((id_conexion, conexion.duracion))
+            res.append((id_conexion, conexion[1]))
 
         return res
 
@@ -155,7 +155,7 @@ class ventana_modelo():                                         # Parte del mode
                 if DEBUG:
                     print("\tConexión de ", elemento.nombre(), ': ', subfila.nombre_siguiente, ', ', subfila.duracion, sep = '')
 
-                elemento.conexiones(subfila.nombre_siguiente, subfila.duracion)
+                elemento.conexiones((subfila.nombre_siguiente, int(subfila.duracion)))
 
             elementos.append(elemento)
 
