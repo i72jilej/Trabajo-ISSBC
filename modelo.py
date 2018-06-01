@@ -15,7 +15,7 @@
 from __future__ import print_function
 
 
-DEBUG = True
+DEBUG = False
 
 
 from rdflib import Graph
