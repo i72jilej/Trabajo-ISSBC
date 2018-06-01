@@ -32,9 +32,13 @@ class Element():                                        # Representacion de un n
         self._padres = []
 
     
-    def conexiones(self, conexion = None):              # Método "sobrecargado":
+    def conexiones(self, conexion = None, multiples = False):              # Método "sobrecargado":
         if conexion != None:                            #     Modificador de la variable
-            self._conexiones.append(conexion)
+            if multiples == True:
+                self._conexiones = conexion
+                
+            else:
+                self._conexiones.append(conexion)
 
         return self._conexiones                         #     Observador de la variable
 
@@ -65,6 +69,23 @@ class Element():                                        # Representacion de un n
 
 
 class ventana_modelo():
+    @staticmethod
+    def conexiones_a_ids(elementos, conexiones):
+        res = []
+
+        for conexion in conexiones:
+            id_conexion = -1
+
+            for id_elemento in range(len(elementos)):
+                if elementos[id_elemento].nombre() == conexion.siguiente:
+                    id_conexion = id_elemento
+
+                    break
+
+            res.append((id_padre, conexion.duracion))
+
+        return res
+
     @staticmethod                                       # Método estático
     def interpretar(grafo):                             # Interpreta un grafo dado: extrae la información necesaria para su posterior uso
         elementos = []
@@ -112,8 +133,6 @@ class ventana_modelo():
 
                 elemento.padres(subfila.nombre_padre)
 
-            elementos.append(elemento)
-
             query = '''
                         PREFIX    maquina:  <http://www.factory.fake/maquina/>
                         PREFIX    conexion: <http://www.factory.fake/conexion/>
@@ -135,11 +154,9 @@ class ventana_modelo():
                 if DEBUG:
                     print("\tConexión de ", elemento.nombre(), ': ', subfila.nombre_siguiente, ', ', subfila.duracion, sep = '')
 
-                # elemento.padres(subfila.nombre_padre)
+                elemento.conexiones(subfila.nombre_siguiente, subfila.duracion)
 
-
-
-
+            elementos.append(elemento)
 
         if DEBUG:
             print()
@@ -147,9 +164,14 @@ class ventana_modelo():
 
         for elemento in elementos:
             padres = elemento.padres()
+            
+            conexiones = elemento.conexiones()
 
             if padres != []:
                 elemento.padres(ventana_modelo.padres_a_ids(elementos, padres), True)
+                
+            if conexiones != []:
+                elemento.conexiones(ventana_modelo.conexiones_a_ids(elementos, conexiones), True)
 
         if DEBUG:
             for elemento in elementos:
