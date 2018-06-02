@@ -221,6 +221,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         # Widget
         mitad_inferior = QtGui.QGroupBox('Resultados')
         mitad_inferior.setLayout(disenyo)
+        mitad_inferior.setStyleSheet('QGroupBox QGroupBox { border: 0px; }')
 
         return mitad_inferior
 
