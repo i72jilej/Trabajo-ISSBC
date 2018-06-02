@@ -110,7 +110,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                         texto_archivo += texto[0] + self._datos[j].nombre() + texto[1] + str(duracion) + '\n' #': ' + self._datos[j].nombre() + ', ' + str(duracion) + "\n"
 
                 if sys.version_info[0] >= 3:                # Llamada al método equivalente de la clase padre
-                    super().apertura('dominio', texto_archivo)
+                    super().apertura('dominio', texto_archivo, nombre_archivo)
                 else:
                     super(ventana_principal, self).apertura('dominio', texto_archivo, nombre_archivo)
 
