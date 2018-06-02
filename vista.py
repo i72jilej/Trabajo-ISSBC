@@ -92,6 +92,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
         elif modo == 'dominio':
             self._text_dominio.setText(args[0])
+            self._text_ruta.setText(args[1])
 
             return True
 

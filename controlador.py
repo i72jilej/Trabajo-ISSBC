@@ -112,7 +112,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                 if sys.version_info[0] >= 3:                # Llamada al método equivalente de la clase padre
                     super().apertura('dominio', texto_archivo)
                 else:
-                    super(ventana_principal, self).apertura('dominio', texto_archivo)
+                    super(ventana_principal, self).apertura('dominio', texto_archivo, nombre_archivo)
 
                 texto = ' ➡ '
 
