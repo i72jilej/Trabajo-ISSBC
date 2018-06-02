@@ -78,7 +78,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                 self._grafo = self.procesar(texto_archivo)
 
                 if self._grafo != None:
-                    self.interpretar(self._grafo)
+                    self._datos = self.interpretar(self._grafo)
 
                 else:
                     pass

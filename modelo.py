@@ -210,6 +210,8 @@ class ventana_modelo():                                         # Parte del mode
             print()
             print()
 
+        return elementos
+
 
     @staticmethod                                               # Método estático
     def procesar(texto):                                        # Procesa un texto: convierte un texto en formato NTriples a grafo
