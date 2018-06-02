@@ -102,7 +102,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                         texto_archivo += "\tPadre de " + self._datos[i].nombre() + ': ' + self._datos[j].nombre() + "\n"
 
                     for (j, duracion) in self._datos[i].conexiones():
-                        texto = u"\tConexión de "
+                        texto = "\tConexión de "
 
                         if sys.version_info[0] < 3:
                             texto = texto.decode('utf-8')
