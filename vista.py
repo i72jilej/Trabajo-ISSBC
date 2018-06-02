@@ -83,8 +83,14 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         QtGui.qApp.aboutQt()
 
 
-    def apertura(self):                                                 # Parte de la vista del procedimiento de apertura
-        return str(QtGui.QFileDialog.getOpenFileName(self, 'Abrir archivo', filter = 'Base de conocimiento NTriples (*.nt);;Todos los archivos (*.*)'))
+    def apertura(self, modo):                                           # Parte de la vista del procedimiento de apertura
+        if modo == 'abrir':
+            return str(QtGui.QFileDialog.getOpenFileName(self, 'Abrir archivo', filter = 'Base de conocimiento NTriples (*.nt);;Todos los archivos (*.*)'))
+
+        elif modo == 'error':
+            QtGui.QMessageBox.warning(self, 'Aviso', 'El formato del archivo es incorrecto o no ha podido ser cargado')
+
+            return True
 
 
     def calcular(self):                                                 # Parte de la vista de la realización de los cálculos necesarios

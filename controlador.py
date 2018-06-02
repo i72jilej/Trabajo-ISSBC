@@ -58,9 +58,9 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
             texto = texto.decode('utf-8')
 
         if sys.version_info[0] >= 3:                        # Llamada al método equivalente de la clase padre
-            nombre_archivo = super().apertura()
+            nombre_archivo = super().apertura('abrir')
         else:
-            nombre_archivo = super(ventana_principal, self).apertura()
+            nombre_archivo = super(ventana_principal, self).apertura('abrir')
 
         if nombre_archivo != '':                            # Comprobando si se ha elegido algún archivo
             try:                                            # Si se ha elegido un archivo
@@ -74,16 +74,32 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
                 self.modificado(False)
 
-                # TODO: Interpretar archivo (rdflib) y controlar si es correcto
                 self._grafo = self.procesar(texto_archivo)
 
                 if self._grafo != None:
                     self._datos = self.interpretar(self._grafo)
 
                 else:
-                    pass
+                    if sys.version_info[0] >= 3:            # Llamada al método equivalente de la clase padre
+                        nombre_archivo = super().apertura('error')
+                    else:
+                        nombre_archivo = super(ventana_principal, self).apertura('error')
 
-                # FIXME: Borrar
+                    self.limpiar()
+
+                # FIXME: ¿Borrar?
+                texto_archivo = ''
+
+                for i in range(len(self._datos)):
+
+                    texto_archivo += self._datos[i].nombre() + ' es una máquina con duración ' + self._datos[i].duracion() + "\n"
+
+                    for j in self._datos[i].padres():
+                        texto_archivo += "\tPadre de " + self._datos[i].nombre() + ': ' + self._datos[j].nombre() + "\n"
+
+                    for (j, duracion) in self._datos[i].conexiones():
+                        texto_archivo += "\tConexión de " + self._datos[i].nombre() + ': ' + self._datos[j].nombre() + ', ' + str(duracion) + "\n"
+
                 self._text_desarrollo.setText(texto_archivo)
 
                 self.setWindowTitle(self._TITULO_APP + texto + nombre_archivo) 
@@ -208,6 +224,10 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
         try:
             del self._nombre_archivo
+
+            del self._grafo
+
+            del self._datos
 
         except AttributeError:
             pass
