@@ -87,6 +87,9 @@ class ventana_modelo():                                         # Parte del mode
 
             hijos[i].start()
 
+        for hijo in hijos:
+            hijo.join()
+
 
     @staticmethod                                               # Método estático
     def calcular_hijos(id_hijo, datos):
