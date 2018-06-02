@@ -82,7 +82,6 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
                     self.limpiar()
 
-                # FIXME: ¿Borrar?
                 texto_archivo = ''
 
                 for i in range(len(self._datos)):

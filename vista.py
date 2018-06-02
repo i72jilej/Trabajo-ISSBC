@@ -93,6 +93,8 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         elif modo == 'dominio':
             self._text_dominio.setText(args[0])
 
+            return True
+
 
     def calcular(self):                                                 # Parte de la vista de la realización de los cálculos necesarios
         texto = 'Error de cálculo'
@@ -204,45 +206,16 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
     def dibujar_interfaz(self):                                         # Dibujo de la interfaz
         self._disenyo = QtGui.QVBoxLayout()                             # Establecimiento del tipo de interfaz
-        self._disenyo.addWidget(self.dibujar_mitad_superior())          # Añadiendo widgets a base de funciones externas
-        self._disenyo.addWidget(self.dibujar_mitad_inferior())
+        self._disenyo.addWidget(self.dibujar_intarfaz_mitad_superior()) # Añadiendo widgets a base de funciones externas
+        self._disenyo.addWidget(self.dibujar_intarfaz_mitad_inferior())
 
 
-    def dibujar_mitad_inferior(self):                                   # Dibujo de la mitad inferior de la interfaz
-        texto = 'Solución:'
-
-        if sys.version_info[0] < 3:
-            texto = texto.decode('utf-8')
-
-        # Etiquetas
-        label_desarrollo = QtGui.QLabel('Desarrollo:')
-
-        label_dominio = QtGui.QLabel('Dominio:')
-
-        label_solucion = QtGui.QLabel(texto)
-
-        # Controles de edición
-        self._text_desarrollo = QtGui.QTextEdit()
-        self._text_desarrollo.setReadOnly(True)
-
-        self._text_dominio = QtGui.QTextEdit()
-        self._text_dominio.setReadOnly(True)
-
-        self._text_solucion = QtGui.QTextEdit()
-        self._text_solucion.setReadOnly(True)
-
-        # Botones
-        self._boton_abrir = QtGui.QPushButton('Abrir')
-        self._boton_abrir.clicked.connect(self.abrir)
-
+    def dibujar_intarfaz_mitad_inferior(self):                          # Dibujo de la mitad inferior de la interfaz
         # Diseño
-        disenyo = QtGui.QVBoxLayout()
-        disenyo.addWidget(label_solucion)
-        disenyo.addWidget(self._text_solucion)
-        disenyo.addWidget(label_desarrollo)
-        disenyo.addWidget(self._text_desarrollo)
-        disenyo.addWidget(label_dominio)
-        disenyo.addWidget(self._text_dominio)
+        disenyo = QtGui.QHBoxLayout()
+        disenyo.addWidget(self.dibujar_interfaz_mitad_inferior_dominio())
+        disenyo.addWidget(self.dibujar_interfaz_mitad_inferior_solucion())
+        disenyo.addWidget(self.dibujar_interfaz_mitad_inferior_desarrollo())
 
         # Widget
         mitad_inferior = QtGui.QGroupBox('Resultados')
@@ -251,7 +224,72 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         return mitad_inferior
 
 
-    def dibujar_mitad_superior(self):                                   # Dibujo de la mitad superior de la interfaz
+    def dibujar_interfaz_mitad_inferior_desarrollo(self):
+        # Etiquetas
+        label_desarrollo = QtGui.QLabel('Desarrollo:')
+
+        # Controles de edición
+        self._text_desarrollo = QtGui.QTextEdit()
+        self._text_desarrollo.setReadOnly(True)
+
+        # Diseño
+        disenyo = QtGui.QVBoxLayout()
+        disenyo.addWidget(label_desarrollo)
+        disenyo.addWidget(self._text_desarrollo)
+
+        # Widget
+        desarrollo = QtGui.QGroupBox()
+        desarrollo.setLayout(disenyo)
+
+        return desarrollo
+
+
+    def dibujar_interfaz_mitad_inferior_dominio(self):
+        # Etiquetas
+        label_dominio = QtGui.QLabel('Dominio:')
+
+        # Controles de edición
+        self._text_dominio = QtGui.QTextEdit()
+        self._text_dominio.setReadOnly(True)
+
+        # Diseño
+        disenyo = QtGui.QVBoxLayout()
+        disenyo.addWidget(label_dominio)
+        disenyo.addWidget(self._text_dominio)
+
+        # Widget
+        dominio = QtGui.QGroupBox()
+        dominio.setLayout(disenyo)
+
+        return dominio
+
+
+    def dibujar_interfaz_mitad_inferior_solucion(self):
+        texto = 'Solución:'
+
+        if sys.version_info[0] < 3:
+            texto = texto.decode('utf-8')
+
+        # Etiquetas
+        label_solucion = QtGui.QLabel(texto)
+
+        # Controles de edición
+        self._text_solucion = QtGui.QTextEdit()
+        self._text_solucion.setReadOnly(True)
+
+        # Diseño
+        disenyo = QtGui.QVBoxLayout()
+        disenyo.addWidget(label_solucion)
+        disenyo.addWidget(self._text_solucion)
+
+        # Widget
+        solucion = QtGui.QGroupBox()
+        solucion.setLayout(disenyo)
+
+        return solucion
+
+
+    def dibujar_intarfaz_mitad_superior(self):                          # Dibujo de la mitad superior de la interfaz
         # Botones
         self._boton_abrir = QtGui.QPushButton('Abrir')
         self._boton_abrir.clicked.connect(self.abrir)
