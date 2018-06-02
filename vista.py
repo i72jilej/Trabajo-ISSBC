@@ -33,7 +33,7 @@ class ventana_vista(QtGui.QMainWindow):                                 # Parte 
 
 
     def __init__(self):                                                 # Parte de la vista del constructor de la clase; al ser una ventana, inicializa la misma
-        if sys.version_info[0] >= 3:                                    # Llamada al constructor de la clase padre
+        if sys.version_info[0] >= 3:                                    # Llamada al método equivalente de la clase padre
             super().__init__()
         else:
             super(ventana_vista, self).__init__()
@@ -335,5 +335,14 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
         else:
             pass
+
+
+    def __del__(self):                                                  # Parte de la vista del destructor de la clase
+        # if sys.version_info[0] >= 3:                                  # Llamada al método equivalente de la clase padre
+            # super().__del__()                                         # Comentado porque la clase padre (QtGui.QMainWindow) no parece tener un método destructor
+        # else:
+            # super(ventana_vista, self).__del__()
+
+        pass
 
 
