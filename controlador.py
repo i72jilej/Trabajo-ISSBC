@@ -92,7 +92,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
                 for i in range(len(self._datos)):
                     texto_archivo += self._datos[i].nombre()
-                    texto_archivo += ' es una máquina con duración '
+                    texto_archivo += u' es una máquina con duración '
                     texto_archivo += self._datos[i].duracion()
                     texto_archivo += "\n"
 
@@ -104,7 +104,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                         texto_archivo += "\n"
 
                     for (j, duracion) in self._datos[i].conexiones():
-                        texto_archivo += "\tConexión de "
+                        texto_archivo += u"\tConexión de "
                         texto_archivo += self._datos[i].nombre()
                         texto_archivo += ': '
                         texto_archivo += self._datos[j].nombre()
