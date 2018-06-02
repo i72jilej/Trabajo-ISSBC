@@ -70,7 +70,7 @@ class Element():                                                # Representacion
 
 class ventana_modelo():                                         # Parte del modelo de la ventana
     @staticmethod                                               # Método estático
-    def conexiones_a_ids(elementos, conexiones):                # Conversor de nombres a ids aplicado a conexiones
+    def convertir_conexiones_a_ids(elementos, conexiones):      # Conversor de nombres a ids aplicado a conexiones
         res = []
 
         for conexion in conexiones:
@@ -83,6 +83,24 @@ class ventana_modelo():                                         # Parte del mode
                     break
 
             res.append((id_conexion, conexion[1]))
+
+        return res
+
+
+    @staticmethod                                               # Método estático
+    def convertir_padres_a_ids(elementos, padres):              # Conversor de nombres a ids aplicado a padres
+        res = []
+
+        for padre in padres:
+            id_padre = -1
+
+            for id_elemento in range(len(elementos)):
+                if elementos[id_elemento].nombre() == padre:
+                    id_padre = id_elemento
+
+                    break
+
+            res.append(id_padre)
 
         return res
 
@@ -172,10 +190,10 @@ class ventana_modelo():                                         # Parte del mode
             conexiones = elemento.conexiones()
 
             if padres != []:
-                elemento.padres(ventana_modelo.padres_a_ids(elementos, padres), True)
+                elemento.padres(ventana_modelo.convertir_padres_a_ids(elementos, padres), True)
 
             if conexiones != []:
-                elemento.conexiones(ventana_modelo.conexiones_a_ids(elementos, conexiones), True)
+                elemento.conexiones(ventana_modelo.convertir_conexiones_a_ids(elementos, conexiones), True)
 
         if DEBUG:
             print('Listando datos después de ser almacenados en memoria...')
@@ -194,24 +212,6 @@ class ventana_modelo():                                         # Parte del mode
 
 
     @staticmethod                                               # Método estático
-    def padres_a_ids(elementos, padres):                        # Conversor de nombres a ids aplicado a padres
-        res = []
-
-        for padre in padres:
-            id_padre = -1
-
-            for id_elemento in range(len(elementos)):
-                if elementos[id_elemento].nombre() == padre:
-                    id_padre = id_elemento
-
-                    break
-
-            res.append(id_padre)
-
-        return res
-
-
-    @staticmethod                                               # Método estático
     def procesar(texto):                                        # Procesa un texto: convierte un texto en formato NTriples a grafo
         grafo = Graph()
 
@@ -226,3 +226,5 @@ class ventana_modelo():                                         # Parte del mode
 
         finally:
             return res
+
+
