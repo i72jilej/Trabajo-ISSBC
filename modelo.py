@@ -15,8 +15,11 @@
 from __future__ import print_function
 
 
-DEBUG = False
+DEBUG = True
 
+import os                                                       # Funcionalidades varias del sistema operativo
+
+from threading import Thread                                    # Capacidades multihilo
 
 from rdflib import Graph
 
@@ -69,6 +72,28 @@ class Element():                                                # Representacion
 
 
 class ventana_modelo():                                         # Parte del modelo de la ventana
+    @staticmethod                                               # Método estático
+    def calcular(datos, hilos):
+        hijos = list()
+
+        for i in range(hilos):
+            if DEBUG:
+                print('Padre #', os.getpid(), "\tPreparando hijo ", i, sep = '')
+
+            hijos.append(Thread(target = ventana_modelo.calcular_hijos, args = (i, datos,)))
+
+            if DEBUG:
+                print('Padre #', os.getpid(), "\tArrancando hijo ", i, sep = '')
+
+            hijos[i].start()
+
+
+    @staticmethod                                               # Método estático
+    def calcular_hijos(id_hijo, datos):
+        if DEBUG:
+            print('Hijo  #', id_hijo, "\tHe sido llamado", sep = '')
+
+
     @staticmethod                                               # Método estático
     def convertir_conexiones_a_ids(elementos, conexiones):      # Conversor de nombres a ids aplicado a conexiones
         res = []

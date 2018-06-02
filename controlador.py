@@ -71,7 +71,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
                 self._grafo = self.procesar(texto_archivo)
 
-                if self._grafo != None:
+                if self._grafo != None:                     # FIXME: ¿Borrar?
                     self._datos = self.interpretar(self._grafo)
 
                 else:
@@ -136,16 +136,13 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
     def calcular(self):                                     # Realiza los cálculos necesarios
         try:
-            self._grafo
+            self._datos
 
         except AttributeError:
-            if sys.version_info[0] >= 3:                    # Llamada al método equivalente de la clase padre
-                super().calcular()
-            else:
-                super(ventana_principal, self).calcular()
+            vista.ventana_vista.calcular(self)              # Llamada al método equivalente de la clase vista
 
         else:
-            #TODO: Por hacer
+            modelo.ventana_modelo.calcular(self._datos, 50) # Llamada al método equivalente de la clase vista
 
             self._modificado = True
 

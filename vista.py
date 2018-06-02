@@ -226,7 +226,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         return mitad_inferior
 
 
-    def dibujar_interfaz_mitad_inferior_desarrollo(self):
+    def dibujar_interfaz_mitad_inferior_desarrollo(self):               # Dibujo de la parte de desarrollo de la mitad inferior de la interfaz
         # Etiquetas
         label_desarrollo = QtGui.QLabel('Desarrollo:')
 
@@ -246,7 +246,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         return desarrollo
 
 
-    def dibujar_interfaz_mitad_inferior_dominio(self):
+    def dibujar_interfaz_mitad_inferior_dominio(self):	                # Dibujo de la parte de dominio de la mitad inferior de la interfaz
         # Etiquetas
         label_dominio = QtGui.QLabel('Dominio:')
 
@@ -266,7 +266,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         return dominio
 
 
-    def dibujar_interfaz_mitad_inferior_solucion(self):
+    def dibujar_interfaz_mitad_inferior_solucion(self):                 # Dibujo de la parte de solución de la mitad inferior de la interfaz
         texto = 'Solución:'
 
         if sys.version_info[0] < 3:
