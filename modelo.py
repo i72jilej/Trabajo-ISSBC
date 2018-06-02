@@ -201,11 +201,11 @@ class ventana_modelo():                                         # Parte del mode
             for i in range(len(elementos)):
                 print(elementos[i].nombre(), 'es una máquina con duración', elementos[i].duracion())
 
-                for j in elemento.padres():
-                    print("\tPadre de ", elemento.nombre(), ': ', elementos[j].nombre(), sep = '')
+                for j in elementos[i].padres():
+                    print("\tPadre de ", elementos[i].nombre(), ': ', elementos[j].nombre(), sep = '')
 
-                for (j, duracion) in elemento.conexiones():
-                    print("\tConexión de ", elemento.nombre(), ': ', elementos[j].nombre(), ', ', duracion, sep = '')
+                for (j, duracion) in elementos[i].conexiones():
+                    print("\tConexión de ", elementos[i].nombre(), ': ', elementos[j].nombre(), ', ', duracion, sep = '')
 
             print()
             print()
