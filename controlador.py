@@ -91,26 +91,23 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                 texto_archivo = ''
 
                 for i in range(len(self._datos)):
-                    texto_archivo += self._datos[i].nombre()
-                    texto_archivo += u' es una máquina con duración '
-                    texto_archivo += self._datos[i].duracion()
-                    texto_archivo += "\n"
+                    texto = ' es una máquina con duración '
+
+                    if sys.version_info[0] < 3:
+                        texto = texto.decode('utf-8')
+
+                    texto_archivo += self._datos[i].nombre() + texto + self._datos[i].duracion() + "\n"
 
                     for j in self._datos[i].padres():
-                        texto_archivo += "\tPadre de "
-                        texto_archivo += self._datos[i].nombre()
-                        texto_archivo += ': '
-                        texto_archivo += self._datos[j].nombre()
-                        texto_archivo += "\n"
+                        texto_archivo += "\tPadre de " + self._datos[i].nombre() + ': ' + self._datos[j].nombre() + "\n"
 
                     for (j, duracion) in self._datos[i].conexiones():
-                        texto_archivo += u"\tConexión de "
-                        texto_archivo += self._datos[i].nombre()
-                        texto_archivo += ': '
-                        texto_archivo += self._datos[j].nombre()
-                        texto_archivo += ', '
-                        texto_archivo += str(duracion)
-                        texto_archivo += "\n"
+                        texto = u"\tConexión de "
+
+                        if sys.version_info[0] < 3:
+                            texto = texto.decode('utf-8')
+
+                        texto_archivo += texto + self._datos[i].nombre() + ': ' + self._datos[j].nombre() + ', ' + str(duracion) + "\n"
 
                 self._text_desarrollo.setText(texto_archivo)
 
