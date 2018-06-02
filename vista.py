@@ -88,7 +88,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
             return str(QtGui.QFileDialog.getOpenFileName(self, 'Abrir archivo', filter = 'Base de conocimiento NTriples (*.nt);;Todos los archivos (*.*)'))
 
         elif modo == 'error':
-            QtGui.QMessageBox.warning(self, 'Aviso', 'El formato del archivo es incorrecto o no ha podido ser cargado')
+            return QtGui.QMessageBox.warning(self, 'Aviso', 'El formato del archivo es incorrecto o no ha podido ser cargado')
 
             return True
 

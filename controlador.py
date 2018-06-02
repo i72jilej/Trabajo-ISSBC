@@ -52,11 +52,6 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
 
     def apertura(self):                                     # Procedimiento de apertura
-        texto = ' ➡ '
-
-        if sys.version_info[0] < 3:
-            texto = texto.decode('utf-8')
-
         if sys.version_info[0] >= 3:                        # Llamada al método equivalente de la clase padre
             nombre_archivo = super().apertura('abrir')
         else:
@@ -110,8 +105,12 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                         texto_archivo += texto + self._datos[i].nombre() + ': ' + self._datos[j].nombre() + ', ' + str(duracion) + "\n"
 
                 self._text_desarrollo.setText(texto_archivo)
+                texto = ' ➡ '
 
-                self.setWindowTitle(self._TITULO_APP + texto + nombre_archivo) 
+                if sys.version_info[0] < 3:
+                    texto = texto.decode('utf-8')
+
+                self.setWindowTitle(self._TITULO_APP + texto + nombre_archivo)
 
                 res = True
 
