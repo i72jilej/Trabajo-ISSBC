@@ -32,8 +32,12 @@ def main(argv):
     aplicacion = QtGui.QApplication(argv)
 
     ventana = controlador.ventana_principal()
-    # ventana.show()
-    ventana.showMaximized()                                 # Mejor maximizada
+
+    if DEBUG_REMOTO == True:
+        ventana.show()
+
+    else:
+        ventana.showMaximized()                             # Mejor maximizada
 
     sys.exit(aplicacion.exec_())
 
