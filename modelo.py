@@ -72,8 +72,7 @@ class Element():                                                # Representacion
 
 
 class ventana_modelo():                                         # Parte del modelo de la ventana
-    @staticmethod                                               # Método estático
-    def calcular(datos, hilos):
+    def calcular(self, hilos):
         hijos = list()
 
         for i in range(hilos):
@@ -91,8 +90,6 @@ class ventana_modelo():                                         # Parte del mode
             hijo.join()
 
 
-    @staticmethod                                               # Método estático
-    def calcular_hijos(id_hijo, datos):
         if DEBUG:
             print('Hijo  #', id_hijo, "\tHe sido llamado", sep = '')
 
