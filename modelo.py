@@ -17,20 +17,20 @@ from __future__ import print_function
 
 DEBUG = True
 
-ESPERA = 1                                                      # Tiempo de espera para que el padre compruebe la finalización de sus hijos
+ESPERA = 1                                                                                                  # Tiempo de espera para que el padre compruebe la finalización de sus hijos
 
-import os                                                       # Funcionalidades varias del sistema operativo
+import os                                                                                                   # Funcionalidades varias del sistema operativo
 
-from random import choice                                       # Elegir un valor aleatorio de una lista
-from threading import Thread                                    # Capacidades multihilo
-from time import sleep                                          # Pausas
+from random import choice                                                                                   # Elegir un valor aleatorio de una lista
+from threading import Thread                                                                                # Capacidades multihilo
+from time import sleep                                                                                      # Pausas
 
-from rdflib import Graph
+from rdflib import Graph                                                                                    # Grafos
 
 
-class Element():                                                # Representacion de un nodo en el grafo
-    def __init__(self, nombre, duracion):                       # Constructor de la clase
-        self._nombre = nombre                                   # Inicialización de variables
+class Element():                                                                                            # Representacion de un nodo en el grafo
+    def __init__(self, nombre, duracion):                                                                   # Constructor de la clase
+        self._nombre = nombre                                                                               # Inicialización de variables
 
         self._duracion = duracion
 
@@ -39,49 +39,49 @@ class Element():                                                # Representacion
         self._conexiones = []
 
 
-    def conexiones(self, conexion = None, multiples = False):   # Método "sobrecargado":
-        if conexion != None:                                    #     Modificador de la variable
-            if multiples == True:                               #     Modificador múltiple
+    def conexiones(self, conexion = None, multiples = False):                                               # Método "sobrecargado":
+        if conexion != None:                                                                                #     Modificador de la variable
+            if multiples == True:                                                                           #     Modificador múltiple
                 self._conexiones = conexion
 
-            else:                                               #     Modificador simple
+            else:                                                                                           #     Modificador simple
                 self._conexiones.append(conexion)
 
-        return self._conexiones                                 #     Observador de la variable
+        return self._conexiones                                                                             #     Observador de la variable
 
 
-    def duracion(self, duracion = None):                        # Método "sobrecargado":
-        if duracion != None:                                    #     Modificador de la variable
+    def duracion(self, duracion = None):                                                                    # Método "sobrecargado":
+        if duracion != None:                                                                                #     Modificador de la variable
             self._duracion = duracion
 
-        return self._duracion                                   #     Observador de la variable
+        return self._duracion                                                                               #     Observador de la variable
 
 
-    def nombre(self, nombre = None):                            # Método "sobrecargado":
-        if nombre != None:                                      #     Modificador de la variable
+    def nombre(self, nombre = None):                                                                        # Método "sobrecargado":
+        if nombre != None:                                                                                  #     Modificador de la variable
             self._nombre = nombre
 
-        return self._nombre                                     #     Observador de la variable
+        return self._nombre                                                                                 #     Observador de la variable
 
 
-    def padres(self, padre = None, multiples = False):          # Método "sobrecargado":
-        if padre != None:                                       #     Modificador de la variable
-            if multiples == True:                               #     Modificador múltiple
+    def padres(self, padre = None, multiples = False):                                                      # Método "sobrecargado":
+        if padre != None:                                                                                   #     Modificador de la variable
+            if multiples == True:                                                                           #     Modificador múltiple
                 self._padres = padre
 
-            else:                                               #     Modificador simple
+            else:                                                                                           #     Modificador simple
                 self._padres.append(padre)
 
-        return self._padres                                     #     Observador de la variable
+        return self._padres                                                                                 #     Observador de la variable
 
 
-class ventana_modelo():                                         # Parte del modelo de la ventana
-    def calcular(self, hilos):
+class ventana_modelo():                                                                                     # Parte del modelo de la ventana
+    def calcular(self, hilos):                                                                              # Cálculo de soluciones
         hijos = list()
 
-        self.__soluciones = [[] for i in range(hilos)]
+        self.__soluciones = [[] for i in range(hilos)]                                                      # Inicialización del vector de soluciones
 
-        nodos_padres = self.padres(self._datos)
+        nodos_padres = self.padres(self._datos)                                                             # Precarga del cálculo de los nodos padres
 
         for i in range(hilos):
             if DEBUG:
@@ -94,10 +94,10 @@ class ventana_modelo():                                         # Parte del mode
 
             hijos[i].start()
 
-        while hijos:                                            # Mientras el vector tenga hijos
-            for hijo in hijos:                                  # Para cada hijo del vector
-                if not hijo.is_alive():                         # Comprobación de si el hijo ha finalizado
-                    hijo.join()                                 # Se recupera el proceso y se saca del vector
+        while hijos:                                                                                        # Mientras el vector tenga hijos
+            for hijo in hijos:                                                                              # Para cada hijo del vector
+                if not hijo.is_alive():                                                                     # Comprobación de si el hijo ha finalizado
+                    hijo.join()                                                                             # Se recupera el proceso y se saca del vector
                     hijos.remove(hijo)
 
                     del(hijo)
@@ -105,38 +105,32 @@ class ventana_modelo():                                         # Parte del mode
             if DEBUG == True:
                 print('Padre #', os.getpid(), "\tEsperando a que los procesos hijos hagan su trabajo", sep = '')
 
-            sleep(ESPERA)                                           # Para no saturar, el padre queda en espera durante "ESPERA" segundos
+            sleep(ESPERA)                                                                                       # Para no saturar, el padre queda en espera durante "ESPERA" segundos
 
         for i in range(len(self.__soluciones)):
             if DEBUG == True:
                 print('Padre #', os.getpid(), "\tEl hijo ", i, ' ha aportado la solución: ', self.__soluciones[i], sep = '')
 
 
-    def calcular_hijos(self, id_hijo, nodos_padres):
+    def calcular_hijos(self, id_hijo, nodos_padres):                                                        # Cálculo de cada solución
         if DEBUG:
             print('Hijo  #', id_hijo, "\tHe sido llamado", sep = '')
 
-        nodo_inicial = choice(nodos_padres)
+        nodo_inicial = choice(nodos_padres)                                                                 # TODO: Heurística // Se elige aleatoriamente un padre
 
-        longitud_datos = len(self._datos)
+        longitud_datos = len(self._datos)                                                                   # Precarga de la longitud del camino
 
-        self.__soluciones[id_hijo].append(nodo_inicial)
+        self.__soluciones[id_hijo].append(nodo_inicial)                                                     # Se añade el nodo de partida
         
-        while len(self.__soluciones[id_hijo]) < longitud_datos:
-            hd = self._datos[self.__soluciones[id_hijo][len(self.__soluciones[id_hijo]) - 1]].conexiones()
-            hijos, duraciones = zip(*hd)
+        while len(self.__soluciones[id_hijo]) < longitud_datos:                                             # Mientras que no hayamos explorado el grafo completo
+            hd = self._datos[self.__soluciones[id_hijo][len(self.__soluciones[id_hijo]) - 1]].conexiones()  # Lista de tuplas: (hijo, duracion)
+            hijos, duraciones = zip(*hd)                                                                    # "Desempaquetado" en dos listas
 
-            self.__soluciones[id_hijo].append( \
-                hijos[ \
-                    duraciones.index( \
-                        min(duraciones) \
-                    ) \
-                ] \
-            )
+            self.__soluciones[id_hijo].append(hijos[duraciones.index(min(duraciones))])                     # Añadir al vector de soluciones el hijo índice de las duraciones con la duración menor
+                                                                                                            # Es decir, se escogerá como solución al hijo con menor duración, siendo este criterio la heurística aplicada a la búsqueda
 
-
-    @staticmethod                                               # Método estático
-    def convertir_conexiones_a_ids(elementos, conexiones):      # Conversor de nombres a ids aplicado a conexiones
+    @staticmethod                                                                                           # Método estático
+    def convertir_conexiones_a_ids(elementos, conexiones):                                                  # Conversor de nombres a ids aplicado a conexiones
         res = []
 
         for conexion in conexiones:
@@ -153,8 +147,8 @@ class ventana_modelo():                                         # Parte del mode
         return res
 
 
-    @staticmethod                                               # Método estático
-    def convertir_padres_a_ids(elementos, padres):              # Conversor de nombres a ids aplicado a padres
+    @staticmethod                                                                                           # Método estático
+    def convertir_padres_a_ids(elementos, padres):                                                          # Conversor de nombres a ids aplicado a padres
         res = []
 
         for padre in padres:
@@ -171,8 +165,8 @@ class ventana_modelo():                                         # Parte del mode
         return res
 
 
-    @staticmethod                                               # Método estático
-    def interpretar(grafo):                                     # Interpreta un grafo dado: extrae la información necesaria para su posterior uso
+    @staticmethod                                                                                           # Método estático
+    def interpretar(grafo):                                                                                 # Interpreta un grafo dado: extrae la información necesaria para su posterior uso
         if DEBUG:
             print('Listando datos antes de ser almacenados en memoria...')
 
@@ -279,8 +273,8 @@ class ventana_modelo():                                         # Parte del mode
         return elementos
 
 
-    @staticmethod                                               # Método estático
-    def procesar(texto):                                        # Procesa un texto: convierte un texto en formato NTriples a grafo
+    @staticmethod                                                                                           # Método estático
+    def procesar(texto):                                                                                    # Procesa un texto: convierte un texto en formato NTriples a grafo
         grafo = Graph()
 
         try:
@@ -296,8 +290,8 @@ class ventana_modelo():                                         # Parte del mode
             return res
 
 
-    @staticmethod                                               # Método estático
-    def padres(datos):                                          # Devuelve una lista con las ids de los nodos padres
+    @staticmethod                                                                                           # Método estático
+    def padres(datos):                                                                                      # Devuelve una lista con las ids de los nodos padres
         res = []
 
         for i in range(len(datos)):
