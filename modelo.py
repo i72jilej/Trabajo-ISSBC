@@ -17,9 +17,13 @@ from __future__ import print_function
 
 DEBUG = True
 
+ESPERA = 1                                                      # Tiempo de espera para que el padre compruebe la finalización de sus hijos
+
 import os                                                       # Funcionalidades varias del sistema operativo
 
+from random import choice                                       # Elegir un valor aleatorio de una lista
 from threading import Thread                                    # Capacidades multihilo
+from time import sleep                                          # Pausas
 
 from rdflib import Graph
 
@@ -75,23 +79,60 @@ class ventana_modelo():                                         # Parte del mode
     def calcular(self, hilos):
         hijos = list()
 
+        self.__soluciones = [[] for i in range(hilos)]
+
+        nodos_padres = self.padres(self._datos)
+
         for i in range(hilos):
             if DEBUG:
                 print('Padre #', os.getpid(), "\tPreparando hijo ", i, sep = '')
 
-            hijos.append(Thread(target = ventana_modelo.calcular_hijos, args = (i, datos,)))
+            hijos.append(Thread(target = ventana_modelo.calcular_hijos, args = (self, i, nodos_padres,)))
 
             if DEBUG:
                 print('Padre #', os.getpid(), "\tArrancando hijo ", i, sep = '')
 
             hijos[i].start()
 
-        for hijo in hijos:
-            hijo.join()
+        while hijos:                                            # Mientras el vector tenga hijos
+            for hijo in hijos:                                  # Para cada hijo del vector
+                if not hijo.is_alive():                         # Comprobación de si el hijo ha finalizado
+                    hijo.join()                                 # Se recupera el proceso y se saca del vector
+                    hijos.remove(hijo)
+
+                    del(hijo)
+
+            if DEBUG == True:
+                print('Padre #', os.getpid(), "\tEsperando a que los procesos hijos hagan su trabajo", sep = '')
+
+            sleep(ESPERA)                                           # Para no saturar, el padre queda en espera durante "ESPERA" segundos
+
+        for i in range(len(self.__soluciones)):
+            if DEBUG == True:
+                print('Padre #', os.getpid(), "\tEl hijo ", i, ' ha aportado la solución: ', self.__soluciones[i], sep = '')
 
 
+    def calcular_hijos(self, id_hijo, nodos_padres):
         if DEBUG:
             print('Hijo  #', id_hijo, "\tHe sido llamado", sep = '')
+
+        nodo_inicial = choice(nodos_padres)
+
+        longitud_datos = len(self._datos)
+
+        self.__soluciones[id_hijo].append(nodo_inicial)
+        
+        while len(self.__soluciones[id_hijo]) < longitud_datos:
+            hd = self._datos[self.__soluciones[id_hijo][len(self.__soluciones[id_hijo]) - 1]].conexiones()
+            hijos, duraciones = zip(*hd)
+
+            self.__soluciones[id_hijo].append( \
+                hijos[ \
+                    duraciones.index( \
+                        min(duraciones) \
+                    ) \
+                ] \
+            )
 
 
     @staticmethod                                               # Método estático
@@ -253,5 +294,16 @@ class ventana_modelo():                                         # Parte del mode
 
         finally:
             return res
+
+
+    @staticmethod                                               # Método estático
+    def padres(datos):                                          # Devuelve una lista con las ids de los nodos padres
+        res = []
+
+        for i in range(len(datos)):
+            if datos[i].padres() == []:
+                res.append(i)
+
+        return res
 
 
