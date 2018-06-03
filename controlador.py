@@ -69,10 +69,10 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
                 self.modificado(False)
 
-                self._grafo = self.procesar(texto_archivo)
+                grafo = self.procesar(texto_archivo)
 
-                if self._grafo != None:                     # FIXME: ¿Borrar?
-                    self._datos = self.interpretar(self._grafo)
+                if grafo != None:
+                    self._datos = self.interpretar(grafo)
 
                 else:
                     if sys.version_info[0] >= 3:            # Llamada al método equivalente de la clase padre
