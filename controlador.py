@@ -97,6 +97,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                                 texto[1] = texto[1].decode('utf-8')
 
                             texto_archivo += texto[0] + self._datos[j].nombre() + texto[1] + str(duracion) + '\n' # ': ' + self._datos[j].nombre() + ', ' + str(duracion) + "\n"
+
                         texto_archivo += '\n'
 
                     if sys.version_info[0] >= 3:                # Llamada al método equivalente de la clase padre

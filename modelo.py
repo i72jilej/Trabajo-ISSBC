@@ -206,7 +206,7 @@ class ventana_modelo():                                                         
                         ?maquina    rdf:type            maquina:maquina        .
                         ?maquina    maquina:nombre      ?nombre                .
                         ?maquina    maquina:duracion    ?duracion              .
-                        }
+                    }
 
                     # ORDER BY ?name
                 '''
@@ -231,7 +231,7 @@ class ventana_modelo():                                                         
                             ?maquina    maquina:nombre      "%s"              .
                             ?maquina    maquina:padre       ?padre            .
                             ?padre      maquina:nombre      ?nombre_padre     .
-                            }
+                        }
                     '''
 
             subresultado = grafo.query(query % fila.nombre)
@@ -257,7 +257,7 @@ class ventana_modelo():                                                         
                             ?conexion   conexion:siguiente  ?siguiente        .
                             ?conexion   conexion:duracion   ?duracion         .
                             ?siguiente  maquina:nombre      ?nombre_siguiente .
-                            }
+                        }
                     '''
 
             subresultado = grafo.query(query % fila.nombre)
