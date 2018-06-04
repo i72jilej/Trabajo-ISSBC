@@ -15,7 +15,8 @@
 from __future__ import print_function
 
 
-DEBUG = True
+DEBUG       = True
+DEBUG_HIJOS = False
 
 ESPERA = 1                                                                                                              # Tiempo de espera para que el padre compruebe la finalización de sus hijos
 
@@ -118,6 +119,9 @@ class solucion():                                                               
 
 class ventana_modelo():                                                                                                 # Parte del modelo de la ventana
     def calcular(self, hilos):                                                                                          # Cálculo de soluciones
+        if DEBUG_HIJOS == True:
+            hilos = 1
+
         hijos = list()
 
         self.__soluciones = [[] for i in range(hilos)]                                                              # Inicialización del vector de soluciones
