@@ -84,22 +84,22 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
                         texto_archivo += self._datos[i].nombre() + texto + self._datos[i].duracion() + "\n"
 
-                        for j in self._datos[i].padres():
+                        for padre in self._datos[i].padres():
                             texto = '\tRequiere haber pasado por '
 
                             if sys.version_info[0] < 3:
                                 texto = texto.decode('utf-8')
 
-                            texto_archivo += texto + self._datos[j].nombre() + '\n'
+                            texto_archivo += texto + padre.nombre() + '\n'
 
-                        for (j, duracion) in self._datos[i].conexiones():
+                        for conexion in self._datos[i].conexiones():
                             texto = ["\tPuede enviar a ", " con una duración de "]
 
                             if sys.version_info[0] < 3:
                                 texto[0] = texto[0].decode('utf-8')
                                 texto[1] = texto[1].decode('utf-8')
 
-                            texto_archivo += texto[0] + self._datos[j].nombre() + texto[1] + str(duracion) + '\n'
+                            texto_archivo += texto[0] + conexion.nombre() + texto[1] + str(conexion.duracion()) + '\n'
 
                         texto_archivo += '\n'
 
