@@ -72,6 +72,46 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                 if grafo != None:
                     self._datos = self.interpretar(grafo)
 
+                    for i in range(len(self._datos)):
+                        texto = ' es una máquina con duración '
+
+                        if sys.version_info[0] < 3:
+                            texto = texto.decode('utf-8')
+
+                        texto_archivo += self._datos[i].nombre() + texto + self._datos[i].duracion() + "\n"
+
+                        for j in self._datos[i].padres():
+                            texto = '\tRequiere haber pasado por '
+
+                            if sys.version_info[0] < 3:
+                                texto = texto.decode('utf-8')
+
+                            texto_archivo += texto + self._datos[j].nombre() + '\n' # ': ' + self._datos[j].nombre() + "\n"
+
+                        for (j, duracion) in self._datos[i].conexiones():
+                            texto = ["\tPuede enviar a ", " con una duración de "]
+
+                            if sys.version_info[0] < 3:
+                                texto[0] = texto[0].decode('utf-8')
+                                texto[1] = texto[1].decode('utf-8')
+
+                            texto_archivo += texto[0] + self._datos[j].nombre() + texto[1] + str(duracion) + '\n' # ': ' + self._datos[j].nombre() + ', ' + str(duracion) + "\n"
+                        texto_archivo += '\n'
+
+                    if sys.version_info[0] >= 3:                # Llamada al método equivalente de la clase padre
+                        super().apertura('dominio', texto_archivo, nombre_archivo)
+                    else:
+                        super(ventana_principal, self).apertura('dominio', texto_archivo, nombre_archivo)
+
+                    texto = ' ➡ '
+
+                    if sys.version_info[0] < 3:
+                        texto = texto.decode('utf-8')
+
+                    self.setWindowTitle(self._TITULO_APP + texto + nombre_archivo)
+
+                    res = True
+
                 else:
                     if sys.version_info[0] >= 3:            # Llamada al método equivalente de la clase padre
                         nombre_archivo = super().apertura('error')
@@ -80,47 +120,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
                     self.limpiar()
 
-                texto_archivo = ''
-
-                for i in range(len(self._datos)):
-                    texto = ' es una máquina con duración '
-
-                    if sys.version_info[0] < 3:
-                        texto = texto.decode('utf-8')
-
-                    texto_archivo += self._datos[i].nombre() + texto + self._datos[i].duracion() + "\n"
-
-                    for j in self._datos[i].padres():
-                        texto = '\tRequiere haber pasado por '
-
-                        if sys.version_info[0] < 3:
-                            texto = texto.decode('utf-8')
-
-                        texto_archivo += texto + self._datos[j].nombre() + '\n' #': ' + self._datos[j].nombre() + "\n"
-
-                    for (j, duracion) in self._datos[i].conexiones():
-                        texto = ["\tPuede enviar a ", " con una duración de "]
-
-                        if sys.version_info[0] < 3:
-                            texto[0] = texto[0].decode('utf-8')
-                            texto[1] = texto[1].decode('utf-8')
-
-                        texto_archivo += texto[0] + self._datos[j].nombre() + texto[1] + str(duracion) + '\n' #': ' + self._datos[j].nombre() + ', ' + str(duracion) + "\n"
-                    texto_archivo += '\n'
-
-                if sys.version_info[0] >= 3:                # Llamada al método equivalente de la clase padre
-                    super().apertura('dominio', texto_archivo, nombre_archivo)
-                else:
-                    super(ventana_principal, self).apertura('dominio', texto_archivo, nombre_archivo)
-
-                texto = ' ➡ '
-
-                if sys.version_info[0] < 3:
-                    texto = texto.decode('utf-8')
-
-                self.setWindowTitle(self._TITULO_APP + texto + nombre_archivo)
-
-                res = True
+                    return False
 
             finally:
                 try:

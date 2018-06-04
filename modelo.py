@@ -147,6 +147,7 @@ class ventana_modelo():                                                         
                 else hijos[duraciones.index(min(duraciones))] \
             )
 
+
     @staticmethod                                                                                           # Método estático
     def convertir_conexiones_a_ids(elementos, conexiones):                                                  # Conversor de nombres a ids aplicado a conexiones
         res = []
