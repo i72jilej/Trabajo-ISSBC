@@ -20,8 +20,6 @@ import vista                                                # Vista del programa
 if sys.version_info[0] < 3:
     from io import open
 
-# from PyQt4 import QtGui
-
 
 class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
     _modificado = False                                     # Inicialización de variables de clase
