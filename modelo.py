@@ -62,6 +62,13 @@ class Element():                                                                
         return self._duracion                                                                                       #     Observador de la variable
 
 
+    def id_elemento(self, id_elemento = None):                                                                      # Método "sobrecargado":
+        if id_elemento != None:                                                                                     #     Modificador de la variable
+            self._id_elemento = id_elemento
+
+        return self._id_elemento                                                                                    #     Observador de la variable
+
+
     def nombre(self, nombre = None):                                                                                # Método "sobrecargado":
         if nombre != None:                                                                                          #     Modificador de la variable
             self._nombre = nombre
