@@ -99,7 +99,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                                 texto[0] = texto[0].decode('utf-8')
                                 texto[1] = texto[1].decode('utf-8')
 
-                            texto_archivo += texto[0] + conexion.nombre() + texto[1] + str(conexion.duracion()) + '\n'
+                            texto_archivo += texto[0] + conexion['objeto'].nombre() + texto[1] + str(conexion['duracion']) + '\n'
 
                         texto_archivo += '\n'
 

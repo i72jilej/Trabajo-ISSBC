@@ -87,6 +87,35 @@ class Element():                                                                
         return self._padres                                                                                         #     Observador de la variable
 
 
+class solucion():
+    def __init__(self):
+        self._camino = []
+        self._duracion = 0
+
+
+    def anyadir(self, nodo):
+        if self._camino.index(nodo) == []:
+            self._duracion(nodo)
+
+            self._camino.append(nodo)
+
+            return True
+
+        else:
+            return False
+
+
+    def _duracion(self, nodo):
+        for conexion in self._camino[len(self._camino) - 1].conexiones():
+            if conexion['objeto'] == nodo:
+                duracion_conexion = conexion['duracion']
+
+                break
+
+
+        self._duracion += duracion_conexion + nodo.duracion()
+
+
 class ventana_modelo():                                                                                             # Parte del modelo de la ventana
     def calcular(self, hilos):                                                                                      # Cálculo de soluciones
         hijos = list()
