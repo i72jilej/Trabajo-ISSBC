@@ -120,18 +120,17 @@ class ventana_modelo():                                                         
 
         padres, duraciones = zip(*nodos_padres)
 
+        longitud_datos = len(self._datos)                                                                   # Precarga de la longitud del camino
+
         ''' Se establece un nodo inicial en función del la probabilidad de emplear la heurística:
                 Si no se emplea, se elige un padre aleatoriamente
                 Si sí, se elige al mejor en función de la duración de los mismos
         '''
-        nodo_inicial = \
+        self.__soluciones[id_hijo].append( \
             random.choice(padres) \
             if random.randint(0, 100) < prob_heuristica \
-            else padres[duraciones.index(min(duraciones))]
-
-        longitud_datos = len(self._datos)                                                                   # Precarga de la longitud del camino
-
-        self.__soluciones[id_hijo].append(nodo_inicial)                                                     # Se añade el nodo de partida
+            else padres[duraciones.index(min(duraciones))] \
+        )
         
         while len(self.__soluciones[id_hijo]) < longitud_datos:                                             # Mientras que no hayamos explorado el grafo completo
             hd = self._datos[self.__soluciones[id_hijo][len(self.__soluciones[id_hijo]) - 1]].conexiones()  # Lista de tuplas: (hijo, duracion)
@@ -142,7 +141,7 @@ class ventana_modelo():                                                         
                     Si no se emplea, se elige un hijo aleatoriamente
                     Si sí, se elige al mejor en función de la duración de los mismos
             '''
-            self.__soluciones[id_hijo].append(\
+            self.__soluciones[id_hijo].append( \
                 random.choice(hijos) \
                 if random.randint(0, 100) < prob_heuristica \
                 else hijos[duraciones.index(min(duraciones))] \
