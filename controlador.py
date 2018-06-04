@@ -72,8 +72,9 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                 grafo = self.procesar(texto_archivo)
 
                 if grafo != None:
-                    self._datos = self.interpretar(grafo)
+                    self._datos = self.interpretar(grafo)   #Extrayendo datos manejables del grafo
 
+                    #Construyendo la descripción del dominio
                     for i in range(len(self._datos)):
                         texto = ' es una máquina con duración '
 
