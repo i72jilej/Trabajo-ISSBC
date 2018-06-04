@@ -87,8 +87,7 @@ class ventana_modelo():                                                         
             if DEBUG:
                 print('Padre #', os.getpid(), "\tPreparando hijo ", i, sep = '')
 
-            #Declarando los hijos. Ejecutarán ventana_modelo.calcular_hijos
-            hijos.append(Thread(target = ventana_modelo.calcular_hijos, args = (self, i, nodos_padres,)))
+            hijos.append(Thread(target = ventana_modelo.calcular_hijos, args = (self, i, nodos_padres,)))   # Declarando los hijos; ejecutarán ventana_modelo.calcular_hijos
 
             if DEBUG:
                 print('Padre #', os.getpid(), "\tArrancando hijo ", i, sep = '')
@@ -108,8 +107,7 @@ class ventana_modelo():                                                         
 
             sleep(ESPERA)                                                                                   # Para no saturar, el padre queda en espera durante "ESPERA" segundos
 
-        #Recorriendo el vector con las soluciones dadas por los hijos (recorriendolo por ids en vez de por elementos)
-        for i in range(len(self.__soluciones)):
+        for i in range(len(self.__soluciones)):                                                             # Recorriendo el vector con las soluciones dadas por los hijos (recorriendolo por ids en vez de por elementos)
             if DEBUG == True:
                 print('Padre #', os.getpid(), "\tEl hijo ", i, ' ha aportado la solución: ', self.__soluciones[i], sep = '')
 
@@ -119,10 +117,8 @@ class ventana_modelo():                                                         
             print('Hijo  #', id_hijo, "\tHe sido llamado", sep = '')
 
         prob_heuristica = random.randint(0, 100)                                                            # Probabilidad de utilizar la heurística
-        #La heuristica evitará que todos los hijos converjan al mismo resultado (puede ser un óptimo local)
-
-        #Descomponineod la lista nodos_padres en dos listas separadas
-        padres, duraciones = zip(*nodos_padres)
+                                                                                                            # La heuristica evitará que todos los hijos converjan al mismo resultado (puede ser un óptimo local)
+        padres, duraciones = zip(*nodos_padres)                                                             # "Desempaquetado" en dos listas
 
         longitud_datos = len(self._datos)                                                                   # Precarga de la longitud del camino
 
@@ -136,7 +132,7 @@ class ventana_modelo():                                                         
             else padres[duraciones.index(min(duraciones))] \
         )
         
-        while len(self.__soluciones[id_hijo]) < longitud_datos:                                             # Mientras que no hayamos explorado el grafo completo -> Mientras no queden máquinas por las que pasar
+        while len(self.__soluciones[id_hijo]) < longitud_datos:                                             # Mientras queden máquinas por las que pasar
             hd = self._datos[self.__soluciones[id_hijo][len(self.__soluciones[id_hijo]) - 1]].conexiones()  # Lista de tuplas: (hijo, duracion)
 
             hijos, duraciones = zip(*hd)                                                                    # "Desempaquetado" en dos listas
@@ -194,8 +190,7 @@ class ventana_modelo():                                                         
             print('Listando datos antes de ser almacenados en memoria...')
 
         elementos = []
-
-        #Extrayendo máquinas del grafo
+                                                                                                            # Extrayendo máquinas del grafo
         query = '''
                     PREFIX    rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns>
                     PREFIX    maquina:  <http://www.factory.fake/maquina/>
@@ -213,15 +208,12 @@ class ventana_modelo():                                                         
 
         resultado = grafo.query(query)
 
-        #Para cada máquina...
-        for fila in resultado:
+        for fila in resultado:                                                                              # Para cada máquina...
             if DEBUG:
                 print(fila.nombre, 'es una máquina con duración', fila.duracion)
 
-            #Almacenando la máquina como un Element
-            elemento = Element(fila.nombre, fila.duracion)
-
-            #Buscando padres de la máquina...
+            elemento = Element(fila.nombre, fila.duracion)                                                  # Almacenando la máquina como un Element
+                                                                                                            # Buscando padres de la máquina...
             query = '''
                         PREFIX    maquina:  <http://www.factory.fake/maquina/>
 
@@ -236,15 +228,12 @@ class ventana_modelo():                                                         
 
             subresultado = grafo.query(query % fila.nombre)
 
-            #Recorriendo la lista de padres
-            for subfila in subresultado:
+            for subfila in subresultado:                                                                    # Recorriendo la lista de padres
                 if DEBUG:
                     print("\tPadre de ", elemento.nombre(), ': ', subfila.nombre_padre, sep = '')
 
-                #Almancenando el nombre del padre de la máquina en el Element.
-                elemento.padres(subfila.nombre_padre)
-
-            #Buscando las conexiones de la máquina
+                elemento.padres(subfila.nombre_padre)                                                       # Almancenando el nombre del padre de la máquina en el Element
+                                                                                                            # Buscando las conexiones de la máquina
             query = '''
                         PREFIX    maquina:  <http://www.factory.fake/maquina/>
                         PREFIX    conexion: <http://www.factory.fake/conexion/>
@@ -262,26 +251,22 @@ class ventana_modelo():                                                         
 
             subresultado = grafo.query(query % fila.nombre)
 
-            #Recorriendo la lista de conexiones
-            for subfila in subresultado:
+            for subfila in subresultado:                                                                    # Recorriendo la lista de conexiones
                 if DEBUG:
                     print("\tConexión de ", elemento.nombre(), ': ', subfila.nombre_siguiente, ', ', subfila.duracion, sep = '')
 
-                #Almacenando las conexiones en el Element
-                elemento.conexiones((subfila.nombre_siguiente, int(subfila.duracion)))
+                elemento.conexiones((subfila.nombre_siguiente, int(subfila.duracion)))                      # Almacenando las conexiones en el Element
 
-            #Almacenando el Element elemento en la lista elementos -> Lista manejada
-            elementos.append(elemento)
+            elementos.append(elemento)                                                                      # Almacenando el Element elemento en la lista elementos -> Lista manejada
 
         if DEBUG:
             print()
             print()
 
-        #Recorriendo la lista elementos para buscar las posiciones que ocupan en la lista
-        for elemento in elementos:
-            padres = elemento.padres()  #Obteniendo padres
+        for elemento in elementos:                                                                          # Recorriendo la lista elementos para buscar las posiciones que ocupan en la lista
+            padres = elemento.padres()                                                                      # Obteniendo padres
 
-            conexiones = elemento.conexiones()  #Obteniendo conexiones
+            conexiones = elemento.conexiones()                                                              # Obteniendo conexiones
 
             if padres != []:
                 elemento.padres(ventana_modelo.convertir_padres_a_ids(elementos, padres), True)
