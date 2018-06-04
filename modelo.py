@@ -20,8 +20,8 @@ DEBUG = True
 ESPERA = 1                                                                                                  # Tiempo de espera para que el padre compruebe la finalización de sus hijos
 
 import os                                                                                                   # Funcionalidades varias del sistema operativo
+import random                                                                                               # Generación de números aleatorios
 
-from random import choice                                                                                   # Elegir un valor aleatorio de una lista
 from threading import Thread                                                                                # Capacidades multihilo
 from time import sleep                                                                                      # Pausas
 
@@ -116,7 +116,18 @@ class ventana_modelo():                                                         
         if DEBUG:
             print('Hijo  #', id_hijo, "\tHe sido llamado", sep = '')
 
-        nodo_inicial = choice(nodos_padres)                                                                 # TODO: Heurística // Se elige aleatoriamente un padre
+        prob_heuristica = random.randint(0, 100)                                                            # Probabilidad de utilizar la heurística
+
+        padres, duraciones = zip(*nodos_padres)
+
+        ''' Se establece un nodo inicial en función del la probabilidad de emplear la heurística:
+                Si no se emplea, se elige un padre aleatoriamente
+                Si sí, se elige al mejor en función de la duración de los mismos
+        '''
+        nodo_inicial = \
+            random.choice(padres) \
+            if random.randint(0, 100) < prob_heuristica \
+            else padres[duraciones.index(min(duraciones))]
 
         longitud_datos = len(self._datos)                                                                   # Precarga de la longitud del camino
 
@@ -124,10 +135,18 @@ class ventana_modelo():                                                         
         
         while len(self.__soluciones[id_hijo]) < longitud_datos:                                             # Mientras que no hayamos explorado el grafo completo
             hd = self._datos[self.__soluciones[id_hijo][len(self.__soluciones[id_hijo]) - 1]].conexiones()  # Lista de tuplas: (hijo, duracion)
+
             hijos, duraciones = zip(*hd)                                                                    # "Desempaquetado" en dos listas
 
-            self.__soluciones[id_hijo].append(hijos[duraciones.index(min(duraciones))])                     # Añadir al vector de soluciones el hijo índice de las duraciones con la duración menor
-                                                                                                            # Es decir, se escogerá como solución al hijo con menor duración, siendo este criterio la heurística aplicada a la búsqueda
+            ''' Se establece un nodo siguiente en función del la probabilidad de emplear la heurística:
+                    Si no se emplea, se elige un hijo aleatoriamente
+                    Si sí, se elige al mejor en función de la duración de los mismos
+            '''
+            self.__soluciones[id_hijo].append(\
+                random.choice(hijos) \
+                if random.randint(0, 100) < prob_heuristica \
+                else hijos[duraciones.index(min(duraciones))] \
+            )
 
     @staticmethod                                                                                           # Método estático
     def convertir_conexiones_a_ids(elementos, conexiones):                                                  # Conversor de nombres a ids aplicado a conexiones
@@ -291,12 +310,12 @@ class ventana_modelo():                                                         
 
 
     @staticmethod                                                                                           # Método estático
-    def padres(datos):                                                                                      # Devuelve una lista con las ids de los nodos padres
+    def padres(datos):                                                                                      # Devuelve una lista con las ids de los nodos padres y sus respectivas duraciones
         res = []
 
         for i in range(len(datos)):
             if datos[i].padres() == []:
-                res.append(i)
+                res.append((i, datos[i].duracion()))
 
         return res
 
