@@ -94,27 +94,45 @@ class solucion():                                                               
         self._duracion = 0
 
 
-    def anyadir(self, nodo):
-        if self._camino.index(nodo) == []:
-            self._duracion(nodo)
+    def anyadir(self, nodo):                                                                                            # Añade un nodo a la solución, siempre que éste no esté ya en ella
+        try:
+            self._camino.index(nodo)                                                                                    # Comprobación de que no esté ya añadido
 
-            self._camino.append(nodo)
+        except ValueError:                                                                                              # En caso de no estarlo:
+            self.__duracion(nodo)                                                                                       #     Se recalcula la duración de la solución
 
-            return True
+            self._camino.append(nodo)                                                                                   #     Y se añade el nodo
 
-        else:
-            return False
+            res = True                                                                                                  #     Se prepara el "informe"
 
+        else:                                                                                                           # En caso de estar repetido:
+            res = False                                                                                                 #     Se prepara el "informe"
 
-    def _duracion(self, nodo):
-        for conexion in self._camino[len(self._camino) - 1].conexiones():
-            if conexion['objeto'] == nodo:
-                duracion_conexion = conexion['duracion']
-
-                break
+        finally:
+            return res                                                                                                  # Se devuelve el informe del éxito (o no) del añadido
 
 
-        self._duracion += duracion_conexion + nodo.duracion()
+    def camino(self):                                                                                                   # Observador de la variable
+        return self._camino                                                                                             # Se entiende que un camino no se modificará (a excepción de añadir nuevos nodos al mismo)
+
+
+    def __duracion(self, nodo):                                                                                         # Método interno para el recálculo de la duración de la solución
+        if self._camino != []:                                                                                          # Si existe un camino
+            for conexion in self._camino[len(self._camino) - 1].conexiones():                                           #     Se calcula la duración de la conexión entre el útimo nodo del mismo y el que se añadirá
+                if conexion['objeto'] == nodo:
+                    duracion_conexion = conexion['duracion']
+
+                    break
+
+        else:                                                                                                           # Si no:
+            duracion_conexion = 0                                                                                       #     La duración es cero
+
+
+        self._duracion += duracion_conexion + int(nodo.duracion())                                                      # La duración será la que actualmente haya más la duración de la conexión más la duración del nodo que se añadirá
+
+
+    def duracion(self):                                                                                                 # Observador de la variable
+        return self._duracion
 
 
 class ventana_modelo():                                                                                                 # Parte del modelo de la ventana
@@ -124,7 +142,7 @@ class ventana_modelo():                                                         
 
         hijos = list()
 
-        self.__soluciones = [[] for i in range(hilos)]                                                              # Inicialización del vector de soluciones
+        self.__soluciones = [solucion() for i in range(hilos)]                                                          # Inicialización del vector de soluciones
 
         nodos_iniciales = self.iniciales(self._datos)                                                                   # Precáculo de los nodos iniciales
 
@@ -155,49 +173,66 @@ class ventana_modelo():                                                         
         for i in range(len(self.__soluciones)):                                                                         # Recorriendo el vector con las soluciones dadas por los hijos (recorriendolo por ids en vez de por elementos)
             if DEBUG == True:
                 if sys.version_info[0] >= 3:
-                    print('Padre #', os.getpid(), "\tEl hijo ", i, ' ha aportado la solución: ', [str(solucion.nombre()) for solucion in self.__soluciones[i]], sep = '')
+                    print('Padre #', os.getpid(), "\tEl hijo ", i, ' ha aportado la solución: ', [str(solucion.nombre()) for solucion in self.__soluciones[i].camino()], sep = '')
 
                 else:
-                    print('Padre #', os.getpid(), "\tEl hijo ", i, ' ha aportado la solución: ', [solucion.nombre().toPython() for solucion in self.__soluciones[i]], sep = '')
+                    print('Padre #', os.getpid(), "\tEl hijo ", i, ' ha aportado la solución: ', [solucion.nombre().toPython() for solucion in self.__soluciones[i].camino()], sep = '')
+
 
     def calcular_hijos(self, id_hijo, nodos_iniciales):                                                                 # Cálculo de cada solución (ejecutada por cada hijo)
         if DEBUG:
             print('Hijo  #', id_hijo, "\tHe sido llamado", sep = '')
 
-        prob_heuristica = random.randint(0, 100)                                                                    # Probabilidad de utilizar la heurística
-                                                                                                                    # La heuristica evitará que todos los hijos converjan al mismo resultado (puede ser un óptimo local)
-        duraciones = [nodo.duracion() for nodo in nodos_iniciales]                                                  # "Desempaquetado" en dos listas
+        prob_heuristica = random.randint(0, 100)                                                                        # Probabilidad de utilizar la heurística
+                                                                                                                        # La heuristica evitará que todos los hijos converjan al mismo resultado (puede ser un óptimo local)
+        longitud_datos = len(self._datos)                                                                               # Precarga de la longitud del camino
 
-        longitud_datos = len(self._datos)                                                                           # Precarga de la longitud del camino
+        nodo_elegido = self.elegir(nodos_iniciales, prob_heuristica)
 
-        ''' Se establece un nodo inicial en función del la probabilidad de emplear la heurística:
-                Si no se emplea, se elige un padre aleatoriamente
-                Si sí, se elige al mejor en función de la duración de los mismos
-        '''
-        self.__soluciones[id_hijo].append( \
-            random.choice(nodos_iniciales) \
-            if random.randint(0, 100) < prob_heuristica \
-            else nodos_iniciales[duraciones.index(min(duraciones))] \
-        )
-        
-        while len(self.__soluciones[id_hijo]) < longitud_datos:                                                     # Mientras queden máquinas por las que pasar
-            conexiones = self.__soluciones[id_hijo][len(self.__soluciones[id_hijo]) - 1].conexiones()               # Lista de tuplas: (hijo, duracion)
+        self.__soluciones[id_hijo].anyadir(nodo_elegido)                                                                # Se añade un nodo inicial en función del la probabilidad de emplear la heurística
 
-            duraciones = [nodo.duracion() for nodo in conexiones]                                                   # "Desempaquetado" en dos listas
+        if DEBUG:
+            print('Hijo  #', id_hijo, "\tAñadido al camino el nodo", nodo_elegido.nombre())
 
-            ''' Se establece un nodo siguiente en función del la probabilidad de emplear la heurística:
-                    Si no se emplea, se elige un hijo aleatoriamente
-                    Si sí, se elige al mejor en función de la duración de los mismos
-            '''
-            self.__soluciones[id_hijo].append( \
-                random.choice(conexiones) \
-                if random.randint(0, 100) < prob_heuristica \
-                else conexiones[duraciones.index(min(duraciones))] \
-            )
+        while len(self.__soluciones[id_hijo].camino()) < longitud_datos:                                                # Mientras queden máquinas por las que pasar
+            if DEBUG:
+                print('Hijo  #', id_hijo, "\tEl tamaño del árbol es de ", longitud_datos, ' nodos', sep = '')
+                print('Hijo  #', id_hijo, "\tEl tamaño del camino es de ", len(self.__soluciones[id_hijo].camino()), ' nodos', sep = '')
 
 
-    @staticmethod                                                                                                   # Método estático
-    def convertir_conexiones_a_elementos(elementos, conexiones):                                                    # Conversor de nombres a ids aplicado a conexiones
+            conexiones = self.__soluciones[id_hijo].camino()[len(self.__soluciones[id_hijo].camino()) - 1].conexiones() # Lista de tuplas: (hijo, duracion)
+
+            nodos_conexiones = [conexion['objeto'] for conexion in conexiones]                                          # "Desempaquetado" en dos listas
+
+            nodo_elegido = self.elegir(nodos_conexiones, prob_heuristica)
+
+            if DEBUG:
+                print('Hijo  #', id_hijo, "\tIntentando añadir al camino el nodo ", nodo_elegido.nombre(), sep = '')
+
+            valido = self.__soluciones[id_hijo].anyadir(nodo_elegido)
+
+            while not valido:
+                if DEBUG:
+                    print('Hijo  #', id_hijo, "\tNo es posible", sep = '')
+
+                nodos_conexiones.remove(nodo_elegido)
+
+                if nodos_conexiones != []:
+                    nodo_elegido = self.elegir(nodos_conexiones, prob_heuristica)
+
+                    if DEBUG:
+                        print('Hijo  #', id_hijo, "\tIntentando añadir al camino el nodo ", nodo_elegido.nombre(), sep = '')
+
+                    valido = self.__soluciones[id_hijo].anyadir(nodo_elegido)                                           # Se añade un nodo siguiente en función del la probabilidad de emplear la heurística
+
+                else:
+                    self.__soluciones[id_hijo] = solucion()
+
+                    return
+
+
+    @staticmethod                                                                                                       # Método estático
+    def convertir_conexiones_a_elementos(elementos, conexiones):                                                        # Conversor de nombres a ids aplicado a conexiones
         res = []
 
         for conexion in conexiones:
@@ -226,6 +261,20 @@ class ventana_modelo():                                                         
             res.append(objeto_padre)
 
         return res
+
+
+    @staticmethod
+    def elegir(nodos, prob_heuristica):                                                                                 # Se elige un nodo en función del la probabilidad de emplear la heurística
+        ''' Se elige un nodo en función del la probabilidad de emplear la heurística:
+                Si no se emplea, se elige un hijo aleatoriamente
+                Si sí, se elige al mejor en función de la duración de los mismos
+        '''
+
+        duraciones = [nodo.duracion() for nodo in nodos]                                                                # "Desempaquetado" en dos listas
+        return \
+            random.choice(nodos) \
+            if random.randint(0, 100) < prob_heuristica \
+            else nodos[duraciones.index(min(duraciones))]
 
 
     @staticmethod                                                                                                       # Método estático
