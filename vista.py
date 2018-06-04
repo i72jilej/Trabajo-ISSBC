@@ -146,6 +146,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
     def crearAcciones(self):                                	       	# Creación de las acciones asociadas al menú y a la barra de herramientas
         textos = []
         textos.append('Sale de la aplicación')
+        textos.append('Comienza los cálculos')
         textos.append('Muestra la ventana "Acerca de" de la librería Qt')
 
         if sys.version_info[0] < 3:
@@ -158,9 +159,9 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         self.guardarComoAcc     = QtGui.QAction('Guardar c&omo',    self, shortcut = QtGui.QKeySequence.SaveAs, statusTip = 'Guarda el archivo con un nombre distinto',             triggered = self.guardar_como   )
         self.imprimirAcc        = QtGui.QAction('Im&primir',        self, shortcut = QtGui.QKeySequence.Print,  statusTip = 'Imprime el archivo',                                   triggered = self.imprimir       )
         self.salirAcc           = QtGui.QAction('&Salir',           self, shortcut = 'Alt+F4',                  statusTip = textos[0],                                              triggered = self.close          )
-        self.calcularAcc        = QtGui.QAction('&Calcular',        self, shortcut = 'F4',                      statusTip = 'Comienza los cálculos',                                triggered = self.calcular       )
+        self.calcularAcc        = QtGui.QAction('&Calcular',        self, shortcut = 'F4',                      statusTip = textos[1],                                              triggered = self.calcular       )
         self.acercaDeAcc        = QtGui.QAction('&Acerca de',       self, shortcut = 'F1',                      statusTip = 'Muestra la ventana "Acerca de"',                       triggered = self.acercaDe       )
-        self.acercaDeQtAcc      = QtGui.QAction('Acerca de &Qt',    self,                                       statusTip = textos[1],                                              triggered = self.acercaDeQt     )
+        self.acercaDeQtAcc      = QtGui.QAction('Acerca de &Qt',    self,                                       statusTip = textos[2],                                              triggered = self.acercaDeQt     )
 
         self.nuevoAcc.          setIcon(QtGui.QIcon('./iconos/001-add-new-document.png')                            )
         self.abrirAcc.          setIcon(QtGui.QIcon('./iconos/002-folder-black-open-shape.png')                     )

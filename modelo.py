@@ -22,6 +22,9 @@ ESPERA = 1                                                                      
 import os                                                                                                           # Funcionalidades varias del sistema operativo
 import random                                                                                                       # Generación de números aleatorios
 
+if DEBUG:
+    import sys                                                                                                      # Funcionalidades varias del sistema
+
 from threading import Thread                                                                                        # Capacidades multihilo
 from time import sleep                                                                                              # Pausas
 
@@ -111,8 +114,11 @@ class ventana_modelo():                                                         
 
         for i in range(len(self.__soluciones)):                                                                     # Recorriendo el vector con las soluciones dadas por los hijos (recorriendolo por ids en vez de por elementos)
             if DEBUG == True:
-                print('Padre #', os.getpid(), "\tEl hijo ", i, ' ha aportado la solución: ', [str(solucion.nombre()) for solucion in self.__soluciones[i]], sep = '')
+                if sys.version_info[0] >= 3:
+                    print('Padre #', os.getpid(), "\tEl hijo ", i, ' ha aportado la solución: ', [str(solucion.nombre()) for solucion in self.__soluciones[i]], sep = '')
 
+                else:
+                    print('Padre #', os.getpid(), "\tEl hijo ", i, ' ha aportado la solución: ', [solucion.nombre().toPython() for solucion in self.__soluciones[i]], sep = '')
 
     def calcular_hijos(self, id_hijo, nodos_iniciales):                                                             # Cálculo de cada solución (ejecutada por cada hijo)
         if DEBUG:
