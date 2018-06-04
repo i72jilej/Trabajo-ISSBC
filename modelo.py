@@ -170,7 +170,7 @@ class ventana_modelo():                                                         
         for conexion in conexiones:
             for id_elemento in range(len(elementos)):
                 if elementos[id_elemento].nombre() == conexion[0]:
-                    objeto_conexion = elementos[id_elemento]
+                    objeto_conexion = {'objeto': elementos[id_elemento], 'duracion': conexion[1]}
 
                     break
 
@@ -306,7 +306,7 @@ class ventana_modelo():                                                         
                     print("\tPadre:", padre.nombre())
 
                 for conexion in elemento.conexiones():
-                    print("\tConexión: ", conexion.nombre(), ', ', conexion.duracion(), sep = '')
+                    print("\tConexión: ", conexion['objeto'].nombre(), ', ', conexion['duracion'], sep = '')
 
             print()
             print()
