@@ -105,7 +105,7 @@ class ventana_modelo():                                                         
             if DEBUG == True:
                 print('Padre #', os.getpid(), "\tEsperando a que los procesos hijos hagan su trabajo", sep = '')
 
-            sleep(ESPERA)                                                                                       # Para no saturar, el padre queda en espera durante "ESPERA" segundos
+            sleep(ESPERA)                                                                                   # Para no saturar, el padre queda en espera durante "ESPERA" segundos
 
         for i in range(len(self.__soluciones)):
             if DEBUG == True:

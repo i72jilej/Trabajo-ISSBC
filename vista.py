@@ -35,6 +35,7 @@ class ventana_vista(QtGui.QMainWindow):                                 # Parte 
     def __init__(self):                                                 # Parte de la vista del constructor de la clase; al ser una ventana, inicializa la misma
         if sys.version_info[0] >= 3:                                    # Llamada al método equivalente de la clase padre
             super().__init__()
+
         else:
             super(ventana_vista, self).__init__()
 
@@ -94,6 +95,13 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
             self._text_dominio.setText(args[0])
             self._text_ruta.setText(args[1])
 
+            texto = ' ➡ '
+
+            if sys.version_info[0] < 3:
+                texto = texto.decode('utf-8')
+
+            self.setWindowTitle(self._TITULO_APP + texto + args[1])
+
             return True
 
 
@@ -130,8 +138,6 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
             boton_cancelar.setText('Cancelar')
 
             return mensaje.exec_()
-
-            # return QtGui.QMessageBox.question(self, 'Aviso', texto, QtGui.QMessageBox.Discard | QtGui.QMessageBox.Save | QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Cancel)
 
         else:
             return QtGui.QMessageBox.Discard

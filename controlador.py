@@ -28,6 +28,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
     def __init__(self):                                     # Constructor de la clase
         if sys.version_info[0] >= 3:                        # Llamada al método equivalente de la clase padre
             super().__init__()
+
         else:
             super(ventana_principal, self).__init__()
 
@@ -52,6 +53,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
     def apertura(self):                                     # Procedimiento de apertura
         if sys.version_info[0] >= 3:                        # Llamada al método equivalente de la clase padre
             nombre_archivo = super().apertura('abrir')
+
         else:
             nombre_archivo = super(ventana_principal, self).apertura('abrir')
 
@@ -101,21 +103,16 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
                     if sys.version_info[0] >= 3:                # Llamada al método equivalente de la clase padre
                         super().apertura('dominio', texto_archivo, nombre_archivo)
+
                     else:
                         super(ventana_principal, self).apertura('dominio', texto_archivo, nombre_archivo)
-
-                    texto = ' ➡ '
-
-                    if sys.version_info[0] < 3:
-                        texto = texto.decode('utf-8')
-
-                    self.setWindowTitle(self._TITULO_APP + texto + nombre_archivo)
 
                     res = True
 
                 else:
                     if sys.version_info[0] >= 3:            # Llamada al método equivalente de la clase padre
                         nombre_archivo = super().apertura('error')
+
                     else:
                         nombre_archivo = super(ventana_principal, self).apertura('error')
 
@@ -173,6 +170,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
         except IOError:
             if sys.version_info[0] >= 3:                    # Llamada al método equivalente de la clase padre
                 super().guardado()
+
             else:
                 super(ventana_principal, self).guardado()
 
@@ -217,11 +215,13 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
     def guardar_como(self):                                 # Acción de guardar cómo
         if sys.version_info[0] >= 3:                        # Llamada al método equivalente de la clase padre
             self._nombre_archivo = super().guardar_como()
+
         else:
             self._nombre_archivo = super(ventana_principal, self).guardar_como()
 
         if self._nombre_archivo != '':
             return self.guardado()
+
         else:
             return False
 
@@ -277,6 +277,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
     def __del__(self):                                     # Constructor de la clase
         if sys.version_info[0] >= 3:                       # Llamada al método equivalente de la clase padre
             super().__del__()
+
         else:
             super(ventana_principal, self).__del__()
 
