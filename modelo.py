@@ -174,6 +174,20 @@ class solucion():                                                               
 
 
 class ventana_modelo():                                                                                                         # Parte del modelo de la ventana
+    def anyadir_solucion(self):
+        if self._cronograma != None:
+            # TODO: Recalcular cronograma
+
+            pass
+        
+        else:
+            # TODO: Generar un nuevo cronograma
+
+            self._soluciones = []
+
+        self._soluciones.append(self._tmp_soluciones)
+
+
     def calcular(self, hilos):                                                                                                  # Cálculo de soluciones
         hijos = list()
 
@@ -228,8 +242,9 @@ class ventana_modelo():                                                         
 
         self._tmp_soluciones = self.validar(self._tmp_soluciones, self._cronograma)
 
-        # FIXME: Acabar
-        self._soluciones = self._tmp_soluciones
+        self._tmp_soluciones = self.elegir(self._tmp_soluciones, random.randint(0, 100))
+
+        self.anyadir_solucion()
 
         if DEBUG == True:
             for una_solucion in self._tmp_soluciones:                                                                           # Recorriendo la lista con las soluciones dadas por los hijos
@@ -495,7 +510,7 @@ class ventana_modelo():                                                         
     def validar(soluciones, cronograma):                                                                                        # Valida las soluciones
         for solucion in soluciones:                                                                                             # Recorre la lista de soluciones
             solucion.validar()                                                                                                  # Valida cada solución
-
+            #                                                                                                                   # Validación de tipo "prerrequisitos"
         soluciones = ventana_modelo.podar(soluciones)                                                                           # "Poda" las que no son válidas
 
         if cronograma != None:
