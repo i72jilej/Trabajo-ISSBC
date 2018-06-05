@@ -145,7 +145,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
         else:
             modelo.ventana_modelo.calcular(self, self._n_hilos) # Llamada al método equivalente de la clase vista
 
-            texto = 'Se han generado ' + str(self._n_hilos) + " soluciones posibles. \nDe ellas, se consideran candidatas: "
+            texto = 'Se han generado ' + str(self._n_hilos) + " soluciones posibles.\nDe ellas, se consideran candidatas: "
 
             i = 1
 
