@@ -490,12 +490,20 @@ class ventana_modelo():                                                         
         return soluciones
 
 
-    @staticmethod                                                                                                       # Método estático
-    def validar(soluciones):                                                                                            # Valida las soluciones
-        for solucion in soluciones:                                                                                     # Recorre la lista de soluciones
-            solucion.validar()                                                                                          # Valida cada solución
+    @staticmethod                                                                                                               # Método estático
+    def validar(soluciones, cronograma):                                                                                        # Valida las soluciones
+        for solucion in soluciones:                                                                                             # Recorre la lista de soluciones
+            solucion.validar()                                                                                                  # Valida cada solución
 
-        soluciones = ventana_modelo.podar(soluciones)                                                                   # "Poda" las que no son válidas
+        soluciones = ventana_modelo.podar(soluciones)                                                                           # "Poda" las que no son válidas
+
+        if cronograma != None:
+            # TODO: Validar con cronograma
+
+            soluciones = ventana_modelo.podar(soluciones)
+
+        else:
+            pass
 
         return soluciones
 
