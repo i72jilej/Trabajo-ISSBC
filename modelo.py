@@ -182,7 +182,7 @@ class ventana_modelo():                                                         
 
 
     def calcular_hijos(self, id_hijo, nodos_iniciales):                                                                 # Cálculo de cada solución (ejecutada por cada hijo)
-        if DEBUG:
+        if DEBUG_HIJOS:
             print('Hijo  #', id_hijo, "\tHe sido llamado", sep = '')
 
         prob_heuristica = random.randint(0, 100)                                                                        # Probabilidad de utilizar la heurística
@@ -193,11 +193,11 @@ class ventana_modelo():                                                         
 
         self.__soluciones[id_hijo].anyadir(nodo_elegido)                                                                # Se añade un nodo inicial en función del la probabilidad de emplear la heurística
 
-        if DEBUG:
+        if DEBUG_HIJOS:
             print('Hijo  #', id_hijo, "\tAñadido al camino el nodo", nodo_elegido.nombre())
 
         while len(self.__soluciones[id_hijo].camino()) < longitud_datos:                                                # Mientras queden máquinas por las que pasar
-            if DEBUG:
+            if DEBUG_HIJOS:
                 print('Hijo  #', id_hijo, "\tEl tamaño del árbol es de ", longitud_datos, ' nodos', sep = '')
                 print('Hijo  #', id_hijo, "\tEl tamaño del camino es de ", len(self.__soluciones[id_hijo].camino()), ' nodos', sep = '')
 
@@ -208,13 +208,13 @@ class ventana_modelo():                                                         
 
             nodo_elegido = self.elegir(nodos_conexiones, prob_heuristica)
 
-            if DEBUG:
+            if DEBUG_HIJOS:
                 print('Hijo  #', id_hijo, "\tIntentando añadir al camino el nodo ", nodo_elegido.nombre(), sep = '')
 
             valido = self.__soluciones[id_hijo].anyadir(nodo_elegido)
 
             while not valido:
-                if DEBUG:
+                if DEBUG_HIJOS:
                     print('Hijo  #', id_hijo, "\tNo es posible", sep = '')
 
                 nodos_conexiones.remove(nodo_elegido)
@@ -222,7 +222,7 @@ class ventana_modelo():                                                         
                 if nodos_conexiones != []:
                     nodo_elegido = self.elegir(nodos_conexiones, prob_heuristica)
 
-                    if DEBUG:
+                    if DEBUG_HIJOS:
                         print('Hijo  #', id_hijo, "\tIntentando añadir al camino el nodo ", nodo_elegido.nombre(), sep = '')
 
                     valido = self.__soluciones[id_hijo].anyadir(nodo_elegido)                                           # Se añade un nodo siguiente en función del la probabilidad de emplear la heurística
