@@ -12,6 +12,8 @@
 # Notes         : 
 
 
+SANGRIA = '        '
+
 import sys                                                      # Funcionalidades varias del sistema
 
 import modelo                                                   # Modelo del programa
@@ -88,7 +90,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                         texto_archivo += self._datos[i].nombre() + texto + self._datos[i].duracion() + "\n"
 
                         for padre in self._datos[i].padres():
-                            texto = '\tRequiere haber pasado por '
+                            texto = SANGRIA + 'Requiere haber pasado por '
 
                             if sys.version_info[0] < 3:
                                 texto = texto.decode('utf-8')
@@ -96,7 +98,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                             texto_archivo += texto + padre.nombre() + '\n'
 
                         for conexion in self._datos[i].conexiones():
-                            texto = ["\tPuede enviar a ", " con una duración de "]
+                            texto = [SANGRIA + 'Puede enviar a ', ' con una duración de ']
 
                             if sys.version_info[0] < 3:
                                 texto[0] = texto[0].decode('utf-8')
@@ -145,22 +147,23 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
         else:
             modelo.ventana_modelo.calcular(self, self._n_hilos) # Llamada al método equivalente de la clase vista
 
-            texto = 'Se han generado ' + str(self._n_hilos) + " soluciones posibles.\nDe ellas, se consideran candidatas: "
+            texto = 'Se han generado ' + str(self._n_hilos) + " soluciones posibles\nDe ellas, se consideran candidatas:\n"
 
             i = 1
 
             for solucion in self._soluciones:
                 str_camino = ''
+
                 for nodo in solucion.camino():
                     if sys.version_info[0] >= 3:
-                        str_camino += " - " + str(nodo.nombre())
+                        str_camino += str(nodo.nombre()) + ' - '
 
                     else:
-                        str_camino += " - " + nodo.nombre().toPython().encode('utf-8')
+                        str_camino += nodo.nombre().toPython().encode('utf-8') + ' - '
 
                 i += 1
 
-                texto = texto + "\nSolución " + str(i) + ': ' + str_camino + "\n"
+                texto = texto + SANGRIA + str(i) + ': ' + str_camino[0:-3] + "\n"
 
             vista.ventana_vista.calcular(self, 'desarrollo', texto)
 

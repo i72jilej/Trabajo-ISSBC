@@ -120,7 +120,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
             if sys.version_info[0] < 3:
                 texto = texto.decode('utf-8')
 
-            self._text_desarrollo.setText(self._text_desarrollo.toPlainText() + "\n" + texto)
+            self._text_desarrollo.setText(self._text_desarrollo.toPlainText() + texto + "\n")
 
 
     def confirmar_modificado(self, accion):                             # Confirmación de las modificaciones antes de realizar una operación que pueda destruirlas
