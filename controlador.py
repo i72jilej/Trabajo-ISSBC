@@ -33,6 +33,8 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
         else:
             super(ventana_principal, self).__init__()
 
+        self._cronograma = None
+
 
     def abrir(self):                                        # Acción de abrir 
         respuesta = self.confirmar_modificado('cargar uno nuevo')
