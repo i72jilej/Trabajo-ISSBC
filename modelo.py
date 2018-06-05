@@ -158,12 +158,17 @@ class ventana_modelo():                                                         
             hijos[i].start()
 
         while hijos:                                                                                                    # Mientras la lista tenga hijos
+            aux = []
+
             for hijo in hijos:                                                                                          # Para cada hijo de la lista
                 if not hijo.is_alive():                                                                                 # Comprobación de si el hijo ha finalizado
                     hijo.join()                                                                                         # Se recupera el proceso y se saca de la lista
-                    hijos.remove(hijo)
+                    aux.append(hijo)
 
-                    del(hijo)
+            for hijo in aux:
+                hijos.remove(hijo)
+
+                del(hijo)
 
             if DEBUG == True:
                 print('Padre #', os.getpid(), "\tEsperando a que los procesos hijos hagan su trabajo", sep = '')
@@ -417,8 +422,13 @@ class ventana_modelo():                                                         
 
     @staticmethod                                                                                                       # Método estático
     def podar(soluciones):                                                                                              # "Poda" (elimina elementos no válidos de) la lista de soluciones
+        aux = []
+
         for solucion in soluciones:                                                                                     # Recorriendo la lista de soluciones
             if len(solucion.camino()) == 0:                                                                             # Criterio de eliminación: el camino tiene una longitud de cero nodos
-                soluciones.remove(solucion)
+                aux.append(solucion)
+
+        for solucion in aux:
+            soluciones.remove(solucion)
 
         return soluciones
