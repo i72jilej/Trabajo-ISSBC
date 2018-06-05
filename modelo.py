@@ -179,7 +179,7 @@ class ventana_modelo():                                                         
 
         hijos = list()
 
-        self._soluciones = [solucion() for i in range(hilos)]                                                           # Inicialización de la lista de soluciones
+        self._tmp_soluciones = [solucion() for i in range(hilos)]                                                               # Inicialización de la lista de soluciones
 
         nodos_iniciales = self.iniciales(self._datos)                                                                           # Precáculo de los nodos iniciales
 
@@ -215,10 +215,10 @@ class ventana_modelo():                                                         
 
             sleep(ESPERA)                                                                                                       # Para no saturar, el padre queda en espera durante "ESPERA" segundos
 
-        self._soluciones = self.podar(self._soluciones)                                                                 # Primera "poda"
+        self._tmp_soluciones = self.podar(self._tmp_soluciones)                                                                 # Primera "poda"
 
         if DEBUG == True:
-            for una_solucion in self._soluciones:                                                                       # Recorriendo la lista con las soluciones dadas por los hijos
+            for una_solucion in self._tmp_soluciones:                                                                           # Recorriendo la lista con las soluciones dadas por los hijos
                 if sys.version_info[0] >= 3:
                     print('Padre #', os.getpid(), "\tSolución posible: ", [str(nodo.nombre()) for nodo in una_solucion.camino()], sep = '')
 
@@ -228,10 +228,10 @@ class ventana_modelo():                                                         
             print()
             print()
 
-        self.validar(self._soluciones)
+        self._tmp_soluciones = self.validar(self._tmp_soluciones, self._cronograma)
 
         if DEBUG == True:
-            for una_solucion in self._soluciones:                                                                       # Recorriendo la lista con las soluciones dadas por los hijos
+            for una_solucion in self._tmp_soluciones:                                                                           # Recorriendo la lista con las soluciones dadas por los hijos
                 if sys.version_info[0] >= 3:
                     print('Padre #', os.getpid(), "\tSolución candidata: ", [str(nodo.nombre()) for nodo in una_solucion.camino()], sep = '')
 
@@ -252,18 +252,18 @@ class ventana_modelo():                                                         
 
         nodo_elegido = self.elegir(nodos_iniciales, prob_heuristica)
 
-        self._soluciones[id_hijo].anyadir(nodo_elegido)                                                                 # Se añade un nodo inicial en función del la probabilidad de emplear la heurística
+        self._tmp_soluciones[id_hijo].anyadir(nodo_elegido)                                                                     # Se añade un nodo inicial en función del la probabilidad de emplear la heurística
 
         if DEBUG_HIJOS:
             print('Hijo  #', id_hijo, "\tAñadido al camino el nodo", nodo_elegido.nombre())
 
-        while len(self._soluciones[id_hijo].camino()) < longitud_datos:                                                 # Mientras queden máquinas por las que pasar
+        while len(self._tmp_soluciones[id_hijo].camino()) < longitud_datos:                                                     # Mientras queden máquinas por las que pasar
             if DEBUG_HIJOS:
                 print('Hijo  #', id_hijo, "\tEl tamaño del árbol es de ", longitud_datos, ' nodos', sep = '')
-                print('Hijo  #', id_hijo, "\tEl tamaño del camino es de ", len(self._soluciones[id_hijo].camino()), ' nodos', sep = '')
+                print('Hijo  #', id_hijo, "\tEl tamaño del camino es de ", len(self._tmp_soluciones[id_hijo].camino()), ' nodos', sep = '')
 
 
-            conexiones = self._soluciones[id_hijo].camino()[len(self._soluciones[id_hijo].camino()) - 1].conexiones()   # Lista de tuplas: (hijo, duracion)
+            conexiones = self._tmp_soluciones[id_hijo].camino()[len(self._tmp_soluciones[id_hijo].camino()) - 1].conexiones()   # Lista de tuplas: (hijo, duracion)
 
             nodos_conexiones = [conexion['objeto'] for conexion in conexiones]                                                  # "Desempaquetado" en dos listas
 
@@ -272,7 +272,7 @@ class ventana_modelo():                                                         
             if DEBUG_HIJOS:
                 print('Hijo  #', id_hijo, "\tIntentando añadir al camino el nodo ", nodo_elegido.nombre(), sep = '')
 
-            valido = self._soluciones[id_hijo].anyadir(nodo_elegido)
+            valido = self._tmp_soluciones[id_hijo].anyadir(nodo_elegido)
 
             while not valido:
                 if DEBUG_HIJOS:
@@ -286,10 +286,10 @@ class ventana_modelo():                                                         
                     if DEBUG_HIJOS:
                         print('Hijo  #', id_hijo, "\tIntentando añadir al camino el nodo ", nodo_elegido.nombre(), sep = '')
 
-                    valido = self._soluciones[id_hijo].anyadir(nodo_elegido)                                            # Se añade un nodo siguiente en función del la probabilidad de emplear la heurística
+                    valido = self._tmp_soluciones[id_hijo].anyadir(nodo_elegido)                                                # Se añade un nodo siguiente en función del la probabilidad de emplear la heurística
 
                 else:
-                    self._soluciones[id_hijo] = solucion()
+                    self._tmp_soluciones[id_hijo] = solucion()
 
                     return
 
