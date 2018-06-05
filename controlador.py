@@ -140,7 +140,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
             vista.ventana_vista.calcular(self)              # Llamada al método equivalente de la clase vista
 
         else:
-            modelo.ventana_modelo.calcular(self, 50)        # Llamada al método equivalente de la clase vista
+            modelo.ventana_modelo.calcular(self, 1000)      # Llamada al método equivalente de la clase vista
 
             self._modificado = True
 
