@@ -105,13 +105,22 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
             return True
 
 
-    def calcular(self):                                                 # Parte de la vista de la realización de los cálculos necesarios
-        texto = 'Error de cálculo'
+    def calcular(self, modo, *args):                                                 # Parte de la vista de la realización de los cálculos necesarios
+        if(modo == "ERROR"):
+            texto = 'Error de cálculo'
 
-        if sys.version_info[0] < 3:
-            texto = texto.decode('utf-8')
+            if sys.version_info[0] < 3:
+                texto = texto.decode('utf-8')
 
-        QtGui.QMessageBox.warning(self, texto, 'Aviso: No se ha cargado ningún archivo')
+            QtGui.QMessageBox.warning(self, texto, 'Aviso: No se ha cargado ningún archivo')
+        
+        elif(modo == "DESARROLLO"):
+            texto = args[0]
+
+            if sys.version_info[0] < 3:
+                texto = texto.decode('utf-8')
+
+            self._text_desarrollo.setText(self._text_desarrollo.toPlainText() + "\n" + texto)
 
 
     def confirmar_modificado(self, accion):                             # Confirmación de las modificaciones antes de realizar una operación que pueda destruirlas

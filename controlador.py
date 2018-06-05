@@ -23,6 +23,7 @@ if sys.version_info[0] < 3:
 
 class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
     _modificado = False                                     # Inicialización de variables de clase
+    _nHilos = 1000                                          # Número de hilos a utilizar (soluciones posibles)
 
 
     def __init__(self):                                     # Constructor de la clase
@@ -137,10 +138,37 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
             self._datos
 
         except AttributeError:
-            vista.ventana_vista.calcular(self)              # Llamada al método equivalente de la clase vista
+            vista.ventana_vista.calcular(self, "ERROR")              # Llamada al método equivalente de la clase vista
 
         else:
-            modelo.ventana_modelo.calcular(self, 1000)      # Llamada al método equivalente de la clase vista
+            modelo.ventana_modelo.calcular(self, self._nHilos)      # Llamada al método equivalente de la clase vista
+
+            texto = "Se han generado " + str(self._nHilos) + " soluciones posibles. \nDe ellas, se consideran candidatas: "
+            i = 1
+
+            for solucion in self._soluciones:
+                '''
+                if sys.version_info[0] >= 3:
+                    #print('Padre #', os.getpid(), "\tSolución candidata: ", [str(nodo.nombre()) for nodo in solucion.camino()], sep = '')
+                    sub_texto = "Solución " + str(i) +": " + ''.join([str(nodo.nombre()) for nodo in solucion.camino()])
+
+                else:
+                    #print('Padre #', os.getpid(), "\tSolución candidata: ", [nodo.nombre().toPython() for nodo in solucion.camino()], sep = '')
+                    sub_texto = "Solución " + str(i) +": " + ''.join(solucion.camino())
+                    #''.join([nodo.nombre().toPython() for nodo in solucion.camino()])
+                '''
+                str_camino = ""
+                for nodo in solucion.camino():
+                    if sys.version_info[0] >= 3:
+                        str_camino = str_camino + str(nodo.nombre())
+                    else:
+                        str_camino = str_camino + nodo.nombre().toPython()
+
+
+                i+=1
+                texto = texto + "\nSolución " + str(i) + ": " + str_camino
+
+            vista.ventana_vista.calcular(self, "DESARROLLO", texto)
 
             self._modificado = True
 
