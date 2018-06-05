@@ -174,9 +174,6 @@ class solucion():                                                               
 
 class ventana_modelo():                                                                                                         # Parte del modelo de la ventana
     def calcular(self, hilos):                                                                                                  # Cálculo de soluciones
-        if DEBUG_HIJOS == True:
-            hilos = 1
-
         hijos = list()
 
         self._tmp_soluciones = [solucion() for i in range(hilos)]                                                               # Inicialización de la lista de soluciones
@@ -184,12 +181,12 @@ class ventana_modelo():                                                         
         nodos_iniciales = self.iniciales(self._datos)                                                                           # Precáculo de los nodos iniciales
 
         for i in range(hilos):
-            if DEBUG:
+            if DEBUG_HIJOS:
                 print('Padre #', os.getpid(), "\tPreparando hijo ", i, sep = '')
 
             hijos.append(Thread(target = ventana_modelo.calcular_hijos, args = (self, i, nodos_iniciales,)))                    # Declarando los hijos; ejecutarán ventana_modelo.calcular_hijos
 
-            if DEBUG:
+            if DEBUG_HIJOS:
                 print('Padre #', os.getpid(), "\tArrancando hijo ", i, sep = '')
 
             hijos[i].start()
