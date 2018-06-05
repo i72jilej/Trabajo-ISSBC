@@ -187,7 +187,8 @@ class ventana_modelo():                                                         
                         print('Padre #', os.getpid(), "\tPosible solución: ", [str(nodo.nombre()) for nodo in una_solucion.camino()], sep = '')
 
                     else:
-                        print('Padre #', os.getpid(), "\tEl hijo ", i, ' ha aportado la solución: ', [nodo.nombre().toPython() for nodo in una_solucion.camino()], sep = '')
+                        #print('Padre #', os.getpid(), "\tEl hijo ", i, ' ha aportado la solución: ', [nodo.nombre().toPython() for nodo in una_solucion.camino()], sep = '')
+                        print('Padre #', os.getpid(), "\tPosible solución: ", [nodo.nombre().toPython() for nodo in una_solucion.camino()], sep = '')
 
         self.validar(self._soluciones)
 
