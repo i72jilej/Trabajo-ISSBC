@@ -170,13 +170,15 @@ class ventana_modelo():                                                         
 
             sleep(ESPERA)                                                                                               # Para no saturar, el padre queda en espera durante "ESPERA" segundos
 
-        for una_solucion in self.__soluciones:                                                                              # Recorriendo el vector con las soluciones dadas por los hijos
-            if DEBUG == True:
-                if sys.version_info[0] >= 3:
-                    print('Padre #', os.getpid(), "\tPosible solución: ", [str(nodo.nombre()) for nodo in una_solucion.camino()], sep = '')
+        self.__soluciones = self.podar(self.__soluciones)                                                               # Primera "poda"
 
-                else:
-                    print('Padre #', os.getpid(), "\tEl hijo ", i, ' ha aportado la solución: ', [nodo.nombre().toPython() for nodo in una_solucion.camino()], sep = '')
+        for una_solucion in self.__soluciones:                                                                          # Recorriendo la lista con las soluciones dadas por los hijos
+                if DEBUG == True:
+                    if sys.version_info[0] >= 3:
+                        print('Padre #', os.getpid(), "\tPosible solución: ", [str(nodo.nombre()) for nodo in una_solucion.camino()], sep = '')
+
+                    else:
+                        print('Padre #', os.getpid(), "\tEl hijo ", i, ' ha aportado la solución: ', [nodo.nombre().toPython() for nodo in una_solucion.camino()], sep = '')
 
 
     def calcular_hijos(self, id_hijo, nodos_iniciales):                                                                 # Cálculo de cada solución (ejecutada por cada hijo)
@@ -413,3 +415,10 @@ class ventana_modelo():                                                         
             return res
 
 
+    @staticmethod                                                                                                       # Método estático
+    def podar(soluciones):                                                                                              # "Poda" (elimina elementos no válidos de) la lista de soluciones
+        for solucion in soluciones:                                                                                     # Recorriendo la lista de soluciones
+            if len(solucion.camino()) == 0:                                                                             # Criterio de eliminación: el camino tiene una longitud de cero nodos
+                soluciones.remove(solucion)
+
+        return soluciones
