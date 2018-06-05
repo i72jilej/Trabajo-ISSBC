@@ -105,8 +105,8 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
             return True
 
 
-    def calcular(self, modo, *args):                                                 # Parte de la vista de la realización de los cálculos necesarios
-        if(modo == "ERROR"):
+    def calcular(self, modo, *args):                                    # Parte de la vista de la realización de los cálculos necesarios
+        if modo == 'error':
             texto = 'Error de cálculo'
 
             if sys.version_info[0] < 3:
@@ -114,7 +114,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
             QtGui.QMessageBox.warning(self, texto, 'Aviso: No se ha cargado ningún archivo')
         
-        elif(modo == "DESARROLLO"):
+        elif modo == 'desarrollo':
             texto = args[0]
 
             if sys.version_info[0] < 3:
