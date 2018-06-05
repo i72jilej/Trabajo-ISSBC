@@ -59,9 +59,9 @@ class ventana_vista(QtGui.QMainWindow):                                 # Parte 
 
         self.setWindowTitle(self._TITULO_APP)                           # Se establece el título de la ventana
 
-        self.setMinimumSize(640, 480)                                   # Parámetros de tamaño
+        self.setMinimumSize(0, 720)                                     # Parámetros de tamaño
 
-        self.resize(800, 600)
+        self.resize(1280, 720)
 
 
     def acercaDe(self):                                                 # Ventana modal que muestra la información de "Acerca de"
@@ -159,6 +159,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
             textos.append('Sale de la aplicación')
             textos.append('Comienza los cálculos')
             textos.append('Muestra la ventana "Acerca de" de la librería Qt')
+
         else:
             textos.append(u'Sale de la aplicación')
             textos.append(u'Comienza los cálculos')
@@ -232,9 +233,17 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
     def dibujar_intarfaz_mitad_inferior(self):                          # Dibujo de la mitad inferior de la interfaz
         # Diseño
         disenyo = QtGui.QHBoxLayout()
+        disenyo.setMargin(0)
+        disenyo.setSpacing(0)
+
+        disenyo.addWidget(self.dibujar_interfaz_mitad_inferior_mitad_izquierda_dominio())
+        disenyo.addWidget(self.dibujar_interfaz_mitad_inferior_mitad_derecha())
+
+        '''
         disenyo.addWidget(self.dibujar_interfaz_mitad_inferior_dominio())
         disenyo.addWidget(self.dibujar_interfaz_mitad_inferior_solucion())
         disenyo.addWidget(self.dibujar_interfaz_mitad_inferior_desarrollo())
+        '''
 
         # Widget
         mitad_inferior = QtGui.QGroupBox('Resultados')
@@ -244,7 +253,24 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         return mitad_inferior
 
 
-    def dibujar_interfaz_mitad_inferior_desarrollo(self):               # Dibujo de la parte de desarrollo de la mitad inferior de la interfaz
+    def dibujar_interfaz_mitad_inferior_mitad_derecha(self):
+        # Diseño
+        disenyo = QtGui.QVBoxLayout()
+        disenyo.setMargin(0)
+        disenyo.setSpacing(0)
+
+        disenyo.addWidget(self.dibujar_interfaz_mitad_inferior_mitad_derecha_desarrollo())
+        disenyo.addWidget(self.dibujar_interfaz_mitad_inferior_mitad_derecha_solucion())
+
+        # Widget
+        mitad_inferior_mitad_superior = QtGui.QGroupBox()
+        mitad_inferior_mitad_superior.setLayout(disenyo)
+        mitad_inferior_mitad_superior.setStyleSheet('QGroupBox QGroupBox { border: 0px; }')
+
+        return mitad_inferior_mitad_superior
+
+
+    def dibujar_interfaz_mitad_inferior_mitad_derecha_desarrollo(self): # Dibujo de la parte de desarrollo de la mitad inferior de la interfaz
         # Etiquetas
         label_desarrollo = QtGui.QLabel('Desarrollo:')
 
@@ -260,11 +286,12 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         # Widget
         desarrollo = QtGui.QGroupBox()
         desarrollo.setLayout(disenyo)
+        desarrollo.setMinimumWidth(650)
 
         return desarrollo
 
 
-    def dibujar_interfaz_mitad_inferior_dominio(self):	                # Dibujo de la parte de dominio de la mitad inferior de la interfaz
+    def dibujar_interfaz_mitad_inferior_mitad_izquierda_dominio(self):  # Dibujo de la parte de dominio de la mitad inferior de la interfaz
         # Etiquetas
         label_dominio = QtGui.QLabel('Dominio:')
 
@@ -280,11 +307,13 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         # Widget
         dominio = QtGui.QGroupBox()
         dominio.setLayout(disenyo)
+        dominio.setMaximumWidth(400)
+        dominio.setMinimumWidth(400)
 
         return dominio
 
 
-    def dibujar_interfaz_mitad_inferior_solucion(self):                 # Dibujo de la parte de solución de la mitad inferior de la interfaz
+    def dibujar_interfaz_mitad_inferior_mitad_derecha_solucion(self):   # Dibujo de la parte de solución de la mitad inferior de la interfaz
         texto = 'Solución:'
 
         if sys.version_info[0] < 3:

@@ -149,7 +149,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
             texto = 'Se han generado ' + str(self._n_hilos) + " soluciones posibles\nDe ellas, se consideran candidatas:\n"
 
-            i = 1
+            i = 0
 
             for solucion in self._soluciones:
                 str_camino = ''
