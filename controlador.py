@@ -150,25 +150,13 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
             i = 1
 
             for solucion in self._soluciones:
-                '''
-                if sys.version_info[0] >= 3:
-                    #print('Padre #', os.getpid(), "\tSolución candidata: ", [str(nodo.nombre()) for nodo in solucion.camino()], sep = '')
-                    sub_texto = "Solución " + str(i) +": " + ''.join([str(nodo.nombre()) for nodo in solucion.camino()])
-
-                else:
-                    #print('Padre #', os.getpid(), "\tSolución candidata: ", [nodo.nombre().toPython() for nodo in solucion.camino()], sep = '')
-                    sub_texto = "Solución " + str(i) +": " + ''.join(solucion.camino())
-                    #''.join([nodo.nombre().toPython() for nodo in solucion.camino()])
-                '''
-
                 str_camino = ''
-
                 for nodo in solucion.camino():
                     if sys.version_info[0] >= 3:
                         str_camino += str(nodo.nombre())
 
                     else:
-                        str_camino += nodo.nombre().toPython()
+                        str_camino = str_camino + nodo.nombre().toPython().encode('utf-8')
 
                 i += 1
 
