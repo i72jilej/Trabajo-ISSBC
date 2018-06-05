@@ -29,7 +29,6 @@ _:transmision					maquina:padre			_:motor					.
 _:puertas						rdf:type				maquina:maquina			.
 _:puertas						maquina:nombre			"Puertas"				.
 _:puertas						maquina:duracion		"60"					.
-_:puertas						maquina:padre			_:carroceria			.
 _:puertas						maquina:padre			_:interiores			.
 
 _:ruedas						rdf:type				maquina:maquina			.
