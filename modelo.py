@@ -135,8 +135,41 @@ class solucion():                                                               
         return self._duracion
 
 
-    def validar(self):
-        return True
+    def validar(self):                                                                                                  # Autovalidador de la solución
+        nodos_visitados = []
+
+        res = True
+
+        for nodo in self._camino:
+            padres = nodo.padres()
+
+            if padres != []:
+                for padre in padres:
+                    try:
+                        nodos_visitados.index(padre)
+
+                    except ValueError:
+                        res = False
+
+                    else:
+                        res = res and True
+
+                    finally:
+                        if res == False:
+                            break
+
+            else:
+                pass
+
+            if res == False:
+                break
+
+            nodos_visitados.append(nodo)
+
+        if res == False:
+            self._camino = []
+
+        return res
 
 
 class ventana_modelo():                                                                                                 # Parte del modelo de la ventana
@@ -177,20 +210,36 @@ class ventana_modelo():                                                         
             if DEBUG == True:
                 print('Padre #', os.getpid(), "\tEsperando a que los procesos hijos hagan su trabajo", sep = '')
 
+                print()
+                print()
+
             sleep(ESPERA)                                                                                               # Para no saturar, el padre queda en espera durante "ESPERA" segundos
 
         self._soluciones = self.podar(self._soluciones)                                                                 # Primera "poda"
 
-        for una_solucion in self._soluciones:                                                                           # Recorriendo la lista con las soluciones dadas por los hijos
-                if DEBUG == True:
-                    if sys.version_info[0] >= 3:
-                        print('Padre #', os.getpid(), "\tPosible solución: ", [str(nodo.nombre()) for nodo in una_solucion.camino()], sep = '')
+        if DEBUG == True:
+            for una_solucion in self._soluciones:                                                                       # Recorriendo la lista con las soluciones dadas por los hijos
+                if sys.version_info[0] >= 3:
+                    print('Padre #', os.getpid(), "\tSolución posible: ", [str(nodo.nombre()) for nodo in una_solucion.camino()], sep = '')
 
-                    else:
-                        #print('Padre #', os.getpid(), "\tEl hijo ", i, ' ha aportado la solución: ', [nodo.nombre().toPython() for nodo in una_solucion.camino()], sep = '')
-                        print('Padre #', os.getpid(), "\tPosible solución: ", [nodo.nombre().toPython() for nodo in una_solucion.camino()], sep = '')
+                else:
+                    print('Padre #', os.getpid(), "\tSolución posible: ", [nodo.nombre().toPython() for nodo in una_solucion.camino()], sep = '')
+
+            print()
+            print()
 
         self.validar(self._soluciones)
+
+        if DEBUG == True:
+            for una_solucion in self._soluciones:                                                                       # Recorriendo la lista con las soluciones dadas por los hijos
+                if sys.version_info[0] >= 3:
+                    print('Padre #', os.getpid(), "\tSolución candidata: ", [str(nodo.nombre()) for nodo in una_solucion.camino()], sep = '')
+
+                else:
+                    print('Padre #', os.getpid(), "\tSolución candidata: ", [nodo.nombre().toPython() for nodo in una_solucion.camino()], sep = '')
+
+            print()
+            print()
 
 
     def calcular_hijos(self, id_hijo, nodos_iniciales):                                                                 # Cálculo de cada solución (ejecutada por cada hijo)
