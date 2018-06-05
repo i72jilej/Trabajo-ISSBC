@@ -153,14 +153,14 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                 str_camino = ''
                 for nodo in solucion.camino():
                     if sys.version_info[0] >= 3:
-                        str_camino += str(nodo.nombre())
+                        str_camino += " - " + str(nodo.nombre())
 
                     else:
-                        str_camino = str_camino + nodo.nombre().toPython().encode('utf-8')
+                        str_camino += " - " + nodo.nombre().toPython().encode('utf-8')
 
                 i += 1
 
-                texto = texto + "\nSolución " + str(i) + ': ' + str_camino
+                texto = texto + "\nSolución " + str(i) + ': ' + str_camino + "\n"
 
             vista.ventana_vista.calcular(self, 'desarrollo', texto)
 
