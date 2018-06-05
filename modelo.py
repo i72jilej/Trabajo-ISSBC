@@ -142,7 +142,7 @@ class ventana_modelo():                                                         
 
         hijos = list()
 
-        self.__soluciones = [solucion() for i in range(hilos)]                                                          # Inicialización del vector de soluciones
+        self.__soluciones = [solucion() for i in range(hilos)]                                                          # Inicialización de la lista de soluciones
 
         nodos_iniciales = self.iniciales(self._datos)                                                                   # Precáculo de los nodos iniciales
 
@@ -157,10 +157,10 @@ class ventana_modelo():                                                         
 
             hijos[i].start()
 
-        while hijos:                                                                                                    # Mientras el vector tenga hijos
-            for hijo in hijos:                                                                                          # Para cada hijo del vector
+        while hijos:                                                                                                    # Mientras la lista tenga hijos
+            for hijo in hijos:                                                                                          # Para cada hijo de la lista
                 if not hijo.is_alive():                                                                                 # Comprobación de si el hijo ha finalizado
-                    hijo.join()                                                                                         # Se recupera el proceso y se saca del vector
+                    hijo.join()                                                                                         # Se recupera el proceso y se saca de la lista
                     hijos.remove(hijo)
 
                     del(hijo)
