@@ -14,6 +14,7 @@
 
 SANGRIA = '        '
 
+
 import sys                                                      # Funcionalidades varias del sistema
 
 import modelo                                                   # Modelo del programa
@@ -301,8 +302,8 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
             pass
 
 
-    def __del__(self):                                         # Constructor de la clase
-        if sys.version_info[0] >= 3:                           # Llamada al método equivalente de la clase padre
+    def __del__(self):                                          # Constructor de la clase
+        if sys.version_info[0] >= 3:                            # Llamada al método equivalente de la clase padre
             super().__del__()
 
         else:

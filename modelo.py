@@ -20,6 +20,7 @@ DEBUG_HIJOS = False
 
 ESPERA = 1                                                                                                                      # Tiempo de espera para que el padre compruebe la finalización de sus hijos
 
+
 import os                                                                                                                       # Funcionalidades varias del sistema operativo
 import random                                                                                                                   # Generación de números aleatorios
 
@@ -247,7 +248,7 @@ class ventana_modelo():                                                         
             print('Hijo  #', id_hijo, "\tHe sido llamado", sep = '')
 
         prob_heuristica = random.randint(0, 100)                                                                                # Probabilidad de utilizar la heurística
-                                                                                                                                # La heuristica evitará que todos los hijos converjan al mismo resultado (puede ser un óptimo local)
+        #                                                                                                                       # La heuristica evitará que todos los hijos converjan al mismo resultado (puede ser un óptimo local)
         longitud_datos = len(self._datos)                                                                                       # Precarga de la longitud del camino
 
         nodo_elegido = self.elegir(nodos_iniciales, prob_heuristica)
@@ -357,7 +358,7 @@ class ventana_modelo():                                                         
             print('Listando datos antes de ser almacenados en memoria...')
 
         elementos = []
-                                                                                                                                # Extrayendo máquinas del grafo
+        #                                                                                                                       # Extrayendo máquinas del grafo
         query = '''
                     PREFIX    rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns>
                     PREFIX    maquina:  <http://www.factory.fake/maquina/>
@@ -380,7 +381,7 @@ class ventana_modelo():                                                         
                 print(fila.nombre, 'es una máquina con duración', fila.duracion)
 
             elemento = Element(len(elementos), fila.nombre, fila.duracion)                                                      # Almacenando la máquina como un Element
-                                                                                                                                # Buscando padres de la máquina...
+            #                                                                                                                   # Buscando padres de la máquina...
             query = '''
                         PREFIX    maquina:  <http://www.factory.fake/maquina/>
 
@@ -400,7 +401,7 @@ class ventana_modelo():                                                         
                     print("\tPadre:", subfila.nombre_padre)
 
                 elemento.padres(subfila.nombre_padre)                                                                           # Almancenando el nombre del padre de la máquina en el Element
-                                                                                                                                # Buscando las conexiones de la máquina
+            #                                                                                                                   # Buscando las conexiones de la máquina
             query = '''
                         PREFIX    maquina:  <http://www.factory.fake/maquina/>
                         PREFIX    conexion: <http://www.factory.fake/conexion/>
