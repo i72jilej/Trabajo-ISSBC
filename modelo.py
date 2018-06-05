@@ -227,6 +227,9 @@ class ventana_modelo():                                                         
 
         self._tmp_soluciones = self.validar(self._tmp_soluciones, self._cronograma)
 
+        # FIXME: Acabar
+        self._soluciones = self._tmp_soluciones
+
         if DEBUG == True:
             for una_solucion in self._tmp_soluciones:                                                                           # Recorriendo la lista con las soluciones dadas por los hijos
                 if sys.version_info[0] >= 3:
