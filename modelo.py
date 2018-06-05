@@ -135,6 +135,10 @@ class solucion():                                                               
         return self._duracion
 
 
+    def validar(self):
+        return True
+
+
 class ventana_modelo():                                                                                                 # Parte del modelo de la ventana
     def calcular(self, hilos):                                                                                          # Cálculo de soluciones
         if DEBUG_HIJOS == True:
@@ -184,6 +188,8 @@ class ventana_modelo():                                                         
 
                     else:
                         print('Padre #', os.getpid(), "\tEl hijo ", i, ' ha aportado la solución: ', [nodo.nombre().toPython() for nodo in una_solucion.camino()], sep = '')
+
+        self.validar(self._soluciones)
 
 
     def calcular_hijos(self, id_hijo, nodos_iniciales):                                                                 # Cálculo de cada solución (ejecutada por cada hijo)
@@ -432,3 +438,15 @@ class ventana_modelo():                                                         
             soluciones.remove(solucion)
 
         return soluciones
+
+
+    @staticmethod                                                                                                       # Método estático
+    def validar(soluciones):                                                                                            # Valida las soluciones
+        for solucion in soluciones:                                                                                     # Recorre la lista de soluciones
+            solucion.validar()                                                                                          # Valida cada solución
+
+        soluciones = ventana_modelo.podar(soluciones)                                                                   # "Poda" las que no son válidas
+
+        return soluciones
+
+
