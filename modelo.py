@@ -170,13 +170,13 @@ class ventana_modelo():                                                         
 
             sleep(ESPERA)                                                                                               # Para no saturar, el padre queda en espera durante "ESPERA" segundos
 
-        for i in range(len(self.__soluciones)):                                                                         # Recorriendo el vector con las soluciones dadas por los hijos (recorriendolo por ids en vez de por elementos)
+        for una_solucion in self.__soluciones:                                                                              # Recorriendo el vector con las soluciones dadas por los hijos
             if DEBUG == True:
                 if sys.version_info[0] >= 3:
-                    print('Padre #', os.getpid(), "\tEl hijo ", i, ' ha aportado la solución: ', [str(solucion.nombre()) for solucion in self.__soluciones[i].camino()], sep = '')
+                    print('Padre #', os.getpid(), "\tPosible solución: ", [str(nodo.nombre()) for nodo in una_solucion.camino()], sep = '')
 
                 else:
-                    print('Padre #', os.getpid(), "\tEl hijo ", i, ' ha aportado la solución: ', [solucion.nombre().toPython() for solucion in self.__soluciones[i].camino()], sep = '')
+                    print('Padre #', os.getpid(), "\tEl hijo ", i, ' ha aportado la solución: ', [nodo.nombre().toPython() for nodo in una_solucion.camino()], sep = '')
 
 
     def calcular_hijos(self, id_hijo, nodos_iniciales):                                                                 # Cálculo de cada solución (ejecutada por cada hijo)
