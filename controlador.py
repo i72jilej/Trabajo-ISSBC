@@ -27,8 +27,10 @@ if sys.version_info[0] < 3:
 
 class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
     _modificado = False                                         # Inicialización de variables de clase
+
     _n_hilos = 1000                                             # Número de hilos a utilizar (soluciones posibles)
-    _nSoluciones = 0
+
+    __num_soluciones = 0                                        # Usada para la condición de parada
 
     def __init__(self):                                         # Constructor de la clase
         if sys.version_info[0] >= 3:                            # Llamada al método equivalente de la clase padre
@@ -155,13 +157,13 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                 if respuesta == vista.respuestas.diccionario[vista.respuestas.DESCARTAR]:
                     self.limpiar('parcial')
 
-                    self.bucle_calcular()
+                    self.calcular_bucle()
 
                 elif respuesta == vista.respuestas.diccionario[vista.respuestas.GUARDAR]:
                     if self.guardar():
                         self.limpiar('parcial')
 
-                        self.bucle_calcular()
+                        self.calcular_bucle()
 
                     else:
                         pass
@@ -170,46 +172,30 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                     pass
 
             else:
-                self.bucle_calcular()
+                self.calcular_bucle()
 
         finally:
             pass
 
 
-    def bucle_calcular(self):
+    def calcular_bucle(self):
         self.calculo()
 
-        self._soluciones_old = []
-        while len(self._soluciones) > len(self._soluciones_old):
-            self._soluciones_old = self._soluciones
+        while len(self._soluciones) > self.__num_soluciones or len(self._soluciones) == 10:
             self.calculo()
 
-        if DEBUG:
-            for solucion in self._soluciones:
-                texto = ''
-                for nodo in solucion.camino():
-                    if sys.version_info[0] >= 3:
-                        texto += str(nodo.nombre()) + ' - '
-
-                    else:
-                        texto += nodo.nombre().toPython().encode('utf-8') + ' - '
-                
-                print('SOLUCION: ', texto, "\n")
-
         texto = 'Se han podido generar ' + str(len(self._soluciones)) + " soluciones válidas simultáneas:\n"
-        i = 0
-        for solucion in self._soluciones:
-            str_camino = ''
-            tiempo = solucion.duracion()
 
-            for nodo in solucion.camino():
+        for i in range(len(self._soluciones)):
+            str_camino = ''
+            tiempo = self._soluciones[i].duracion()
+
+            for nodo in self._soluciones[i].camino():
                 if sys.version_info[0] >= 3:
                     str_camino += str(nodo.nombre()) + ' - '
 
                 else:
                     str_camino += nodo.nombre().toPython().encode('utf-8') + ' - '
-
-            i+=1
 
             texto += SANGRIA + str(i) + ': ' + str_camino[0:-3] + ' con una duración de ' + str(tiempo) + " seg.\n"
 
@@ -221,44 +207,38 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
         texto = 'Se han generado ' + str(self._n_hilos) + " soluciones posibles\nDe ellas, se consideran candidatas:\n"
 
-        i = 0
-
-        for solucion in self._soluciones_candidatas:
+        for i in range(len(self._soluciones_candidatas)):
             str_camino = ''
-            tiempo = solucion.duracion()
 
-            for nodo in solucion.camino():
+            for nodo in self._soluciones_candidatas[i].camino():
                 if sys.version_info[0] >= 3:
                     str_camino += str(nodo.nombre()) + ' - '
 
                 else:
                     str_camino += nodo.nombre().toPython().encode('utf-8') + ' - '
 
-            i += 1
+            texto += SANGRIA + str(i) + ': ' + str_camino[0:-3] + ', con una duración de ' + str(self._soluciones_candidatas[i].duracion()) + " seg.\n"
 
-            texto = texto + SANGRIA + str(i) + ': ' + str_camino[0:-3] + ' con una duración de ' + str(tiempo) + " seg.\n"
+        num_soluciones = len(self._soluciones)
 
-        vista.ventana_vista.calcular(self, 'desarrollo', texto)
+        if self.__num_soluciones < num_soluciones:
+            self.__num_soluciones = num_soluciones
 
-        if self._nSoluciones < len(self._soluciones):
-            print("NSOLUCIONES: ", self._nSoluciones)
-            print("LEN: ", len(self._soluciones))
+            texto = "Se ha elegido la solución: \n"
 
-            self._nSoluciones = len(self._soluciones)
+            texto_camino = ''
 
-            tiempo = self._solucion_elegida.duracion()
-            texto = "\nSe ha elegido la solución: \n"
-            str_camino = ''
             for nodo in self._solucion_elegida.camino():
                 if sys.version_info[0] >= 3:
-                    str_camino += str(nodo.nombre()) + ' - '
+                    texto_camino += str(nodo.nombre()) + ' - '
 
                 else:
-                    str_camino += nodo.nombre().toPython().encode('utf-8') + ' - '
+                    texto_camino += nodo.nombre().toPython().encode('utf-8') + ' - '
 
-            texto = texto + SANGRIA + str_camino[0:-3] + ' con una duración de ' + str(tiempo) + " seg.\n"
+            texto += SANGRIA + texto_camino[0:-3] + ', con una duración de ' + str(self._solucion_elegida.duracion()) + " seg.\n"
+
         else:
-            texto = "No se ha encontrado ninguna otra solución válida\n. Fin de la ejecución."
+            texto = "\nNo se ha encontrado ninguna otra solución válida\nFin de la ejecución"
 
         vista.ventana_vista.calcular(self, 'desarrollo', texto)
 
@@ -381,6 +361,8 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
         self._cronograma = None
 
         self._soluciones = []
+
+        self.__num_soluciones = 0
 
 
     def modificado(self, *args):                                # Función "sobrecargada": modificador / observador de la variable self._modificado

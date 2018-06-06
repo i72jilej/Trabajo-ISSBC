@@ -106,6 +106,7 @@ class Element():                                                                
 class solucion():                                                                                                                       # Representación de una solución
     def __init__(self):                                                                                                                 # Constructor de la clase
         self._camino = []                                                                                                               # Inicialización de variables
+
         self._duracion = 0
 
 
@@ -219,7 +220,7 @@ class ventana_modelo():                                                         
             hilos = 10
 
         hijos = list()
-        prob_heuristica = 50
+        prob_heuristica = 25
         # FIXME: Hacer ajustable
 
         self._soluciones_posibles = [solucion() for i in range(hilos)]                                                                  # Inicialización de la lista de soluciones
@@ -276,21 +277,33 @@ class ventana_modelo():                                                         
 
         del self._soluciones_posibles
 
-        if DEBUG == True:
-            for una_solucion in self._soluciones_candidatas:                                                                            # Recorriendo la lista con las soluciones dadas por los hijos
-                if sys.version_info[0] >= 3:
-                    print('Padre #', os.getpid(), "\tSolución candidata: ", [str(nodo.nombre()) for nodo in una_solucion.camino()], sep = '')
+        if self._soluciones_candidatas != []:
+            if DEBUG == True:
+                for una_solucion in self._soluciones_candidatas:                                                                            # Recorriendo la lista con las soluciones dadas por los hijos
+                    if sys.version_info[0] >= 3:
+                        print('Padre #', os.getpid(), "\tSolución candidata: ", [str(nodo.nombre()) for nodo in una_solucion.camino()], sep = '')
 
-                else:
-                    print('Padre #', os.getpid(), "\tSolución candidata: ", [nodo.nombre().toPython() for nodo in una_solucion.camino()], sep = '')
+                    else:
+                        print('Padre #', os.getpid(), "\tSolución candidata: ", [nodo.nombre().toPython() for nodo in una_solucion.camino()], sep = '')
+
+                print()
+                print()
+
+
+            self._solucion_elegida = self.elegir(self._soluciones_candidatas, prob_heuristica)
+
+            self.anyadir_solucion()
+
+            if DEBUG:
+                for una_solucion in self._soluciones:
+                    if sys.version_info[0] >= 3:
+                        print('Padre #', os.getpid(), "\tSolución definitiva: ", [str(nodo.nombre()) for nodo in una_solucion.camino()], sep = '')
+
+                    else:
+                        print('Padre #', os.getpid(), "\tSolución definitiva: ", [nodo.nombre().toPython() for nodo in una_solucion.camino()], sep = '')
 
             print()
             print()
-
-
-        self._solucion_elegida = self.elegir(self._soluciones_candidatas, prob_heuristica)
-
-        self.anyadir_solucion()
 
 
     def calcular_hijos(self, id_hijo, nodos_iniciales, prob_heuristica):                                                                # Cálculo de cada solución (ejecutada por cada hijo)
@@ -565,7 +578,7 @@ class ventana_modelo():                                                         
             #                                                                                                                           # Validación de tipo "prerrequisitos"
         soluciones = ventana_modelo.podar(soluciones)                                                                                   # "Poda" las que no son válidas
 
-        if cronograma != None:
+        ''' if cronograma != None:
             for solucion in soluciones:                                                                                                 # Recorre la lista de soluciones
                 tiempo = 0
 
@@ -594,7 +607,7 @@ class ventana_modelo():                                                         
             soluciones = ventana_modelo.podar(soluciones)
 
         else:
-            pass
+            pass '''
 
         return soluciones
 
