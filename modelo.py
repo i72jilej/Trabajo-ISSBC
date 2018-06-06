@@ -23,6 +23,7 @@ ESPERA = 1                                                                      
 
 import os                                                                                                                               # Funcionalidades varias del sistema operativo
 import random                                                                                                                           # Generación de números aleatorios
+import time
 
 if DEBUG:
     import sys                                                                                                                          # Funcionalidades varias del sistema
@@ -310,6 +311,7 @@ class ventana_modelo():                                                         
         #prob_heuristica = random.randint(0, 100)
         #prob_heuristica = 50                                                                                        # Probabilidad de utilizar la heurística
         #                                                                                                                               # La heuristica evitará que todos los hijos converjan al mismo resultado (puede ser un óptimo local)
+        random.seed(id_hijo*time.time())
         longitud_datos = len(self._datos)                                                                                               # Precarga de la longitud del camino
 
         nodo_elegido = self.elegir(nodos_iniciales, prob_heuristica)
@@ -588,7 +590,7 @@ class ventana_modelo():                                                         
         return soluciones
 
 
-    @staticmethod                                                                                                                       # Método estático
+    @staticmethod                                                                                                                       # Método estáticovalidar
     def validar_tiempo(cronograma, maquina, tiempo):
         res = True
 
