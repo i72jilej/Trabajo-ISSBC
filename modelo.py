@@ -235,7 +235,7 @@ class ventana_modelo():                                                         
             hilos = 10
 
         hijos = list()
-        prob_heuristica = 75
+        prob_heuristica = 50
 
         self._soluciones_posibles = [solucion() for i in range(hilos)]                                                                  # Inicialización de la lista de soluciones
 
