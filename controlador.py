@@ -28,7 +28,7 @@ if sys.version_info[0] < 3:
 class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
     _modificado = False                                         # Inicialización de variables de clase
     _n_hilos = 1000                                             # Número de hilos a utilizar (soluciones posibles)
-
+    _nSoluciones = 0
 
     def __init__(self):                                         # Constructor de la clase
         if sys.version_info[0] >= 3:                            # Llamada al método equivalente de la clase padre
@@ -240,11 +240,15 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
         vista.ventana_vista.calcular(self, 'desarrollo', texto)
 
-        if self._solucion_elegida != []:
-            str_camino = ''
+        if self._nSoluciones < len(self._soluciones):
+            print("NSOLUCIONES: ", self._nSoluciones)
+            print("LEN: ", len(self._soluciones))
+
+            self._nSoluciones = len(self._soluciones)
+
             tiempo = self._solucion_elegida.duracion()
             texto = "\nSe ha elegido la solución: \n"
-
+            str_camino = ''
             for nodo in self._solucion_elegida.camino():
                 if sys.version_info[0] >= 3:
                     str_camino += str(nodo.nombre()) + ' - '
@@ -255,7 +259,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
             texto = texto + SANGRIA + str_camino[0:-3] + ' con una duración de ' + str(tiempo) + " seg.\n"
         else:
             texto = "No se ha encontrado ninguna otra solución válida\n. Fin de la ejecución."
-        
+
         vista.ventana_vista.calcular(self, 'desarrollo', texto)
 
         del self._soluciones_candidatas
