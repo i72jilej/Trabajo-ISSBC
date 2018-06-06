@@ -152,7 +152,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
             i = 0
 
-            for solucion in self._soluciones:
+            for solucion in self._soluciones_candidatas:
                 str_camino = ''
 
                 for nodo in solucion.camino():
@@ -167,6 +167,8 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                 texto = texto + SANGRIA + str(i) + ': ' + str_camino[0:-3] + "\n"
 
             vista.ventana_vista.calcular(self, 'desarrollo', texto)
+
+            del self._soluciones_candidatas
 
             self._modificado = True
 
