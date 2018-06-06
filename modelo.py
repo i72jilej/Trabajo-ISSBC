@@ -188,34 +188,45 @@ class solucion():                                                               
 
 class ventana_modelo():                                                                                                                 # Parte del modelo de la ventana
     def anyadir_solucion(self):
-        if self._cronograma != None:
-            # TODO: Recalcular cronograma
+        tiempo = 0
 
-            pass
-        
-        else:                                                                                                                           # Inicializando la estructura del cronograma:
-            ''' El cronograma:
-                    Contiene una lista de tuplas ["máquina", "[lista te tiempos de inicio]"]
-                    Se calcula si una máquina puede entrar a trabajar o no si du tiempo de inicio + tiempo de funcionamiento no entra en conflicto con otro ya presente en la lista
-            '''
+        tiempos = []
 
-            self._cronograma = {i : [] for i in range(len(self._datos))}
+        nodos = self._solucion_elegida.camino()
 
-            tiempo = 0
+        num_nodos = len(nodos)
 
-            nodos = self._solucion_elegida.camino()
+        if self._cronograma == None:
+            self._cronograma = {i : [] for i in range(len(self._datos))}                                                                # Creación del cronograma
+            #                                                                                                                           #         ''' El cronograma contendrá una lista de tuplas ["máquina", "[lista te tiempos de inicio]"]
+        for i in range(num_nodos):
+            if self._cronograma != None:
+                res = self.validar_tiempo(self._cronograma, nodos[i], tiempo)                                                                  # Se calcula si una máquina puede entrar a trabajar o no si su tiempo de inicio + tiempo de funcionamiento no entra en conflicto con otro ya presente en la lista correspondiente a dicha máquina
 
-            num_nodos = len(nodos)
+            else:
+                res = True
 
-            for i in range(num_nodos):
-                self._cronograma[nodos[i].id_elemento()].append(tiempo)                                                                 # Añadiendo el tiempo a la lista de una máquina
+            conexiones = nodos[i].conexiones()                                                                                          # Obteniendo las conexiones de la máquina
 
-                conexiones = nodos[i].conexiones()                                                                                      # Obteniendo las conexiones de la máquina
+            if res == True:
+                tiempos.append(tiempo)
 
                 if i < num_nodos - 1:
-                    tiempo += int(nodos[i].duracion()) + int(conexiones[conexiones.index(nodos[i].conexion(nodos[i + 1]))]['duracion']) # Calculando el tiempo = tiempo de la máquina + tiempo de la conexión a la siguiente
+                    tiempo += nodos[i].duracion() + conexiones[conexiones.index(nodos[i].conexion(nodos[i + 1]))]['duracion']           # Calculando el tiempo = tiempo de la máquina + tiempo de la conexión a la siguiente
+
+            else:
+                break
+
+        if res == True:
+            for i in range(num_nodos):
+                self._cronograma[nodos[i].id_elemento()].append(tiempos[i])                                                             # Añadiendo el tiempo a la lista de una máquina
+
+                # FIXME ordenar
 
             self._soluciones.append(self._solucion_elegida)
+
+
+        return res
 
 
     def calcular(self, hilos):                                                                                                          # Cálculo de soluciones
@@ -289,6 +300,7 @@ class ventana_modelo():                                                         
         self._solucion_elegida = self.elegir(self._soluciones_candidatas, random.randint(0, 100))
 
         self.anyadir_solucion()
+
 
     def calcular_hijos(self, id_hijo, nodos_iniciales):                                                                                 # Cálculo de cada solución (ejecutada por cada hijo)
         if DEBUG_HIJOS:
@@ -554,5 +566,20 @@ class ventana_modelo():                                                         
             pass
 
         return soluciones
+
+
+    @staticmethod                                                                                                                       # Método estático
+    def validar_tiempo(cronograma, maquina, tiempo):
+        res = True
+
+        tiempos = cronograma[maquina.id_elemento()]
+
+        for i in range(len(tiempos)):
+            if tiempos[i] == tiempo or tiempos[i] + maquina.duracion() > tiempo or tiempos[i + 1] < tiempo + maquina.duracion():
+                res = False
+
+                break
+
+        return res
 
 
