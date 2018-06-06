@@ -439,7 +439,13 @@ class ventana_modelo():                                                         
             if DEBUG:
                 print(fila.nombre, 'es una máquina con duración', fila.duracion)
 
-            elemento = Element(len(elementos), str(fila.nombre), int(fila.duracion))                                                    # Almacenando la máquina como un Element
+                                                                # Almacenando la máquina como un Element
+            if sys.version_info[0] >= 3:
+                elemento = Element(len(elementos), str(fila.nombre), int(fila.duracion))
+
+            else:
+                elemento = Element(len(elementos), fila.nombre, int(fila.duracion))
+
             #                                                                                                                           # Buscando padres de la máquina...
             query = '''
                         PREFIX    maquina:  <http://www.factory.fake/maquina/>
@@ -459,7 +465,14 @@ class ventana_modelo():                                                         
                 if DEBUG:
                     print("\tPadre:", subfila.nombre_padre)
 
-                elemento.padres(str(subfila.nombre_padre))                                                                              # Almancenando el nombre del padre de la máquina en el Element
+                                                                                              # Almancenando el nombre del padre de la máquina en el Element
+
+                if sys.version_info[0] >= 3:
+                    elemento.padres(str(subfila.nombre_padre))
+
+                else:
+                    elemento.padres(subfila.nombre_padre)
+
             #                                                                                                                           # Buscando las conexiones de la máquina
             query = '''
                         PREFIX    maquina:  <http://www.factory.fake/maquina/>
@@ -482,7 +495,12 @@ class ventana_modelo():                                                         
                 if DEBUG:
                     print("\tConexión: ", subfila.nombre_siguiente, ', ', subfila.duracion, sep = '')
 
-                elemento.conexiones((str(subfila.nombre_siguiente), int(subfila.duracion)))                                             # Almacenando las conexiones en el Element
+                                                             # Almacenando las conexiones en el Element
+                if sys.version_info[0] >= 3:
+                    elemento.conexiones((str(subfila.nombre_siguiente), int(subfila.duracion)))
+
+                else:
+                    elemento.conexiones((subfila.nombre_siguiente, int(subfila.duracion)))
 
             elementos.append(elemento)                                                                                                  # Almacenando el Element elemento en la lista elementos -> Lista manejada
 
