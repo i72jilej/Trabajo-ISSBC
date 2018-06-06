@@ -148,7 +148,7 @@ class solucion():                                                               
         return self._duracion
 
 
-    def validar(self):                                                                                                                  # Autovalidador de la solución
+    def validar(self):                                                                                                                  # Autovalidador de la solución (atendiendo a los requisitos de otras máquinas)
         nodos_visitados = []
 
         res = True
@@ -159,13 +159,14 @@ class solucion():                                                               
             if padres != []:
                 for padre in padres:
                     try:
+                        #Buscando al padre en los nodos ya visitados
                         nodos_visitados.index(padre)
 
-                    except ValueError:
+                    except ValueError: #Si el padre no se encuentra 
                         res = False
 
                     else:
-                        res = res and True
+                        res = res and True #res = True
 
                     finally:
                         if res == False:
@@ -180,7 +181,7 @@ class solucion():                                                               
             nodos_visitados.append(nodo)
 
         if res == False:
-            self._camino = []
+            self._camino = [] #Camino vacío significa camino no válido (se podará más adelante)
 
         return res
 
@@ -193,6 +194,9 @@ class ventana_modelo():                                                         
             pass
         
         else:
+            #Inicializando la estructura del cronograma 
+            #Contiene una lista de tuplas ["máquina", "[lista te tiempos de inicio]"]
+            #Se calcula si una máquina puede entrar a trabajar o no si du tiempo de inicio + tiempo de funcionamiento no entra en conflicto con otro ya presente en la lista
             self._cronograma = {i : [] for i in range(len(self._datos))}
 
             tiempo = 0
@@ -202,11 +206,14 @@ class ventana_modelo():                                                         
             num_nodos = len(nodos)
 
             for i in range(num_nodos):
+                #Añadiendo el tiempo a la lista de una máquina
                 self._cronograma[nodos[i].id_elemento()].append(tiempo)
 
+                #Obteniendo las conexiones de la máquina
                 conexiones = nodos[i].conexiones()
 
                 if i < num_nodos - 1:
+                    #Calculando el tiempo = tiempo de la máquina + tiempo de la conexión a la siguiente
                     tiempo += int(nodos[i].duracion()) + int(conexiones[conexiones.index(nodos[i].conexion(nodos[i + 1]))]['duracion'])
 
             self._soluciones.append(self._solucion_elegida)
