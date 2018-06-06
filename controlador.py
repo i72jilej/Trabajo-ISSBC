@@ -172,6 +172,8 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                     pass
 
             else:
+                self.limpiar('parcial')
+
                 self.calcular_bucle()
 
         finally:
@@ -224,7 +226,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
         if self.__num_soluciones < num_soluciones:
             self.__num_soluciones = num_soluciones
 
-            texto = "Se ha elegido la solución: \n"
+            texto += "Se ha elegido la solución: \n"
 
             texto_camino = ''
 
@@ -238,7 +240,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
             texto += SANGRIA + texto_camino[0:-3] + ', con una duración de ' + str(self._solucion_elegida.duracion()) + " seg.\n"
 
         else:
-            texto = "\nNo se ha encontrado ninguna otra solución válida\nFin de la ejecución"
+            texto += "\nNo se ha encontrado ninguna otra solución válida\nFin de la ejecución"
 
         vista.ventana_vista.calcular(self, 'desarrollo', texto)
 
