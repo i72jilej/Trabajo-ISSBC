@@ -38,6 +38,8 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
         self._cronograma = None
 
+        self._soluciones = []
+
 
     def abrir(self):                                            # Acción de abrir
         respuesta = self.confirmar_modificado('cargar uno nuevo')

@@ -46,6 +46,18 @@ class Element():                                                                
         self._conexiones = []
 
 
+    def conexion(self, elemento):
+        res = None
+
+        for conexion in self._conexiones:
+            if conexion['objeto'] == elemento:
+                res = conexion
+
+                break
+
+        return res
+
+
     def conexiones(self, conexion = None, multiples = False):                                                                           # Método "sobrecargado":
         if conexion != None:                                                                                                            #     Modificador de la variable
             if multiples == True:                                                                                                       #     Modificador múltiple
@@ -181,11 +193,23 @@ class ventana_modelo():                                                         
             pass
         
         else:
-            # TODO: Generar un nuevo cronograma
+            self._cronograma = {i : [] for i in range(len(self._datos))}
 
-            self._soluciones = []
+            tiempo = 0
 
-        self._soluciones.append(self._solucion_elegida)
+            nodos = self._solucion_elegida.camino()
+
+            num_nodos = len(nodos)
+
+            for i in range(num_nodos):
+                self._cronograma[nodos[i].id_elemento()].append(tiempo)
+
+                conexiones = nodos[i].conexiones()
+
+                if i < num_nodos - 1:
+                    tiempo += int(nodos[i].duracion()) + int(conexiones[conexiones.index(nodos[i].conexion(nodos[i + 1]))]['duracion'])
+
+            self._soluciones.append(self._solucion_elegida)
 
 
     def calcular(self, hilos):                                                                                                          # Cálculo de soluciones
