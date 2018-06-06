@@ -12,6 +12,7 @@
 # Notes         : 
 
 
+DEBUG = True
 SANGRIA = '        '
 
 
@@ -154,13 +155,13 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                 if respuesta == vista.respuestas.diccionario[vista.respuestas.DESCARTAR]:
                     self.limpiar('parcial')
 
-                    self.calculo()
+                    self.bucle_calcular()
 
                 elif respuesta == vista.respuestas.diccionario[vista.respuestas.GUARDAR]:
                     if self.guardar():
                         self.limpiar('parcial')
 
-                        self.calculo()
+                        self.bucle_calcular()
 
                     else:
                         pass
@@ -169,10 +170,49 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                     pass
 
             else:
-                self.calculo()
+                self.bucle_calcular()
 
         finally:
             pass
+
+    def bucle_calcular(self):
+        self.calculo()
+
+        self._soluciones_old = []
+        while len(self._soluciones) > len(self._soluciones_old):
+            self._soluciones_old = self._soluciones
+            self.calculo()
+
+        if DEBUG:
+            for solucion in self._soluciones:
+                texto = ''
+                for nodo in solucion.camino():
+                    if sys.version_info[0] >= 3:
+                        texto += str(nodo.nombre()) + ' - '
+
+                    else:
+                        texto += nodo.nombre().toPython().encode('utf-8') + ' - '
+                
+                print('SOLUCION: ', texto, "\n")
+
+        texto = 'Se han podido generar ' + str(len(self._soluciones)) + " soluciones válidas simultáneas:\n"
+        i = 0
+        for solucion in self._soluciones:
+            str_camino = ''
+            tiempo = solucion.duracion()
+
+            for nodo in solucion.camino():
+                if sys.version_info[0] >= 3:
+                    str_camino += str(nodo.nombre()) + ' - '
+
+                else:
+                    str_camino += nodo.nombre().toPython().encode('utf-8') + ' - '
+
+            i+=1
+
+            texto += SANGRIA + str(i) + ': ' + str_camino[0:-3] + ' con una duración de ' + str(tiempo) + " seg.\n"
+
+        vista.ventana_vista.calcular(self, 'solucion', texto)
 
 
     def calculo(self):                                          # Acción de realizar los cálculos

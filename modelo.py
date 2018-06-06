@@ -306,7 +306,8 @@ class ventana_modelo():                                                         
         if DEBUG_HIJOS:
             print('Hijo  #', id_hijo, "\tHe sido llamado", sep = '')
 
-        prob_heuristica = random.randint(0, 100)                                                                                        # Probabilidad de utilizar la heurística
+        #prob_heuristica = random.randint(0, 100)
+        prob_heuristica = 50                                                                                        # Probabilidad de utilizar la heurística
         #                                                                                                                               # La heuristica evitará que todos los hijos converjan al mismo resultado (puede ser un óptimo local)
         longitud_datos = len(self._datos)                                                                                               # Precarga de la longitud del camino
 
