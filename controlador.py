@@ -148,35 +148,60 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
             vista.ventana_vista.calcular(self, 'error')         # Llamada al método equivalente de la clase vista
 
         else:
-            modelo.ventana_modelo.calcular(self, self._n_hilos) # Llamada al método equivalente de la clase vista
+            if self._soluciones != []:
+                respuesta = self.confirmar_modificado('realizar nuevos cálculos')
 
-            texto = 'Se han generado ' + str(self._n_hilos) + " soluciones posibles\nDe ellas, se consideran candidatas:\n"
+                if respuesta == vista.respuestas.diccionario[vista.respuestas.DESCARTAR]:
+                    self.limpiar('parcial')
 
-            i = 0
+                    self.calculo()
 
-            for solucion in self._soluciones_candidatas:
-                str_camino = ''
-                tiempo = solucion.duracion()
+                elif respuesta == vista.respuestas.diccionario[vista.respuestas.GUARDAR]:
+                    if self.guardar():
+                        self.limpiar('parcial')
 
-                for nodo in solucion.camino():
-                    if sys.version_info[0] >= 3:
-                        str_camino += str(nodo.nombre()) + ' - '
+                        self.calculo()
 
                     else:
-                        str_camino += nodo.nombre().toPython().encode('utf-8') + ' - '
+                        pass
 
-                i += 1
+                else:
+                    pass
 
-                texto = texto + SANGRIA + str(i) + ': ' + str_camino[0:-3] + ' con una duración de ' + str(tiempo) + " seg.\n"
-
-            vista.ventana_vista.calcular(self, 'desarrollo', texto)
-
-            del self._soluciones_candidatas
-
-            self._modificado = True
+            else:
+                self.calculo()
 
         finally:
             pass
+
+
+    def calculo(self):                                          # Acción de realizar los cálculos
+        modelo.ventana_modelo.calcular(self, self._n_hilos) # Llamada al método equivalente de la clase vista
+
+        texto = 'Se han generado ' + str(self._n_hilos) + " soluciones posibles\nDe ellas, se consideran candidatas:\n"
+
+        i = 0
+
+        for solucion in self._soluciones_candidatas:
+            str_camino = ''
+            tiempo = solucion.duracion()
+
+            for nodo in solucion.camino():
+                if sys.version_info[0] >= 3:
+                    str_camino += str(nodo.nombre()) + ' - '
+
+                else:
+                    str_camino += nodo.nombre().toPython().encode('utf-8') + ' - '
+
+            i += 1
+
+            texto = texto + SANGRIA + str(i) + ': ' + str_camino[0:-3] + ' con una duración de ' + str(tiempo) + " seg.\n"
+
+        vista.ventana_vista.calcular(self, 'desarrollo', texto)
+
+        del self._soluciones_candidatas
+
+        self._modificado = True
 
 
     def closeEvent(self, event):                                # Se pregunta al usuario si quiere salir
@@ -259,25 +284,40 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
             return False
 
 
-    def limpiar(self):                                          # Acción de limpiar
-        self._text_ruta.clear()
+    def limpiar(self, modo):                                    # Acción de limpiar
+        if modo == 'total':
+            self._text_ruta.clear()
+
+            self._text_dominio.clear()
+
+            self.setWindowTitle(self._TITULO_APP)
+
+            try:
+                del self._nombre_archivo
+
+            except AttributeError:
+                pass
+
+            try:
+                del self._datos
+
+            except AttributeError:
+                pass
+
         self._text_solucion.clear()
         self._text_desarrollo.clear()
-        self._text_dominio.clear()
 
         self.modificado(False)
 
-        self.setWindowTitle(self._TITULO_APP)
-
         try:
-            del self._nombre_archivo
-
             del self._grafo
-
-            del self._datos
 
         except AttributeError:
             pass
+
+        self._cronograma = None
+
+        self._soluciones = []
 
 
     def modificado(self, *args):                                # Función "sobrecargada": modificador / observador de la variable self._modificado
@@ -294,11 +334,11 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
         respuesta = self.confirmar_modificado('cargar un modelo nuevo')
 
         if respuesta == vista.respuestas.diccionario[vista.respuestas.DESCARTAR]:
-            self.limpiar()
+            self.limpiar('total')
 
         elif respuesta == vista.respuestas.diccionario[vista.respuestas.GUARDAR]:
             if self.guardar():
-                self.limpiar()
+                self.limpiar('total')
 
             else:
                 pass
