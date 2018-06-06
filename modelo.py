@@ -231,8 +231,11 @@ class ventana_modelo():                                                         
 
 
     def calcular(self, hilos):                                                                                                          # Cálculo de soluciones
+        if DEBUG_HIJOS:
+            hilos = 10
+
         hijos = list()
-        prob_heuristica = 0
+        prob_heuristica = 75
 
         self._soluciones_posibles = [solucion() for i in range(hilos)]                                                                  # Inicialización de la lista de soluciones
 
@@ -265,10 +268,11 @@ class ventana_modelo():                                                         
             if DEBUG == True:
                 print('Padre #', os.getpid(), "\tEsperando a que los procesos hijos hagan su trabajo", sep = '')
 
-                print()
-                print()
-
             sleep(ESPERA)                                                                                                               # Para no saturar, el padre queda en espera durante "ESPERA" segundos
+
+        if DEBUG == True:
+            print()
+            print()
 
         self._soluciones_posibles = self.podar(self._soluciones_posibles)                                                               # Primera "poda"
 
@@ -304,22 +308,18 @@ class ventana_modelo():                                                         
         self.anyadir_solucion()
 
 
-    def calcular_hijos(self, id_hijo, nodos_iniciales, prob_heuristica):                                                                                 # Cálculo de cada solución (ejecutada por cada hijo)
+    def calcular_hijos(self, id_hijo, nodos_iniciales, prob_heuristica):                                                                # Cálculo de cada solución (ejecutada por cada hijo)
         if DEBUG_HIJOS:
             print('Hijo  #', id_hijo, "\tHe sido llamado", sep = '')
 
-        #prob_heuristica = random.randint(0, 100)
-        #prob_heuristica = 50                                                                                        # Probabilidad de utilizar la heurística
-        #                                                                                                                               # La heuristica evitará que todos los hijos converjan al mismo resultado (puede ser un óptimo local)
-        random.seed(id_hijo*time.time())
         longitud_datos = len(self._datos)                                                                                               # Precarga de la longitud del camino
 
-        nodo_elegido = self.elegir(nodos_iniciales, prob_heuristica)
+        nodo_elegido = self.elegir(nodos_iniciales, prob_heuristica, id_hijo + 1)
 
         self._soluciones_posibles[id_hijo].anyadir(nodo_elegido)                                                                        # Se añade un nodo inicial en función del la probabilidad de emplear la heurística
 
         if DEBUG_HIJOS:
-            print('Hijo  #', id_hijo, "\tAñadido al camino el nodo", nodo_elegido.nombre())
+            print('Hijo  #', id_hijo, "\tAñadido al camino el nodo ", nodo_elegido.nombre(), sep = '')
 
         while len(self._soluciones_posibles[id_hijo].camino()) < longitud_datos:                                                        # Mientras queden máquinas por las que pasar
             if DEBUG_HIJOS:
@@ -331,7 +331,7 @@ class ventana_modelo():                                                         
 
             nodos_conexiones = [conexion['objeto'] for conexion in conexiones]                                                          # "Desempaquetado" en dos listas
 
-            nodo_elegido = self.elegir(nodos_conexiones, prob_heuristica)
+            nodo_elegido = self.elegir(nodos_conexiones, prob_heuristica, id_hijo + 1)
 
             if DEBUG_HIJOS:
                 print('Hijo  #', id_hijo, "\tIntentando añadir al camino el nodo ", nodo_elegido.nombre(), sep = '')
@@ -345,7 +345,7 @@ class ventana_modelo():                                                         
                 nodos_conexiones.remove(nodo_elegido)
 
                 if nodos_conexiones != []:
-                    nodo_elegido = self.elegir(nodos_conexiones, prob_heuristica)
+                    nodo_elegido = self.elegir(nodos_conexiones, prob_heuristica, id_hijo + 1)
 
                     if DEBUG_HIJOS:
                         print('Hijo  #', id_hijo, "\tIntentando añadir al camino el nodo ", nodo_elegido.nombre(), sep = '')
@@ -391,16 +391,18 @@ class ventana_modelo():                                                         
 
 
     @staticmethod
-    def elegir(nodos, prob_heuristica):                                                                                                 # Se elige un nodo en función del la probabilidad de emplear la heurística
+    def elegir(nodos, prob_heuristica, semilla = 0):                                                                                                 # Se elige un nodo en función del la probabilidad de emplear la heurística
         ''' Se elige un nodo en función del la probabilidad de emplear la heurística:
                 Si no se emplea, se elige un hijo aleatoriamente
                 Si sí, se elige al mejor en función de la duración de los mismos
         '''
+        random_local = random.Random(time.time() * semilla)
 
         duraciones = [nodo.duracion() for nodo in nodos]                                                                                # "Desempaquetado" en dos listas
+
         return \
-            random.choice(nodos) \
-            if random.randint(0, 100) < prob_heuristica \
+            random_local.choice(nodos) \
+            if random_local.randint(0, 100) > prob_heuristica \
             else nodos[duraciones.index(min(duraciones))]
 
 
