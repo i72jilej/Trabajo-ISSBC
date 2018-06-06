@@ -141,7 +141,7 @@ class solucion():                                                               
             duracion_conexion = 0                                                                                                       #     La duración es cero
 
 
-        self._duracion += duracion_conexion + int(nodo.duracion())                                                                      # La duración será la que actualmente haya más la duración de la conexión más la duración del nodo que se añadirá
+        self._duracion += duracion_conexion + nodo.duracion()                                                                           # La duración será la que actualmente haya más la duración de la conexión más la duración del nodo que se añadirá
 
 
     def duracion(self):                                                                                                                 # Observador de la variable
@@ -439,7 +439,7 @@ class ventana_modelo():                                                         
             if DEBUG:
                 print(fila.nombre, 'es una máquina con duración', fila.duracion)
 
-            elemento = Element(len(elementos), fila.nombre, fila.duracion)                                                              # Almacenando la máquina como un Element
+            elemento = Element(len(elementos), str(fila.nombre), int(fila.duracion))                                                    # Almacenando la máquina como un Element
             #                                                                                                                           # Buscando padres de la máquina...
             query = '''
                         PREFIX    maquina:  <http://www.factory.fake/maquina/>
@@ -459,7 +459,7 @@ class ventana_modelo():                                                         
                 if DEBUG:
                     print("\tPadre:", subfila.nombre_padre)
 
-                elemento.padres(subfila.nombre_padre)                                                                                   # Almancenando el nombre del padre de la máquina en el Element
+                elemento.padres(str(subfila.nombre_padre))                                                                              # Almancenando el nombre del padre de la máquina en el Element
             #                                                                                                                           # Buscando las conexiones de la máquina
             query = '''
                         PREFIX    maquina:  <http://www.factory.fake/maquina/>
@@ -482,7 +482,7 @@ class ventana_modelo():                                                         
                 if DEBUG:
                     print("\tConexión: ", subfila.nombre_siguiente, ', ', subfila.duracion, sep = '')
 
-                elemento.conexiones((subfila.nombre_siguiente, int(subfila.duracion)))                                                  # Almacenando las conexiones en el Element
+                elemento.conexiones((str(subfila.nombre_siguiente), int(subfila.duracion)))                                             # Almacenando las conexiones en el Element
 
             elementos.append(elemento)                                                                                                  # Almacenando el Element elemento en la lista elementos -> Lista manejada
 

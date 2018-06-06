@@ -90,7 +90,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                         if sys.version_info[0] < 3:
                             texto = texto.decode('utf-8')
 
-                        texto_archivo += self._datos[i].nombre() + texto + self._datos[i].duracion() + "\n"
+                        texto_archivo += self._datos[i].nombre() + texto + str(self._datos[i].duracion()) + "\n"
 
                         for padre in self._datos[i].padres():
                             texto = SANGRIA + 'Requiere haber pasado por '
