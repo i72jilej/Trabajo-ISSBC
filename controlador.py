@@ -187,11 +187,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
             tiempo = solucion.duracion()
 
             for nodo in solucion.camino():
-                if sys.version_info[0] >= 3:
-                    str_camino += str(nodo.nombre()) + ' - '
-
-                else:
-                    str_camino += nodo.nombre().toPython().encode('utf-8') + ' - '
+                str_camino += nodo.nombre() + ' - '
 
             i += 1
 
