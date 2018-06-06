@@ -154,6 +154,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
             for solucion in self._soluciones_candidatas:
                 str_camino = ''
+                tiempo = solucion.duracion()
 
                 for nodo in solucion.camino():
                     if sys.version_info[0] >= 3:
@@ -164,7 +165,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
                 i += 1
 
-                texto = texto + SANGRIA + str(i) + ': ' + str_camino[0:-3] + "\n"
+                texto = texto + SANGRIA + str(i) + ': ' + str_camino[0:-3] + ' con una duración de ' + str(tiempo) + " seg.\n"
 
             vista.ventana_vista.calcular(self, 'desarrollo', texto)
 
