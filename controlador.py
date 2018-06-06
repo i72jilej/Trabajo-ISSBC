@@ -239,6 +239,24 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
         vista.ventana_vista.calcular(self, 'desarrollo', texto)
 
+        if self._solucion_elegida != []:
+            str_camino = ''
+            tiempo = self._solucion_elegida.duracion()
+            texto = "\nSe ha elegido la solución: \n"
+
+            for nodo in self._solucion_elegida.camino():
+                if sys.version_info[0] >= 3:
+                    str_camino += str(nodo.nombre()) + ' - '
+
+                else:
+                    str_camino += nodo.nombre().toPython().encode('utf-8') + ' - '
+
+            texto = texto + SANGRIA + str_camino[0:-3] + ' con una duración de ' + str(tiempo) + " seg.\n"
+        else:
+            texto = "No se ha encontrado ninguna otra solución válida\n. Fin de la ejecución."
+        
+        vista.ventana_vista.calcular(self, 'desarrollo', texto)
+
         del self._soluciones_candidatas
 
         self._modificado = True
