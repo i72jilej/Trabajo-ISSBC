@@ -28,6 +28,7 @@ import time
 if DEBUG:
     import sys                                                                                                                          # Funcionalidades varias del sistema
 
+from bisect import insort                                                                                                               # Insercción ordenada
 from threading import Thread                                                                                                            # Capacidades multihilo
 from time import sleep                                                                                                                  # Pausas
 
@@ -149,6 +150,10 @@ class solucion():                                                               
         return self._duracion
 
 
+    def invalidar(self):                                                                                                                # Marca la solución como no válida
+        self._camino = []
+
+
     def validar(self):                                                                                                                  # Autovalidador de la solución (atendiendo a los requisitos de otras máquinas)
         nodos_visitados = []
 
@@ -182,16 +187,14 @@ class solucion():                                                               
             nodos_visitados.append(nodo)
 
         if res == False:
-            self._camino = []                                                                                                           # Camino vacío significa camino no válido (se podará más adelante)
+            self.invalidar()                                                                                                            # Camino vacío significa camino no válido (se podará más adelante)
 
         return res
 
 
 class ventana_modelo():                                                                                                                 # Parte del modelo de la ventana
-    def anyadir_solucion(self):
+    def anyadir_solucion(self):                                                                                                         # Añade una solución a la lista de soluciones
         tiempo = 0
-
-        tiempos = []
 
         nodos = self._solucion_elegida.camino()
 
@@ -201,33 +204,14 @@ class ventana_modelo():                                                         
             self._cronograma = {i : [] for i in range(len(self._datos))}                                                                # Creación del cronograma
             #                                                                                                                           #         ''' El cronograma contendrá una lista de tuplas ["máquina", "[lista te tiempos de inicio]"]
         for i in range(num_nodos):
-            if self._cronograma != None:
-                res = self.validar_tiempo(self._cronograma, nodos[i], tiempo)                                                                  # Se calcula si una máquina puede entrar a trabajar o no si su tiempo de inicio + tiempo de funcionamiento no entra en conflicto con otro ya presente en la lista correspondiente a dicha máquina
-
-            else:
-                res = True
+            insort(self._cronograma[nodos[i].id_elemento()], tiempo)
 
             conexiones = nodos[i].conexiones()                                                                                          # Obteniendo las conexiones de la máquina
 
-            if res == True:
-                tiempos.append(tiempo)
+            if i < num_nodos - 1:
+                tiempo += nodos[i].duracion() + conexiones[conexiones.index(nodos[i].conexion(nodos[i + 1]))]['duracion']               # Calculando el tiempo = tiempo de la máquina + tiempo de la conexión a la siguiente
 
-                if i < num_nodos - 1:
-                    tiempo += nodos[i].duracion() + conexiones[conexiones.index(nodos[i].conexion(nodos[i + 1]))]['duracion']           # Calculando el tiempo = tiempo de la máquina + tiempo de la conexión a la siguiente
-
-            else:
-                break
-
-        if res == True:
-            for i in range(num_nodos):
-                self._cronograma[nodos[i].id_elemento()].append(tiempos[i])                                                             # Añadiendo el tiempo a la lista de una máquina
-
-                # FIXME ordenar
-
-            self._soluciones.append(self._solucion_elegida)
-
-
-        return res
+        self._soluciones.append(self._solucion_elegida)
 
 
     def calcular(self, hilos):                                                                                                          # Cálculo de soluciones
@@ -235,7 +219,8 @@ class ventana_modelo():                                                         
             hilos = 10
 
         hijos = list()
-        prob_heuristica = 75
+        prob_heuristica = 50
+        # FIXME: Hacer ajustable
 
         self._soluciones_posibles = [solucion() for i in range(hilos)]                                                                  # Inicialización de la lista de soluciones
 
@@ -471,8 +456,7 @@ class ventana_modelo():                                                         
                 if DEBUG:
                     print("\tPadre:", subfila.nombre_padre)
 
-                                                                                              # Almancenando el nombre del padre de la máquina en el Element
-
+                #                                                                                                                       # Almancenando el nombre del padre de la máquina en el Element
                 if sys.version_info[0] >= 3:
                     elemento.padres(str(subfila.nombre_padre))
 
@@ -501,7 +485,7 @@ class ventana_modelo():                                                         
                 if DEBUG:
                     print("\tConexión: ", subfila.nombre_siguiente, ', ', subfila.duracion, sep = '')
 
-                                                             # Almacenando las conexiones en el Element
+                #                                                                                                                       # Almacenando las conexiones en el Element
                 if sys.version_info[0] >= 3:
                     elemento.conexiones((str(subfila.nombre_siguiente), int(subfila.duracion)))
 
@@ -582,7 +566,30 @@ class ventana_modelo():                                                         
         soluciones = ventana_modelo.podar(soluciones)                                                                                   # "Poda" las que no son válidas
 
         if cronograma != None:
-            # TODO: Validar con cronograma
+            for solucion in soluciones:                                                                                                 # Recorre la lista de soluciones
+                tiempo = 0
+
+                tiempos = []
+
+                nodos = solucion.camino()
+
+                num_nodos = len(nodos)
+
+                for i in range(num_nodos):
+                    valido = ventana_modelo.validar_tiempo(cronograma, nodos[i], tiempo)                                               # Se calcula si una máquina puede entrar a trabajar o no si su tiempo de inicio + tiempo de funcionamiento no entra en conflicto con otro ya presente en la lista correspondiente a dicha máquina
+
+                    if valido == True:
+                        tiempos.append(tiempo)
+
+                        if i < num_nodos - 1:
+                            conexiones = nodos[i].conexiones()                                                                         # Obteniendo las conexiones de la máquina
+
+                            tiempo += nodos[i].duracion() + conexiones[conexiones.index(nodos[i].conexion(nodos[i + 1]))]['duracion']  # Calculando el tiempo = tiempo de la máquina + tiempo de la conexión a la siguiente
+
+                    else:
+                        solucion.invalidar()
+
+                        break
 
             soluciones = ventana_modelo.podar(soluciones)
 

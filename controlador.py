@@ -175,6 +175,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
         finally:
             pass
 
+
     def bucle_calcular(self):
         self.calculo()
 
@@ -216,7 +217,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
 
     def calculo(self):                                          # Acción de realizar los cálculos
-        modelo.ventana_modelo.calcular(self, self._n_hilos) # Llamada al método equivalente de la clase vista
+        modelo.ventana_modelo.calcular(self, self._n_hilos)     # Llamada al método equivalente de la clase vista
 
         texto = 'Se han generado ' + str(self._n_hilos) + " soluciones posibles\nDe ellas, se consideran candidatas:\n"
 
