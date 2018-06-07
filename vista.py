@@ -261,7 +261,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         return mitad_inferior
 
 
-    def dibujar_interfaz_mitad_inferior_mitad_derecha(self):
+    def dibujar_interfaz_mitad_inferior_mitad_derecha(self):            # Dibujo de la mitad derecha de la mitad inferior de la interfaz
         # Diseño
         disenyo = QtGui.QVBoxLayout()
         disenyo.setMargin(0)
@@ -379,7 +379,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
     def guardar_como(self, modo):                                       # Parte de la vista de la acción de guardar cómo
         if modo == 'nombre':
-            return str(QtGui.QFileDialog.getSaveFileName(self, 'Guardar archivo'))
+            return str(QtGui.QFileDialog.getSaveFileName(self, 'Guardar archivo', filter = 'Documentos de texto (*.txt);;Todos los archivos (*.*)'))
 
         else:
             return QtGui.QMessageBox.information(self, 'Imposible guardar', 'Información: No es posible guardar ya que aún no se han realizado cálculos')
