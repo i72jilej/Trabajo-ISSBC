@@ -563,6 +563,14 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         return mi_widget
 
 
+    def aviso_carga(self, accion):
+        texto = 'Información: No es posible ' + accion + ' ya que aún no se han realizado cálculos'
+        if sys.version_info[0] < 3:
+            texto = texto.decode('utf-8')
+
+        return QtGui.QMessageBox.information(self, 'Imposible ' + accion, texto)
+
+
     def guardado(self):                                                     # Parte de la vista del procedimiento de guardado
             QtGui.QMessageBox.warning(self, 'Error de apertura', 'Error: Archivo <' + self._nombre_archivo + '> inaccesible')
 
@@ -571,22 +579,22 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         if modo == 'nombre':
             return str(QtGui.QFileDialog.getSaveFileName(self, 'Guardar archivo', filter = 'Documentos de texto (*.txt);;Todos los archivos (*.*)'))
 
-        else:
-            texto = 'Información: No es posible guardar ya que aún no se han realizado cálculos'
-            if sys.version_info[0] < 3:
-                texto = texto.decode('utf-8')
-
-            return QtGui.QMessageBox.information(self, 'Imposible guardar', texto)
+        elif modo == 'error':
+            return self.aviso_carga('guardar')
 
 
-    def imprimir(self):                                                     # Acción de imprimir
-        impresion = QtGui.QPrintDialog()
+    def imprimir(self, modo):                                               # Acción de imprimir
+        if modo == 'imprimir':
+            impresion = QtGui.QPrintDialog()
 
-        if impresion.exec_() == QtGui.QDialog.Accepted:
-            self._text_solucion.document().print_(impresion.printer())
+            if impresion.exec_() == QtGui.QDialog.Accepted:
+                self._text_solucion.document().print_(impresion.printer())
 
-        else:
-            pass
+            else:
+                pass
+
+        elif modo == 'error':
+            return self.aviso_carga('imprimir')
 
 
     def __del__(self):                                                      # Parte de la vista del destructor de la clase

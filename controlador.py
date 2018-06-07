@@ -304,6 +304,17 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
             return False
 
 
+    def imprimir(self):                                                             # Acción de imprimir
+        if self._soluciones != []:
+            vista.ventana_vista.imprimir(self, 'imprimir')                          # Llamada al método equivalente de la clase vista
+
+        else:
+            vista.ventana_vista.imprimir(self, 'error')                             # Llamada al método equivalente de la clase vista
+
+            return False
+
+
+
     def limpiar(self, modo):                                                        # Acción de limpiar
         if modo == 'total':
             self._num_hijos = 1000
