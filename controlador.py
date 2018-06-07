@@ -197,6 +197,8 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
         del self._soluciones_candidatas
 
+        texto+='El resto se han descartado por ser inválidas\n'
+
         texto_solucion = ''
 
         if self.__num_soluciones < len(self._soluciones):
