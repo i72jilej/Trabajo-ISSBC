@@ -283,7 +283,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
 
         # else:
-        archivo.write(self._text_solucion.toPlainText())
+        archivo.write(str(self._text_solucion.toPlainText()))
 
         self.modificado(False)
 
