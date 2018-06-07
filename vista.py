@@ -107,12 +107,12 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
     def calcular(self, modo, *args):                                    # Parte de la vista de la realización de los cálculos necesarios
         if modo == 'error':
-            texto = 'Error de cálculo'
+            texto = 'Imposible calcular'
 
             if sys.version_info[0] < 3:
                 texto = texto.decode('utf-8')
 
-            QtGui.QMessageBox.warning(self, texto, 'Aviso: No se ha cargado ningún archivo')
+            QtGui.QMessageBox.warning(self, texto, 'Aviso: No es posible calcular ya que aún no se ha cargado ningún archivo')
         
         elif modo == 'desarrollo':
             texto = args[0]
@@ -377,8 +377,12 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
             QtGui.QMessageBox.warning(self, 'Error de apertura', 'Error: Archivo <' + self._nombre_archivo + '> inaccesible')
 
 
-    def guardar_como(self):                                             # Parte de la vista de la acción de guardar cómo
-        return QtGui.QFileDialog.getSaveFileName(self, 'Guardar archivo')
+    def guardar_como(self, modo):                                       # Parte de la vista de la acción de guardar cómo
+        if modo == 'nombre':
+            return QtGui.QFileDialog.getSaveFileName(self, 'Guardar archivo')
+
+        else:
+            return QtGui.QMessageBox.information(self, 'Imposible guardar', 'Información: No es posible guardar ya que aún no se han realizado cálculos')
 
 
     def imprimir(self):                                                 # Acción de imprimir
