@@ -1,0 +1,323 @@
+@prefix rdf:            <http://www.w3.org/1999/02/22-rdf-syntax-ns>    .
+@prefix maquina:        <http://www.factory.fake/maquina/>              .
+@prefix conexion:       <http://www.factory.fake/conexion/>             .
+
+
+_:electronica                   rdf:type                maquina:maquina         .
+_:electronica                   maquina:nombre          "Electrónica"           .
+_:electronica                   maquina:duracion        "60"                    .
+
+_:carroceria                    rdf:type                maquina:maquina         .
+_:carroceria                    maquina:nombre          "Carrocería"            .
+_:carroceria                    maquina:duracion        "1000"                    .
+
+_:motor                         rdf:type                maquina:maquina         .
+_:motor                         maquina:nombre          "Motor"                 .
+_:motor                         maquina:duracion        "30"                    .
+
+_:interiores                    rdf:type                maquina:maquina         .
+_:interiores                    maquina:nombre          "Interiores"            .
+_:interiores                    maquina:duracion        "40"                    .
+_:interiores                    maquina:padre           _:electronica           .
+_:interiores                    maquina:padre           _:carroceria            .
+
+_:transmision                   rdf:type                maquina:maquina         .
+_:transmision                   maquina:nombre          "Transmisión"           .
+_:transmision                   maquina:duracion        "50"                    .
+_:transmision                   maquina:padre           _:motor                 .
+
+_:puertas                       rdf:type                maquina:maquina         .
+_:puertas                       maquina:nombre          "Puertas"               .
+_:puertas                       maquina:duracion        "30"                    .
+_:puertas                       maquina:padre           _:interiores            .
+
+_:ruedas                        rdf:type                maquina:maquina         .
+_:ruedas                        maquina:nombre          "Ruedas"                .
+_:ruedas                        maquina:duracion        "30"                    .
+_:ruedas                        maquina:padre           _:transmision           .
+
+_:pintura                       rdf:type                maquina:maquina         .
+_:pintura                       maquina:nombre          "Pintura"               .
+_:pintura                       maquina:duracion        "20"                    .
+_:pintura                       maquina:padre           _:puertas               .
+
+_:faros                         rdf:type                maquina:maquina         .
+_:faros                         maquina:nombre          "Faros"                 .
+_:faros                         maquina:duracion        "40"                    .
+_:faros                         maquina:padre           _:pintura               .
+
+_:cristales                     rdf:type                maquina:maquina         .
+_:cristales                     maquina:nombre          "Cristales"             .
+_:cristales                     maquina:duracion        "30"                    .
+_:cristales                     maquina:padre           _:pintura               .
+
+
+_:c_electronica_carroceria      rdf:type                conexion:conexion       .
+_:c_electronica_carroceria      conexion:duracion       "30"                    .
+_:c_electronica_carroceria      conexion:precedente     _:electronica           .
+_:c_electronica_carroceria      conexion:siguiente      _:carroceria            .
+
+_:c_electronica_motor           rdf:type                conexion:conexion       .
+_:c_electronica_motor           conexion:duracion       "20"                    .
+_:c_electronica_motor           conexion:precedente     _:electronica           .
+_:c_electronica_motor           conexion:siguiente      _:motor                 .
+
+_:c_electronica_interiores      rdf:type                conexion:conexion       .
+_:c_electronica_interiores      conexion:duracion       "20"                    .
+_:c_electronica_interiores      conexion:precedente     _:electronica           .
+_:c_electronica_interiores      conexion:siguiente      _:interiores            .
+
+_:c_electronica_transmision     rdf:type                conexion:conexion       .
+_:c_electronica_transmision     conexion:duracion       "40"                    .
+_:c_electronica_transmision     conexion:precedente     _:electronica           .
+_:c_electronica_transmision     conexion:siguiente      _:transmision           .
+
+_:c_electronica_ruedas          rdf:type                conexion:conexion       .
+_:c_electronica_ruedas          conexion:duracion       "50"                    .
+_:c_electronica_ruedas          conexion:precedente     _:electronica           .
+_:c_electronica_ruedas          conexion:siguiente      _:ruedas                .
+
+_:c_carroceria_electronica      rdf:type                conexion:conexion       .
+_:c_carroceria_electronica      conexion:duracion       "10"                    .
+_:c_carroceria_electronica      conexion:precedente     _:carroceria            .
+_:c_carroceria_electronica      conexion:siguiente      _:electronica           .
+
+_:c_carroceria_motor            rdf:type                conexion:conexion       .
+_:c_carroceria_motor            conexion:duracion       "20"                    .
+_:c_carroceria_motor            conexion:precedente     _:carroceria            .
+_:c_carroceria_motor            conexion:siguiente      _:motor                 .
+
+_:c_carroceria_interiores       rdf:type                conexion:conexion       .
+_:c_carroceria_interiores       conexion:duracion       "50"                    .
+_:c_carroceria_interiores       conexion:precedente     _:carroceria            .
+_:c_carroceria_interiores       conexion:siguiente      _:interiores            .
+
+_:c_carroceria_transmision      rdf:type                conexion:conexion       .
+_:c_carroceria_transmision      conexion:duracion       "60"                    .
+_:c_carroceria_transmision      conexion:precedente     _:carroceria            .
+_:c_carroceria_transmision      conexion:siguiente      _:transmision           .
+
+_:c_carroceria_ruedas           rdf:type                conexion:conexion       .
+_:c_carroceria_ruedas           conexion:duracion       "10"                    .
+_:c_carroceria_ruedas           conexion:precedente     _:carroceria            .
+_:c_carroceria_ruedas           conexion:siguiente      _:ruedas                .
+
+_:c_motor_electronica           rdf:type                conexion:conexion       .
+_:c_motor_electronica           conexion:duracion       "30"                    .
+_:c_motor_electronica           conexion:precedente     _:motor                 .
+_:c_motor_electronica           conexion:siguiente      _:electronica           .
+
+_:c_motor_carroceria            rdf:type                conexion:conexion       .
+_:c_motor_carroceria            conexion:duracion       "20"                    .
+_:c_motor_carroceria            conexion:precedente     _:motor                 .
+_:c_motor_carroceria            conexion:siguiente      _:carroceria            .
+
+_:c_motor_interiores            rdf:type                conexion:conexion       .
+_:c_motor_interiores            conexion:duracion       "70"                    .
+_:c_motor_interiores            conexion:precedente     _:motor                 .
+_:c_motor_interiores            conexion:siguiente      _:interiores            .
+
+_:c_motor_transmision           rdf:type                conexion:conexion       .
+_:c_motor_transmision           conexion:duracion       "10"                    .
+_:c_motor_transmision           conexion:precedente     _:motor                 .
+_:c_motor_transmision           conexion:siguiente      _:transmision           .
+
+_:c_motor_puertas               rdf:type                conexion:conexion       .
+_:c_motor_puertas               conexion:duracion       "30"                    .
+_:c_motor_puertas               conexion:precedente     _:motor                 .
+_:c_motor_puertas               conexion:siguiente      _:puertas               .
+
+_:c_motor_pintura               rdf:type                conexion:conexion       .
+_:c_motor_pintura               conexion:duracion       "60"                    .
+_:c_motor_pintura               conexion:precedente     _:motor                 .
+_:c_motor_pintura               conexion:siguiente      _:pintura               .
+
+_:c_motor_faros                 rdf:type                conexion:conexion       .
+_:c_motor_faros                 conexion:duracion       "60"                    .
+_:c_motor_faros                 conexion:precedente     _:motor                 .
+_:c_motor_faros                 conexion:siguiente      _:faros                 .
+
+_:c_motor_cristales             rdf:type                conexion:conexion       .
+_:c_motor_cristales             conexion:duracion       "20"                    .
+_:c_motor_cristales             conexion:precedente     _:motor                 .
+_:c_motor_cristales             conexion:siguiente      _:cristales             .
+
+_:c_interiores_motor            rdf:type                conexion:conexion       .
+_:c_interiores_motor            conexion:duracion       "10"                    .
+_:c_interiores_motor            conexion:precedente     _:interiores            .
+_:c_interiores_motor            conexion:siguiente      _:motor                 .
+
+_:c_interiores_transmision      rdf:type                conexion:conexion       .
+_:c_interiores_transmision      conexion:duracion       "50"                    .
+_:c_interiores_transmision      conexion:precedente     _:interiores            .
+_:c_interiores_transmision      conexion:siguiente      _:transmision           .
+
+_:c_interiores_puertas          rdf:type                conexion:conexion       .
+_:c_interiores_puertas          conexion:duracion       "60"                    .
+_:c_interiores_puertas          conexion:precedente     _:interiores            .
+_:c_interiores_puertas          conexion:siguiente      _:puertas               .
+
+_:c_interiores_ruedas           rdf:type                conexion:conexion       .
+_:c_interiores_ruedas           conexion:duracion       "10"                    .
+_:c_interiores_ruedas           conexion:precedente     _:interiores            .
+_:c_interiores_ruedas           conexion:siguiente      _:ruedas                .
+
+_:c_transmision_electronica     rdf:type                conexion:conexion       .
+_:c_transmision_electronica     conexion:duracion       "40"                    .
+_:c_transmision_electronica     conexion:precedente     _:transmision           .
+_:c_transmision_electronica     conexion:siguiente      _:electronica           .
+
+_:c_transmision_carroceria      rdf:type                conexion:conexion       .
+_:c_transmision_carroceria      conexion:duracion       "60"                    .
+_:c_transmision_carroceria      conexion:precedente     _:transmision           .
+_:c_transmision_carroceria      conexion:siguiente      _:carroceria            .
+
+_:c_transmision_interiores      rdf:type                conexion:conexion       .
+_:c_transmision_interiores      conexion:duracion       "80"                    .
+_:c_transmision_interiores      conexion:precedente     _:transmision           .
+_:c_transmision_interiores      conexion:siguiente      _:interiores            .
+
+_:c_transmision_puertas         rdf:type                conexion:conexion       .
+_:c_transmision_puertas         conexion:duracion       "20"                    .
+_:c_transmision_puertas         conexion:precedente     _:transmision           .
+_:c_transmision_puertas         conexion:siguiente      _:puertas               .
+
+_:c_transmision_ruedas          rdf:type                conexion:conexion       .
+_:c_transmision_ruedas          conexion:duracion       "40"                    .
+_:c_transmision_ruedas          conexion:precedente     _:transmision           .
+_:c_transmision_ruedas          conexion:siguiente      _:ruedas                .
+
+_:c_transmision_pintura         rdf:type                conexion:conexion       .
+_:c_transmision_pintura         conexion:duracion       "20"                    .
+_:c_transmision_pintura         conexion:precedente     _:transmision           .
+_:c_transmision_pintura         conexion:siguiente      _:pintura               .
+
+_:c_transmision_faros           rdf:type                conexion:conexion       .
+_:c_transmision_faros           conexion:duracion       "70"                    .
+_:c_transmision_faros           conexion:precedente     _:transmision           .
+_:c_transmision_faros           conexion:siguiente      _:faros                 .
+
+_:c_transmision_cristaleria     rdf:type                conexion:conexion       .
+_:c_transmision_cristaleria     conexion:duracion       "70"                    .
+_:c_transmision_cristaleria     conexion:precedente     _:transmision           .
+_:c_transmision_cristaleria     conexion:siguiente      _:cristaleria           .
+
+_:c_puertas_motor               rdf:type                conexion:conexion       .
+_:c_puertas_motor               conexion:duracion       "30"                    .
+_:c_puertas_motor               conexion:precedente     _:puertas               .
+_:c_puertas_motor               conexion:siguiente      _:motor                 .
+
+_:c_puertas_transmision         rdf:type                conexion:conexion       .
+_:c_puertas_transmision         conexion:duracion       "20"                    .
+_:c_puertas_transmision         conexion:precedente     _:puertas               .
+_:c_puertas_transmision         conexion:siguiente      _:transmision           .
+
+_:c_puertas_ruedas              rdf:type                conexion:conexion       .
+_:c_puertas_ruedas              conexion:duracion       "70"                    .
+_:c_puertas_ruedas              conexion:precedente     _:puertas               .
+_:c_puertas_ruedas              conexion:siguiente      _:ruedas                .
+
+_:c_puertas_pintura             rdf:type                conexion:conexion       .
+_:c_puertas_pintura             conexion:duracion       "20"                    .
+_:c_puertas_pintura             conexion:precedente     _:puertas               .
+_:c_puertas_pintura             conexion:siguiente      _:pintura               .
+
+_:c_ruedas_electronica          rdf:type                conexion:conexion       .
+_:c_ruedas_electronica          conexion:duracion       "10"                    .
+_:c_ruedas_electronica          conexion:precedente     _:ruedas                .
+_:c_ruedas_electronica          conexion:siguiente      _:electronica           .
+
+_:c_ruedas_carroceria           rdf:type                conexion:conexion       .
+_:c_ruedas_carroceria           conexion:duracion       "10"                    .
+_:c_ruedas_carroceria           conexion:precedente     _:ruedas                .
+_:c_ruedas_carroceria           conexion:siguiente      _:carroceria            .
+
+_:c_ruedas_interiores           rdf:type                conexion:conexion       .
+_:c_ruedas_interiores           conexion:duracion       "20"                    .
+_:c_ruedas_interiores           conexion:precedente     _:ruedas                .
+_:c_ruedas_interiores           conexion:siguiente      _:interiores            .
+
+_:c_ruedas_puertas              rdf:type                conexion:conexion       .
+_:c_ruedas_puertas              conexion:duracion       "30"                    .
+_:c_ruedas_puertas              conexion:precedente     _:ruedas                .
+_:c_ruedas_puertas              conexion:siguiente      _:puertas               .
+
+_:c_ruedas_pintura              rdf:type                conexion:conexion       .
+_:c_ruedas_pintura              conexion:duracion       "20"                    .
+_:c_ruedas_pintura              conexion:precedente     _:ruedas                .
+_:c_ruedas_pintura              conexion:siguiente      _:pintura               .
+
+_:c_ruedas_faros                rdf:type                conexion:conexion       .
+_:c_ruedas_faros                conexion:duracion       "20"                    .
+_:c_ruedas_faros                conexion:precedente     _:ruedas                .
+_:c_ruedas_faros                conexion:siguiente      _:faros                 .
+
+_:c_ruedas_cristales            rdf:type                conexion:conexion       .
+_:c_ruedas_cristales            conexion:duracion       "10"                    .
+_:c_ruedas_cristales            conexion:precedente     _:ruedas                .
+_:c_ruedas_cristales            conexion:siguiente      _:cristales             .
+
+_:c_pintura_motor               rdf:type                conexion:conexion       .
+_:c_pintura_motor               conexion:duracion       "40"                    .
+_:c_pintura_motor               conexion:precedente     _:pintura               .
+_:c_pintura_motor               conexion:siguiente      _:motor                 .
+
+_:c_pintura_transmision         rdf:type                conexion:conexion       .
+_:c_pintura_transmision         conexion:duracion       "20"                    .
+_:c_pintura_transmision         conexion:precedente     _:pintura               .
+_:c_pintura_transmision         conexion:siguiente      _:transmision           .
+
+_:c_pintura_ruedas              rdf:type                conexion:conexion       .
+_:c_pintura_ruedas              conexion:duracion       "30"                    .
+_:c_pintura_ruedas              conexion:precedente     _:pintura               .
+_:c_pintura_ruedas              conexion:siguiente      _:ruedas                .
+
+_:c_pintura_faros               rdf:type                conexion:conexion       .
+_:c_pintura_faros               conexion:duracion       "30"                    .
+_:c_pintura_faros               conexion:precedente     _:pintura               .
+_:c_pintura_faros               conexion:siguiente      _:faros                 .
+
+_:c_pintura_cristales           rdf:type                conexion:conexion       .
+_:c_pintura_cristales           conexion:duracion       "10"                    .
+_:c_pintura_cristales           conexion:precedente     _:pintura               .
+_:c_pintura_cristales           conexion:siguiente      _:cristales             .
+
+_:c_faros_motor                 rdf:type                conexion:conexion       .
+_:c_faros_motor                 conexion:duracion       "40"                    .
+_:c_faros_motor                 conexion:precedente     _:faros                 .
+_:c_faros_motor                 conexion:siguiente      _:motor                 .
+
+_:c_faros_transmision           rdf:type                conexion:conexion       .
+_:c_faros_transmision           conexion:duracion       "30"                    .
+_:c_faros_transmision           conexion:precedente     _:faros                 .
+_:c_faros_transmision           conexion:siguiente      _:transmision           .
+
+_:c_faros_ruedas                rdf:type                conexion:conexion       .
+_:c_faros_ruedas                conexion:duracion       "20"                    .
+_:c_faros_ruedas                conexion:precedente     _:faros                 .
+_:c_faros_ruedas                conexion:siguiente      _:ruedas                .
+
+_:c_faros_cristales             rdf:type                conexion:conexion       .
+_:c_faros_cristales             conexion:duracion       "10"                    .
+_:c_faros_cristales             conexion:precedente     _:faros                 .
+_:c_faros_cristales             conexion:siguiente      _:cristales             .
+
+_:c_cristales_motor             rdf:type                conexion:conexion       .
+_:c_cristales_motor             conexion:duracion       "30"                    .
+_:c_cristales_motor             conexion:precedente     _:cristales             .
+_:c_cristales_motor             conexion:siguiente      _:motor                 .
+
+_:c_cristales_transmision       rdf:type                conexion:conexion       .
+_:c_cristales_transmision       conexion:duracion       "30"                    .
+_:c_cristales_transmision       conexion:precedente     _:cristales             .
+_:c_cristales_transmision       conexion:siguiente      _:transmision           .
+
+_:c_cristales_ruedas            rdf:type                conexion:conexion       .
+_:c_cristales_ruedas            conexion:duracion       "20"                    .
+_:c_cristales_ruedas            conexion:precedente     _:cristales             .
+_:c_cristales_ruedas            conexion:siguiente      _:ruedas                .
+
+_:c_cristales_faros             rdf:type                conexion:conexion       .
+_:c_cristales_faros             conexion:duracion       "40"                    .
+_:c_cristales_faros             conexion:precedente     _:cristales             .
+_:c_cristales_faros             conexion:siguiente      _:faros                 .
