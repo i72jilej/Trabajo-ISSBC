@@ -573,4 +573,6 @@ class ventana_modelo():                                                         
             #                                                                                                                           # Validación de tipo "prerrequisitos"
         soluciones = ventana_modelo.podar(soluciones)                                                                                   # "Poda" las que no son válidas
 
+        return soluciones
+
 
