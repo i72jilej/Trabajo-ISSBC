@@ -281,20 +281,20 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
             else:
                 super(ventana_principal, self).guardado()
 
-            return False
+            res = False
 
 
         else:
-            # FIXME: Así tampoco archivo.write(self.textEdit.toPlainText())
+            archivo.write(self._text_solucion.toPlainText())
 
             self.modificado(False)
 
-            return True
+            res = True
 
         finally:
-            # TODO: Comprobar si se llega aquí
-
             archivo.close()
+
+            return res
 
 
     def guardar(self):                                          # Acción de guardar
