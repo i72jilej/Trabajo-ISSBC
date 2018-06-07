@@ -379,7 +379,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
     def guardar_como(self, modo):                                       # Parte de la vista de la acción de guardar cómo
         if modo == 'nombre':
-            return QtGui.QFileDialog.getSaveFileName(self, 'Guardar archivo')
+            return str(QtGui.QFileDialog.getSaveFileName(self, 'Guardar archivo'))
 
         else:
             return QtGui.QMessageBox.information(self, 'Imposible guardar', 'Información: No es posible guardar ya que aún no se han realizado cálculos')
