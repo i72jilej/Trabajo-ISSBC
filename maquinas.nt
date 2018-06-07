@@ -197,10 +197,10 @@ _:c_transmision_faros			conexion:duracion		"30"					.
 _:c_transmision_faros			conexion:precedente		_:transmision			.
 _:c_transmision_faros			conexion:siguiente		_:faros					.
 
-_:c_transmision_cristaleria		rdf:type				conexion:conexion		.
-_:c_transmision_cristaleria		conexion:duracion		"30"					.
-_:c_transmision_cristaleria		conexion:precedente		_:transmision			.
-_:c_transmision_cristaleria		conexion:siguiente		_:cristaleria			.
+_:c_transmision_cristales		rdf:type				conexion:conexion		.
+_:c_transmision_cristales		conexion:duracion		"30"					.
+_:c_transmision_cristales		conexion:precedente		_:transmision			.
+_:c_transmision_cristales		conexion:siguiente		_:cristales				.
 
 _:c_puertas_motor				rdf:type				conexion:conexion		.
 _:c_puertas_motor				conexion:duracion		"30"					.

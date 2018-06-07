@@ -1,0 +1,47 @@
+@prefix rdf:			<http://www.w3.org/1999/02/22-rdf-syntax-ns>	.
+@prefix maquina:		<http://www.factory.fake/maquina/>				.
+@prefix conexion:		<http://www.factory.fake/conexion/>				.
+
+
+_:electronica					rdf:type				maquina:maquina			.
+_:electronica					maquina:nombre			"Electrónica"			.
+_:electronica					maquina:duracion		"60"					.
+
+_:carroceria					rdf:type				maquina:maquina			.
+_:carroceria					maquina:nombre			"Carrocería"			.
+_:carroceria					maquina:duracion		"60"					.
+
+_:motor							rdf:type				maquina:maquina			.
+_:motor							maquina:nombre			"Motor"					.
+_:motor							maquina:duracion		"60"					.
+
+_:c_electronica_carroceria		rdf:type				conexion:conexion		.
+_:c_electronica_carroceria		conexion:duracion		"30"					.
+_:c_electronica_carroceria		conexion:precedente		_:electronica			.
+_:c_electronica_carroceria		conexion:siguiente		_:carroceria			.
+
+_:c_electronica_motor			rdf:type				conexion:conexion		.
+_:c_electronica_motor			conexion:duracion		"30"					.
+_:c_electronica_motor			conexion:precedente		_:electronica			.
+_:c_electronica_motor			conexion:siguiente		_:motor					.
+
+_:c_carroceria_electronica		rdf:type				conexion:conexion		.
+_:c_carroceria_electronica		conexion:duracion		"30"					.
+_:c_carroceria_electronica		conexion:precedente		_:carroceria			.
+_:c_carroceria_electronica		conexion:siguiente		_:electronica			.
+
+_:c_carroceria_motor			rdf:type				conexion:conexion		.
+_:c_carroceria_motor			conexion:duracion		"30"					.
+_:c_carroceria_motor			conexion:precedente		_:carroceria			.
+_:c_carroceria_motor			conexion:siguiente		_:motor					.
+
+_:c_motor_electronica			rdf:type				conexion:conexion		.
+_:c_motor_electronica			conexion:duracion		"30"					.
+_:c_motor_electronica			conexion:precedente		_:motor					.
+_:c_motor_electronica			conexion:siguiente		_:electronica			.
+
+_:c_motor_carroceria			rdf:type				conexion:conexion		.
+_:c_motor_carroceria			conexion:duracion		"30"					.
+_:c_motor_carroceria			conexion:precedente		_:motor					.
+_:c_motor_carroceria			conexion:siguiente		_:carroceria			.
+

@@ -579,7 +579,7 @@ class ventana_modelo():                                                         
             #                                                                                                                           # Validación de tipo "prerrequisitos"
         soluciones = ventana_modelo.podar(soluciones)                                                                                   # "Poda" las que no son válidas
 
-        ''' if cronograma != None:
+        if cronograma != None:
             for solucion in soluciones:                                                                                                 # Recorre la lista de soluciones
                 tiempo = 0
 
@@ -608,7 +608,7 @@ class ventana_modelo():                                                         
             soluciones = ventana_modelo.podar(soluciones)
 
         else:
-            pass '''
+            pass
 
         return soluciones
 
