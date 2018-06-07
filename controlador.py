@@ -227,8 +227,10 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
         del self._soluciones_candidatas
 
+        texto_solucion = ''
+
         if self.__num_soluciones < len(self._soluciones):
-            texto_solucion = "Se ha elegido la solución: \n"
+            texto_solucion += "Se ha elegido la solución: \n"
 
             texto_camino = ''
 
