@@ -66,78 +66,78 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
             nombre_archivo = super(ventana_principal, self).apertura('abrir')
 
         if nombre_archivo != '':                                # Comprobando si se ha elegido algún archivo
-            try:                                                # Si se ha elegido un archivo
-                archivo = open(file = nombre_archivo, mode = 'r', encoding = 'utf-8')
+            # try:                                                # Si se ha elegido un archivo
+            archivo = open(file = nombre_archivo, mode = 'r', encoding = 'utf-8')
 
-            except IOError:
-                res = False
+            # except IOError:
+            #     res = False
 
-            else:
-                texto_archivo = archivo.read()
+            # else:
+            texto_archivo = archivo.read()
 
-                self.modificado(False)
+            self.modificado(False)
 
-                grafo = self.procesar(texto_archivo)
+            grafo = self.procesar(texto_archivo)
 
-                if grafo != None:
-                    self._datos = self.interpretar(grafo)       # Extrayendo datos manejables del grafo
+            if grafo != None:
+                self._datos = self.interpretar(grafo)       # Extrayendo datos manejables del grafo
 
-                    texto_archivo = ''                          # Necesario para reutilizar la dichosa variable
+                texto_archivo = ''                          # Necesario para reutilizar la dichosa variable
 
-                    for i in range(len(self._datos)):           # Construyendo la descripción del dominio
-                        texto = ' es una máquina con duración '
+                for i in range(len(self._datos)):           # Construyendo la descripción del dominio
+                    texto = ' es una máquina con duración '
+
+                    if sys.version_info[0] < 3:
+                        texto = texto.decode('utf-8')
+
+                    texto_archivo += self._datos[i].nombre() + texto + str(self._datos[i].duracion()) + "\n"
+
+                    for padre in self._datos[i].padres():
+                        texto = SANGRIA + 'Requiere haber pasado por '
 
                         if sys.version_info[0] < 3:
                             texto = texto.decode('utf-8')
 
-                        texto_archivo += self._datos[i].nombre() + texto + str(self._datos[i].duracion()) + "\n"
+                        texto_archivo += texto + padre.nombre() + '\n'
 
-                        for padre in self._datos[i].padres():
-                            texto = SANGRIA + 'Requiere haber pasado por '
+                    for conexion in self._datos[i].conexiones():
+                        texto = [SANGRIA + 'Puede enviar a ', ' con una duración de ']
 
-                            if sys.version_info[0] < 3:
-                                texto = texto.decode('utf-8')
+                        if sys.version_info[0] < 3:
+                            texto[0] = texto[0].decode('utf-8')
+                            texto[1] = texto[1].decode('utf-8')
 
-                            texto_archivo += texto + padre.nombre() + '\n'
+                        texto_archivo += texto[0] + conexion['objeto'].nombre() + texto[1] + str(conexion['duracion']) + '\n'
 
-                        for conexion in self._datos[i].conexiones():
-                            texto = [SANGRIA + 'Puede enviar a ', ' con una duración de ']
+                    texto_archivo += '\n'
 
-                            if sys.version_info[0] < 3:
-                                texto[0] = texto[0].decode('utf-8')
-                                texto[1] = texto[1].decode('utf-8')
-
-                            texto_archivo += texto[0] + conexion['objeto'].nombre() + texto[1] + str(conexion['duracion']) + '\n'
-
-                        texto_archivo += '\n'
-
-                    if sys.version_info[0] >= 3:                # Llamada al método equivalente de la clase padre
-                        super().apertura('dominio', texto_archivo, nombre_archivo)
-
-                    else:
-                        super(ventana_principal, self).apertura('dominio', texto_archivo, nombre_archivo)
-
-                    res = True
+                if sys.version_info[0] >= 3:                # Llamada al método equivalente de la clase padre
+                    super().apertura('dominio', texto_archivo, nombre_archivo)
 
                 else:
-                    if sys.version_info[0] >= 3:                # Llamada al método equivalente de la clase padre
-                        nombre_archivo = super().apertura('error')
+                    super(ventana_principal, self).apertura('dominio', texto_archivo, nombre_archivo)
 
-                    else:
-                        nombre_archivo = super(ventana_principal, self).apertura('error')
+                res = True
 
-                    self.limpiar()
+            else:
+                if sys.version_info[0] >= 3:                # Llamada al método equivalente de la clase padre
+                    nombre_archivo = super().apertura('error')
 
-                    return False
+                else:
+                    nombre_archivo = super(ventana_principal, self).apertura('error')
 
-            finally:
-                try:
-                    archivo.close()
+                self.limpiar()
 
-                except UnboundLocalError:
-                    pass
+                return False
 
-                return res
+            # finally:
+            try:
+                archivo.close()
+
+            except UnboundLocalError:
+                pass
+
+            return res
 
 
     def calcular(self):                                         # Realiza los cálculos necesarios
