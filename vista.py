@@ -90,6 +90,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         QtGui.qApp.aboutQt()
 
 
+    #Actualiza el valor de la variable y el campo de texto al desplazar la barra
     def actualizar_valor_heuristica(self):
         if (self._slider_heuristica.value() > 75 or self._slider_heuristica.value() < 25) and self._aviso_valores == QtGui.QMessageBox.No:
             self._aviso_valores = self.confirmar_valores()
@@ -104,6 +105,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         self._text_heuristica.setText(str(self._slider_heuristica.value()) + ' %')
 
 
+    #Actualiza el valor de la variable y el campo de texto al desplazar la barra
     def actualizar_valor_hijos(self):
         if self._slider_hijos.value() > 5000 and self._aviso_valores == QtGui.QMessageBox.No:
             self._aviso_valores = self.confirmar_valores()
@@ -338,8 +340,11 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
     def dibujar_interfaz_tercio_central_mitad_derecha_mitad_superior(self): # Dibujo de la mitad superior del tercio central de la interfaz
         # Etiquetas
-        label_heuristica = QtGui.QLabel('Probabilidad heurística:')
-        label_heuristica.setMaximumWidth(125)
+        if sys.version_info[0] >= 3: 
+            label_heuristica = QtGui.QLabel('Probabilidad heurística:')
+        else:
+            label_heuristica = QtGui.QLabel(u'Probabilidad heurística:')
+        label_heuristica.setMaximumWidth(150)
 
         # Controles de edición
         self._text_heuristica = QtGui.QLineEdit()
