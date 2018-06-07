@@ -579,8 +579,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         impresion = QtGui.QPrintDialog()
 
         if impresion.exec_() == QtGui.QDialog.Accepted:
-            # TODO: Establecer widget a imprimir self.textEdit.document().print_(impresion.printer())
-            pass
+            self._text_solucion.document().print_(impresion.printer())
 
         else:
             pass
