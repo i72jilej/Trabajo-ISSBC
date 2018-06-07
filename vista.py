@@ -349,6 +349,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         # Controles de edición
         self._text_heuristica = QtGui.QLineEdit()
         self._text_heuristica.setMaximumWidth(40)
+        self._text_heuristica.setReadOnly(True)                             # TODO: Rehacerlo de modo que, editándolo, valide y cargue valores
         self._text_heuristica.setText(str(self._prob_heuristica) + ' %')
 
         # Diseño
@@ -401,6 +402,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         # Controles de edición
         self._text_hijos = QtGui.QLineEdit()
         self._text_hijos.setMaximumWidth(40)
+        self._text_hijos.setReadOnly(True)                                  # TODO: Rehacerlo de modo que, editándolo, valide y cargue valores
         self._text_hijos.setText(str(self._num_hijos))
 
         # Diseño
