@@ -253,7 +253,12 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
 
         # else:
-        archivo.write(str(self._text_solucion.toPlainText()))
+        texto = self._text_solucion.toPlainText()
+
+        if sys.version_info[0] < 3:
+            texto = str(texto.toUtf8()).decode("utf-8")
+
+        archivo.write(texto)
 
         self.modificado(False)
 
