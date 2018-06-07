@@ -33,8 +33,6 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
         else:
             super(ventana_principal, self).__init__()
 
-        self._cronograma = None
-
         self._modificado = False                                 # Inicialización de variables de clase
 
         self._n_hilos = 1000                                     # Número de hilos a utilizar (soluciones posibles)
@@ -359,8 +357,6 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
         except AttributeError:
             pass
-
-        self._cronograma = None
 
         self._soluciones = []
 

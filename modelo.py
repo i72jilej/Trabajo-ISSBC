@@ -27,7 +27,6 @@ import random                                                                   
 if DEBUG:
     import sys                                                                                                                          # Funcionalidades varias del sistema
 
-from bisect import insort                                                                                                               # Insercción ordenada
 from threading import Thread                                                                                                            # Capacidades multihilo
 from time import sleep                                                                                                                  # Pausas
 
@@ -204,12 +203,7 @@ class ventana_modelo():                                                         
 
         num_nodos = len(nodos)
 
-        if self._cronograma == None:
-            self._cronograma = {i : [] for i in range(len(self._datos))}                                                                # Creación del cronograma
-            #                                                                                                                           #         ''' El cronograma contendrá una lista de tuplas ["máquina", "[lista te tiempos de inicio]"]
         for i in range(num_nodos):
-            insort(self._cronograma[nodos[i].id_elemento()], tiempo)
-
             conexiones = nodos[i].conexiones()                                                                                          # Obteniendo las conexiones de la máquina
 
             if i < num_nodos - 1:
@@ -276,7 +270,7 @@ class ventana_modelo():                                                         
             print()
             print()
 
-        self._soluciones_candidatas = self.validar(self._soluciones_posibles, self._cronograma)
+        self._soluciones_candidatas = self.validar(self._soluciones_posibles)
 
         del self._soluciones_posibles
 
@@ -573,58 +567,10 @@ class ventana_modelo():                                                         
 
 
     @staticmethod                                                                                                                       # Método estático
-    def validar(soluciones, cronograma):                                                                                                # Valida las soluciones
+    def validar(soluciones):                                                                                                            # Valida las soluciones
         for solucion in soluciones:                                                                                                     # Recorre la lista de soluciones
             solucion.validar()                                                                                                          # Valida cada solución
             #                                                                                                                           # Validación de tipo "prerrequisitos"
         soluciones = ventana_modelo.podar(soluciones)                                                                                   # "Poda" las que no son válidas
-
-        if cronograma != None:
-            for solucion in soluciones:                                                                                                 # Recorre la lista de soluciones
-                tiempo = 0
-
-                tiempos = []
-
-                nodos = solucion.camino()
-
-                num_nodos = len(nodos)
-
-                for i in range(num_nodos):
-                    valido = ventana_modelo.validar_tiempo(cronograma, nodos[i], tiempo)                                               # Se calcula si una máquina puede entrar a trabajar o no si su tiempo de inicio + tiempo de funcionamiento no entra en conflicto con otro ya presente en la lista correspondiente a dicha máquina
-
-                    if valido == True:
-                        tiempos.append(tiempo)
-
-                        if i < num_nodos - 1:
-                            conexiones = nodos[i].conexiones()                                                                         # Obteniendo las conexiones de la máquina
-
-                            tiempo += nodos[i].duracion() + conexiones[conexiones.index(nodos[i].conexion(nodos[i + 1]))]['duracion']  # Calculando el tiempo = tiempo de la máquina + tiempo de la conexión a la siguiente
-
-                    else:
-                        solucion.invalidar()
-
-                        break
-
-            soluciones = ventana_modelo.podar(soluciones)
-
-        else:
-            pass
-
-        return soluciones
-
-
-    @staticmethod                                                                                                                       # Método estáticovalidar
-    def validar_tiempo(cronograma, maquina, tiempo):
-        res = True
-
-        tiempos = cronograma[maquina.id_elemento()]
-
-        for i in range(len(tiempos)):
-            if tiempos[i] == tiempo or tiempos[i] + maquina.duracion() > tiempo or tiempos[i + 1] < tiempo + maquina.duracion():
-                res = False
-
-                break
-
-        return res
 
 
