@@ -26,12 +26,6 @@ if sys.version_info[0] < 3:
 
 
 class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
-    _modificado = False                                         # Inicialización de variables de clase
-
-    _n_hilos = 1000                                             # Número de hilos a utilizar (soluciones posibles)
-
-    __num_soluciones = 0                                        # Usada para la condición de parada
-
     def __init__(self):                                         # Constructor de la clase
         if sys.version_info[0] >= 3:                            # Llamada al método equivalente de la clase padre
             super().__init__()
@@ -41,7 +35,13 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
         self._cronograma = None
 
+        self._modificado = False                                 # Inicialización de variables de clase
+
+        self._n_hilos = 5000                                     # Número de hilos a utilizar (soluciones posibles)
+
         self._soluciones = []
+
+        self.__num_soluciones = 0                                # Usada para la condición de parada
 
 
     def abrir(self):                                            # Acción de abrir
@@ -151,7 +151,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
             vista.ventana_vista.calcular(self, 'error')         # Llamada al método equivalente de la clase vista
 
         else:
-            if self._soluciones != []:
+            if self._modificado == True:
                 respuesta = self.confirmar_modificado('realizar nuevos cálculos')
 
                 if respuesta == vista.respuestas.diccionario[vista.respuestas.DESCARTAR]:
@@ -183,12 +183,16 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
     def calcular_bucle(self):
         self.calculo()
 
-        while len(self._soluciones) > self.__num_soluciones or len(self._soluciones) == 10:
+        while len(self._soluciones) > self.__num_soluciones and len(self._soluciones) <= 10:
+            self.__num_soluciones += 1
+
             self.calculo()
 
-        texto = 'Se han podido generar ' + str(len(self._soluciones)) + " soluciones válidas simultáneas:\n"
+        tam_soluciones = len(self._soluciones)
 
-        for i in range(len(self._soluciones)):
+        texto = 'Se han podido generar ' + str(tam_soluciones) + " soluciones válidas simultáneas:\n"
+
+        for i in range(tam_soluciones):
             str_camino = ''
             tiempo = self._soluciones[i].duracion()
 
@@ -199,7 +203,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                 else:
                     str_camino += nodo.nombre().toPython().encode('utf-8') + ' - '
 
-            texto += SANGRIA + str(i) + ': ' + str_camino[0:-3] + ' con una duración de ' + str(tiempo) + " seg.\n"
+            texto += SANGRIA + str(i) + ': ' + str_camino[0:-3] + ', con una duración de ' + str(tiempo) + " seg.\n"
 
         vista.ventana_vista.calcular(self, 'solucion', texto)
 
@@ -221,11 +225,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
             texto += SANGRIA + str(i) + ': ' + str_camino[0:-3] + ', con una duración de ' + str(self._soluciones_candidatas[i].duracion()) + " seg.\n"
 
-        num_soluciones = len(self._soluciones)
-
-        if self.__num_soluciones < num_soluciones:
-            self.__num_soluciones = num_soluciones
-
+        if self.__num_soluciones < len(self._soluciones):
             texto += "Se ha elegido la solución: \n"
 
             texto_camino = ''
