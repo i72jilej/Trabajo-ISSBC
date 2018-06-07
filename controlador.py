@@ -239,50 +239,50 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
 
     def guardado(self):                                                             # Procedimiento de guardado
-        try:
-            archivo = open(file = self._nombre_archivo, mode = 'w', encoding = 'utf-8')
+        # try:
+        archivo = open(file = self._nombre_archivo, mode = 'w', encoding = 'utf-8')
 
-        except IOError:
-            if sys.version_info[0] >= 3:                                            # Llamada al método equivalente de la clase padre
-                super().guardado()
+        # except IOError:
+        #    if sys.version_info[0] >= 3:                                            # Llamada al método equivalente de la clase padre
+        #        super().guardado()
 
-            else:
-                super(ventana_principal, self).guardado()
+        #    else:
+        #        super(ventana_principal, self).guardado()
 
-            res = False
+        #    res = False
 
 
-        else:
-            archivo.write(self._text_solucion.toPlainText())
+        # else:
+        archivo.write(self._text_solucion.toPlainText())
 
-            self.modificado(False)
+        self.modificado(False)
 
-            res = True
+        res = True
 
-        finally:
-            archivo.close()
+        # finally:
+        archivo.close()
 
-            return res
+        return res
 
 
     def guardar(self):                                                              # Acción de guardar
-        try:
-            self._nombre_archivo
+        # try:
+        #     self._nombre_archivo
 
-        except AttributeError:
-            res = self.guardar_como()
+        # except AttributeError:
+        res = self.guardar_como()
 
-        else:
-            if self._nombre_archivo == '':
-                del self._nombre_archivo
+        # else:
+        #     if self._nombre_archivo == '':
+        #         del self._nombre_archivo
 
-                res = self.guardar_como()
+        #         res = self.guardar_como()
 
-            else:
-                res = self.guardado()
+        #     else:
+        #         res = self.guardado()
 
-        finally:
-            return res
+        # finally:
+        return res
 
 
     def guardar_como(self):                                                         # Acción de guardar cómo
