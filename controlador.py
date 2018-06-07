@@ -225,8 +225,10 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
             texto += SANGRIA + str(i) + ': ' + str_camino[0:-3] + ', con una duración de ' + str(self._soluciones_candidatas[i].duracion()) + " seg.\n"
 
+        del self._soluciones_candidatas
+
         if self.__num_soluciones < len(self._soluciones):
-            texto += "Se ha elegido la solución: \n"
+            texto_solucion = "Se ha elegido la solución: \n"
 
             texto_camino = ''
 
@@ -237,14 +239,14 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                 else:
                     texto_camino += nodo.nombre().toPython().encode('utf-8') + ' - '
 
-            texto += SANGRIA + texto_camino[0:-3] + ', con una duración de ' + str(self._solucion_elegida.duracion()) + " seg.\n"
+            texto_solucion += SANGRIA + texto_camino[0:-3] + ', con una duración de ' + str(self._solucion_elegida.duracion()) + " seg.\n"
 
         else:
             texto += "\nNo se ha encontrado ninguna otra solución válida\nFin de la ejecución"
 
-        vista.ventana_vista.calcular(self, 'desarrollo', texto)
+        vista.ventana_vista.calcular(self, 'desarrollo', texto + texto_solucion)
 
-        del self._soluciones_candidatas
+        vista.ventana_vista.calcular(self, 'solucion', texto_solucion)
 
         self._modificado = True
 
