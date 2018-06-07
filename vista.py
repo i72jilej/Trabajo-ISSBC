@@ -153,17 +153,15 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
 
     def crearAcciones(self):                                	       	# Creación de las acciones asociadas al menú y a la barra de herramientas
-        textos = []
+        textos = [
+                    'Sale de la aplicación',
+                    'Comienza los cálculos',
+                    'Muestra la ventana "Acerca de" de la librería Qt',
+                 ]
 
-        if sys.version_info[0] >= 3:
-            textos.append('Sale de la aplicación')
-            textos.append('Comienza los cálculos')
-            textos.append('Muestra la ventana "Acerca de" de la librería Qt')
-
-        else:
-            textos.append(u'Sale de la aplicación')
-            textos.append(u'Comienza los cálculos')
-            textos.append(u'Muestra la ventana "Acerca de" de la librería Qt')
+        if sys.version_info[0] < 3:
+            for texto in textos:
+                texto = texto.decode('unicode-escape')
 
         self.nuevoAcc           = QtGui.QAction('&Nuevo',           self, shortcut = QtGui.QKeySequence.New,    statusTip = 'Crea un nuevo archivo',                                triggered = self.nuevo          )
         self.abrirAcc           = QtGui.QAction('&Abrir...',        self, shortcut = QtGui.QKeySequence.Open,   statusTip = 'Abre un archivo existente',                            triggered = self.abrir          )

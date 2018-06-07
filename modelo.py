@@ -225,7 +225,6 @@ class ventana_modelo():                                                         
 
             self._soluciones.append(self._solucion_elegida)
 
-
         return res
 
 
