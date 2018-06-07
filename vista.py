@@ -12,9 +12,9 @@
 # Notes         : 
 
 
-import sys                                                              # Funcionalidades varias del sistema
+import sys                                                                  # Funcionalidades varias del sistema
 
-from PyQt4 import QtGui                                                 # Módulo de interfaz de usuario de PyQt4
+from PyQt4 import QtCore, QtGui                                             # Módulo de interfaz de usuario de PyQt4
 
 
 class respuestas():
@@ -28,43 +28,49 @@ class respuestas():
     diccionario.append(QtGui.QMessageBox.Save)
 
 
-class ventana_vista(QtGui.QMainWindow):                                 # Parte de la vista de la ventana
+class ventana_vista(QtGui.QMainWindow):                                     # Parte de la vista de la ventana
     _TITULO_APP = 'Planificador de cadena de montaje'
 
+    _aviso_valores = QtGui.QMessageBox.No
 
-    def __init__(self):                                                 # Parte de la vista del constructor de la clase; al ser una ventana, inicializa la misma
-        if sys.version_info[0] >= 3:                                    # Llamada al método equivalente de la clase padre
+    _num_hijos = 1000                                                       # Número de hilos a utilizar (soluciones posibles)
+
+    _prob_heuristica = 50
+
+
+    def __init__(self):                                                     # Parte de la vista del constructor de la clase; al ser una ventana, inicializa la misma
+        if sys.version_info[0] >= 3:                                        # Llamada al método equivalente de la clase padre
             super().__init__()
 
         else:
             super(ventana_vista, self).__init__()
 
-        self.setWindowIcon(QtGui.QIcon('./iconos/000-checklist.png'))   # Establecer el icono de la ventana principal
-
-        self._widget_principal = QtGui.QWidget(self)                    # Establecer el widget principal
-
-        self.setCentralWidget(self._widget_principal)                   # Establecer el widget central
-
-        self.dibujar_interfaz()                                         # Dibujar la interfaz
-
-        self._widget_principal.setLayout(self._disenyo)                 # Establecer el diseño del widget
-
-        self.crearAcciones()                                            # Crer los menús, barras de herramientas y acciones que éstos dispararán
-                                                                        # Es importante crear las acciones lo primero, ya que el resto de elementos dependen de ellas
+        self.crearAcciones()                                                # Crer los menús, barras de herramientas y acciones que éstos dispararán
+        #                                                                   # Es importante crear las acciones lo primero, ya que el resto de elementos dependen de ellas
         self.crearMenus()
 
         self.crearBarraDeHerramientas()
 
-        self.statusBar().showMessage('Esperando archivo')               # Se establece el mensaje para barra de estado
+        self.dibujar_interfaz()                                             # Dibujar la interfaz
 
-        self.setWindowTitle(self._TITULO_APP)                           # Se establece el título de la ventana
+        self._widget_principal = QtGui.QWidget(self)                        # Establecer el widget principal
 
-        self.setMinimumSize(0, 720)                                     # Parámetros de tamaño
+        self._widget_principal.setLayout(self._disenyo)                     # Establecer el diseño del widget
+
+        self.setCentralWidget(self._widget_principal)                       # Establecer el widget central
+
+        self.setWindowIcon(QtGui.QIcon('./iconos/000-checklist.png'))       # Establecer el icono de la ventana principal
+
+        self.setWindowTitle(self._TITULO_APP)                               # Se establece el título de la ventana
+
+        self.statusBar().showMessage('Esperando archivo')                   # Se establece el mensaje para barra de estado
+
+        self.setMinimumSize(0, 720)                                         # Parámetros de tamaño
 
         self.resize(1280, 720)
 
 
-    def acercaDe(self):                                                 # Ventana modal que muestra la información de "Acerca de"
+    def acercaDe(self):                                                     # Ventana modal que muestra la información de "Acerca de"
         texto = '''<p>Trabajo de planificación creada por Julio Domingo Jiménez Ledesma (i72jilej) y Rafael Carlos Méndez Rodríguez (i82meror)</p>
 <p>Icono usado en "Nuevo" por <a href="https://www.flaticon.com/authors/yannick">Yannick</a><br />
 Icono usado en "Abrir" por <a href="https://www.flaticon.com/authors/simpleicon">SimpleIcon</a><br />
@@ -80,11 +86,39 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         QtGui.QMessageBox.about(self, 'Acerca de', texto)
 
 
-    def acercaDeQt(self):                                               # Ventana modal que muestra la información de "Acerca de Qt"
+    def acercaDeQt(self):                                                   # Ventana modal que muestra la información de "Acerca de Qt"
         QtGui.qApp.aboutQt()
 
 
-    def apertura(self, modo, *args):                                    # Parte de la vista del procedimiento de apertura
+    def actualizar_valor_heuristica(self):
+        if (self._slider_heuristica.value() > 75 or self._slider_heuristica.value() < 25) and self._aviso_valores == QtGui.QMessageBox.No:
+            self._aviso_valores = self.confirmar_valores()
+
+            if self._aviso_valores == QtGui.QMessageBox.No:
+                self._slider_heuristica.setValue(50)
+
+        self._prob_heuristica = self._slider_heuristica.value()
+
+        self._slider_heuristica.setToolTip(str(self._slider_heuristica.value()))
+
+        self._text_heuristica.setText(str(self._slider_heuristica.value()) + ' %')
+
+
+    def actualizar_valor_hijos(self):
+        if self._slider_hijos.value() > 5000 and self._aviso_valores == QtGui.QMessageBox.No:
+            self._aviso_valores = self.confirmar_valores()
+
+            if self._aviso_valores == QtGui.QMessageBox.No:
+                self._slider_hijos.setValue(1000)
+
+        self._num_hijos = self._slider_hijos.value()
+
+        self._slider_hijos.setToolTip(str(self._slider_hijos.value()))
+
+        self._text_hijos.setText(str(self._slider_hijos.value()))
+
+
+    def apertura(self, modo, *args):                                        # Parte de la vista del procedimiento de apertura
         if modo == 'abrir':
             return str(QtGui.QFileDialog.getOpenFileName(self, 'Abrir archivo', filter = 'Base de conocimiento NTriples (*.nt);;Todos los archivos (*.*)'))
 
@@ -105,7 +139,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
             return True
 
 
-    def calcular(self, modo, *args):                                    # Parte de la vista de la realización de los cálculos necesarios
+    def calcular(self, modo, *args):                                        # Parte de la vista de la realización de los cálculos necesarios
         if modo == 'error':
             texto = 'Imposible calcular'
             texto2 = 'Aviso: No es posible calcular ya que aún no se ha cargado ningún archivo'
@@ -133,7 +167,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
             self._text_solucion.setText(self._text_solucion.toPlainText() + texto + "\n")
 
 
-    def confirmar_modificado(self, accion):                             # Confirmación de las modificaciones antes de realizar una operación que pueda destruirlas
+    def confirmar_modificado(self, accion):                                 # Confirmación de las modificaciones antes de realizar una operación que pueda destruirlas
         if self.modificado():
             texto = 'Hay cálculos no guardados. ¿Desea guardarlos antes de ' + accion + '?'
     
@@ -162,7 +196,23 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
             return QtGui.QMessageBox.Discard
 
 
-    def crearAcciones(self):                                	       	# Creación de las acciones asociadas al menú y a la barra de herramientas
+    def confirmar_valores(self):                                            # Confirmación de valores extermos
+        texto = 'Valores extremos podrían dar resultados pobres o inesperados. ¿Está seguro?'
+
+        if sys.version_info[0] < 3:
+            texto = texto.decode('utf-8')
+
+        mensaje = QtGui.QMessageBox()
+        mensaje.setIcon(QtGui.QMessageBox.Question)
+        mensaje.setWindowTitle('Aviso')
+        mensaje.setText(texto)
+        mensaje.setStandardButtons(QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
+        mensaje.setDefaultButton(QtGui.QMessageBox.No)
+
+        return mensaje.exec_()
+
+
+    def crearAcciones(self):                                	       	    # Creación de las acciones asociadas al menú y a la barra de herramientas
         textos = []
 
         if sys.version_info[0] >= 3:
@@ -196,7 +246,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         self.acercaDeQtAcc.     setIcon(QtGui.QIcon('./iconos/009-presenter-talking-about-people-on-a-screen.png')  )
 
 
-    def crearBarraDeHerramientas(self):                     	        # Creación de la barra de herramientas
+    def crearBarraDeHerramientas(self):                     	            # Creación de la barra de herramientas
         self._toolbar = self.addToolBar('Barra de herramientas')
         self._toolbar.addAction(self.nuevoAcc)
         self._toolbar.addAction(self.abrirAcc)
@@ -207,10 +257,10 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         self._toolbar.addSeparator()
         self._toolbar.addAction(self.salirAcc)
 
-        self._toolbar.setMovable(False)                                 # Hace la barra inamovible
+        self._toolbar.setMovable(False)                                     # Hace la barra inamovible
 
 
-    def crearMenus(self):                                   	        # Creación de los menús
+    def crearMenus(self):                                   	            # Creación de los menús
         texto = 'A&cción'
 
         if sys.version_info[0] < 3:
@@ -234,53 +284,172 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         self._menu_ayuda.addAction(self.acercaDeQtAcc)
 
 
-    def dibujar_interfaz(self):                                         # Dibujo de la interfaz
-        self._disenyo = QtGui.QVBoxLayout()                             # Establecimiento del tipo de interfaz
-        self._disenyo.addWidget(self.dibujar_intarfaz_mitad_superior()) # Añadiendo widgets a base de funciones externas
-        self._disenyo.addWidget(self.dibujar_intarfaz_mitad_inferior())
+    def dibujar_interfaz(self):                                             # Dibujo de la interfaz
+        self._disenyo = QtGui.QVBoxLayout()                                 # Establecimiento del tipo de interfaz
+        self._disenyo.addWidget(self.dibujar_intarfaz_tercio_superior())    # Añadiendo widgets a base de funciones externas
+        self._disenyo.addWidget(self.dibujar_intarfaz_tercio_central())
+        self._disenyo.addWidget(self.dibujar_intarfaz_tercio_inferior())
 
 
-    def dibujar_intarfaz_mitad_inferior(self):                          # Dibujo de la mitad inferior de la interfaz
+    def dibujar_intarfaz_tercio_central(self):                              # Dibujo del tercio central de la interfaz
         # Diseño
         disenyo = QtGui.QHBoxLayout()
         disenyo.setMargin(0)
         disenyo.setSpacing(0)
 
-        disenyo.addWidget(self.dibujar_interfaz_mitad_inferior_mitad_izquierda_dominio())
-        disenyo.addWidget(self.dibujar_interfaz_mitad_inferior_mitad_derecha())
-
-        '''
-        disenyo.addWidget(self.dibujar_interfaz_mitad_inferior_dominio())
-        disenyo.addWidget(self.dibujar_interfaz_mitad_inferior_solucion())
-        disenyo.addWidget(self.dibujar_interfaz_mitad_inferior_desarrollo())
-        '''
+        # Widgets
+        disenyo.addWidget(self.dibujar_interfaz_tercio_central_mitad_izquierda())
+        disenyo.addWidget(self.dibujar_interfaz_tercio_central_mitad_derecha())
 
         # Widget
-        mitad_inferior = QtGui.QGroupBox('Resultados')
-        mitad_inferior.setLayout(disenyo)
-        mitad_inferior.setStyleSheet('QGroupBox QGroupBox { border: 0px; }')
+        mi_widget = QtGui.QGroupBox('Control')
+        mi_widget.setLayout(disenyo)
+        mi_widget.setStyleSheet('QGroupBox QGroupBox { border: 0px; }')
 
-        return mitad_inferior
+        return mi_widget
 
 
-    def dibujar_interfaz_mitad_inferior_mitad_derecha(self):            # Dibujo de la mitad derecha de la mitad inferior de la interfaz
+    def dibujar_interfaz_tercio_central_mitad_derecha(self):                # Dibujo de la parte de heurística del tercio central de la interfaz
+        # Controles de edición
+        self._slider_heuristica = QtGui.QSlider(QtCore.Qt.Horizontal)
+        self._slider_heuristica.setMinimum(0)
+        self._slider_heuristica.setMaximum(100)
+        self._slider_heuristica.setValue(50)
+        self._slider_heuristica.setTickPosition(QtGui.QSlider.TicksBelow)
+        self._slider_heuristica.setTickInterval(1)
+
+        # Eventos de los controles
+        self._slider_heuristica.setToolTip(str(self._slider_heuristica.value()))
+        self._slider_heuristica.valueChanged.connect(self.actualizar_valor_heuristica)
+
+        # Diseño
+        disenyo = QtGui.QVBoxLayout()
+
+        # Widgets
+        disenyo.addWidget(self.dibujar_interfaz_tercio_central_mitad_derecha_mitad_superior())
+        disenyo.addWidget(self._slider_heuristica)
+
+        # Widget
+        mi_widget = QtGui.QGroupBox()
+        mi_widget.setLayout(disenyo)
+
+        return mi_widget
+
+
+    def dibujar_interfaz_tercio_central_mitad_derecha_mitad_superior(self): # Dibujo de la mitad superior del tercio central de la interfaz
+        # Etiquetas
+        label_heuristica = QtGui.QLabel('Probabilidad heurística:')
+        label_heuristica.setMaximumWidth(125)
+
+        # Controles de edición
+        self._text_heuristica = QtGui.QLineEdit()
+        self._text_heuristica.setMaximumWidth(40)
+        self._text_heuristica.setText(str(self._prob_heuristica) + ' %')
+
+        # Diseño
+        disenyo = QtGui.QHBoxLayout()
+
+        # Widgets
+        disenyo.addWidget(label_heuristica)
+        disenyo.addWidget(self._text_heuristica)
+        disenyo.setAlignment(QtCore.Qt.AlignLeft)
+
+        # Widget
+        mi_widget = QtGui.QGroupBox()
+        mi_widget.setLayout(disenyo)
+
+        return mi_widget
+
+
+    def dibujar_interfaz_tercio_central_mitad_izquierda(self):              # Dibujo de la parte de heurística del tercio central de la interfaz
+        # Controles de edición
+        self._slider_hijos = QtGui.QSlider(QtCore.Qt.Horizontal)
+        self._slider_hijos.setMinimum(100)
+        self._slider_hijos.setMaximum(10000)
+        self._slider_hijos.setValue(1000)
+        self._slider_hijos.setTickPosition(QtGui.QSlider.TicksBelow)
+        self._slider_hijos.setTickInterval(100)
+
+        # Eventos de los controles
+        self._slider_hijos.setToolTip(str(self._slider_hijos.value()))
+        self._slider_hijos.valueChanged.connect(self.actualizar_valor_hijos)
+
+        # Diseño
+        disenyo = QtGui.QVBoxLayout()
+
+        # Widgets
+        disenyo.addWidget(self.dibujar_interfaz_tercio_central_mitad_izquierda_mitad_superior())
+        disenyo.addWidget(self._slider_hijos)
+
+        # Widget
+        mi_widget = QtGui.QGroupBox()
+        mi_widget.setLayout(disenyo)
+
+        return mi_widget
+
+
+    def dibujar_interfaz_tercio_central_mitad_izquierda_mitad_superior(self): # Dibujo de la mitad superior del tercio central de la interfaz
+        # Etiquetas
+        label_hijos = QtGui.QLabel('Cantidad de hilos buscadores de soluciones simultáneos:')
+        label_hijos.setMaximumWidth(275)
+
+        # Controles de edición
+        self._text_hijos = QtGui.QLineEdit()
+        self._text_hijos.setMaximumWidth(40)
+        self._text_hijos.setText(str(self._num_hijos))
+
+        # Diseño
+        disenyo = QtGui.QHBoxLayout()
+
+        # Widgets
+        disenyo.addWidget(label_hijos)
+        disenyo.addWidget(self._text_hijos)
+        disenyo.setAlignment(QtCore.Qt.AlignLeft)
+
+        # Widget
+        mi_widget = QtGui.QGroupBox()
+        mi_widget.setLayout(disenyo)
+
+        return mi_widget
+
+
+    def dibujar_intarfaz_tercio_inferior(self):                             # Dibujo del tercio inferior de la interfaz
+        # Diseño
+        disenyo = QtGui.QHBoxLayout()
+        disenyo.setMargin(0)
+        disenyo.setSpacing(0)
+
+        # Widgets
+        disenyo.addWidget(self.dibujar_interfaz_tercio_inferior_mitad_izquierda_dominio())
+        disenyo.addWidget(self.dibujar_interfaz_tercio_inferior_mitad_derecha())
+
+        # Widget
+        mi_widget = QtGui.QGroupBox('Resultados')
+        mi_widget.setLayout(disenyo)
+        mi_widget.setStyleSheet('QGroupBox QGroupBox { border: 0px; }')
+
+        return mi_widget
+
+
+    def dibujar_interfaz_tercio_inferior_mitad_derecha(self):               # Dibujo de la mitad derecha del tercio inferior de la interfaz
         # Diseño
         disenyo = QtGui.QVBoxLayout()
         disenyo.setMargin(0)
         disenyo.setSpacing(0)
 
-        disenyo.addWidget(self.dibujar_interfaz_mitad_inferior_mitad_derecha_desarrollo())
-        disenyo.addWidget(self.dibujar_interfaz_mitad_inferior_mitad_derecha_solucion())
+        # Widgets
+        disenyo.addWidget(self.dibujar_interfaz_tercio_inferior_mitad_derecha_desarrollo())
+        disenyo.addWidget(self.dibujar_interfaz_tercio_inferior_mitad_derecha_solucion())
 
         # Widget
-        mitad_inferior_mitad_superior = QtGui.QGroupBox()
-        mitad_inferior_mitad_superior.setLayout(disenyo)
-        mitad_inferior_mitad_superior.setStyleSheet('QGroupBox QGroupBox { border: 0px; }')
+        mi_widget = QtGui.QGroupBox()
+        mi_widget.setLayout(disenyo)
+        mi_widget.setStyleSheet('QGroupBox QGroupBox { border: 0px; }')
 
-        return mitad_inferior_mitad_superior
+        return mi_widget
 
 
-    def dibujar_interfaz_mitad_inferior_mitad_derecha_desarrollo(self): # Dibujo de la parte de desarrollo de la mitad inferior de la interfaz
+    def dibujar_interfaz_tercio_inferior_mitad_derecha_desarrollo(self):    # Dibujo de la parte de desarrollo de la mitad derecha del tercio inferior de la interfaz
         # Etiquetas
         label_desarrollo = QtGui.QLabel('Desarrollo:')
 
@@ -290,40 +459,20 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
         # Diseño
         disenyo = QtGui.QVBoxLayout()
+
+        # Widgets
         disenyo.addWidget(label_desarrollo)
         disenyo.addWidget(self._text_desarrollo)
 
         # Widget
-        desarrollo = QtGui.QGroupBox()
-        desarrollo.setLayout(disenyo)
-        desarrollo.setMinimumWidth(650)
+        mi_widget = QtGui.QGroupBox()
+        mi_widget.setLayout(disenyo)
+        mi_widget.setMinimumWidth(650)
 
-        return desarrollo
-
-
-    def dibujar_interfaz_mitad_inferior_mitad_izquierda_dominio(self):  # Dibujo de la parte de dominio de la mitad inferior de la interfaz
-        # Etiquetas
-        label_dominio = QtGui.QLabel('Dominio:')
-
-        # Controles de edición
-        self._text_dominio = QtGui.QTextEdit()
-        self._text_dominio.setReadOnly(True)
-
-        # Diseño
-        disenyo = QtGui.QVBoxLayout()
-        disenyo.addWidget(label_dominio)
-        disenyo.addWidget(self._text_dominio)
-
-        # Widget
-        dominio = QtGui.QGroupBox()
-        dominio.setLayout(disenyo)
-        dominio.setMaximumWidth(400)
-        dominio.setMinimumWidth(400)
-
-        return dominio
+        return mi_widget
 
 
-    def dibujar_interfaz_mitad_inferior_mitad_derecha_solucion(self):   # Dibujo de la parte de solución de la mitad inferior de la interfaz
+    def dibujar_interfaz_tercio_inferior_mitad_derecha_solucion(self):      # Dibujo de la parte de solución de la mitad derecha del tercio inferior de la interfaz
         texto = 'Solución:'
 
         if sys.version_info[0] < 3:
@@ -338,17 +487,43 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
         # Diseño
         disenyo = QtGui.QVBoxLayout()
+
+        # Widgets
         disenyo.addWidget(label_solucion)
         disenyo.addWidget(self._text_solucion)
 
         # Widget
-        solucion = QtGui.QGroupBox()
-        solucion.setLayout(disenyo)
+        mi_widget = QtGui.QGroupBox()
+        mi_widget.setLayout(disenyo)
 
-        return solucion
+        return mi_widget
 
 
-    def dibujar_intarfaz_mitad_superior(self):                          # Dibujo de la mitad superior de la interfaz
+    def dibujar_interfaz_tercio_inferior_mitad_izquierda_dominio(self):     # Dibujo de la parte de dominio de la mitad izquierda del tercio inferior de la interfaz
+        # Etiquetas
+        label_dominio = QtGui.QLabel('Dominio:')
+
+        # Controles de edición
+        self._text_dominio = QtGui.QTextEdit()
+        self._text_dominio.setReadOnly(True)
+
+        # Diseño
+        disenyo = QtGui.QVBoxLayout()
+
+        # Widgets
+        disenyo.addWidget(label_dominio)
+        disenyo.addWidget(self._text_dominio)
+
+        # Widget
+        mi_widget = QtGui.QGroupBox()
+        mi_widget.setLayout(disenyo)
+        mi_widget.setMaximumWidth(400)
+        mi_widget.setMinimumWidth(400)
+
+        return mi_widget
+
+
+    def dibujar_intarfaz_tercio_superior(self):                             # Dibujo del tercio superior de la interfaz
         # Botones
         self._boton_abrir = QtGui.QPushButton('Abrir')
         self._boton_abrir.clicked.connect(self.abrir)
@@ -364,22 +539,24 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
         # Diseño
         disenyo = QtGui.QHBoxLayout()
+
+        # Widgets
         disenyo.addWidget(label_archivo)
         disenyo.addWidget(self._text_ruta)
         disenyo.addWidget(self._boton_abrir)
 
         # Widget
-        mitad_superior = QtGui.QGroupBox('Carga del archivo')
-        mitad_superior.setLayout(disenyo)
+        mi_widget = QtGui.QGroupBox('Carga del archivo')
+        mi_widget.setLayout(disenyo)
 
-        return mitad_superior
+        return mi_widget
 
 
-    def guardado(self):                                                 # Parte de la vista del procedimiento de guardado
+    def guardado(self):                                                     # Parte de la vista del procedimiento de guardado
             QtGui.QMessageBox.warning(self, 'Error de apertura', 'Error: Archivo <' + self._nombre_archivo + '> inaccesible')
 
 
-    def guardar_como(self, modo):                                       # Parte de la vista de la acción de guardar cómo
+    def guardar_como(self, modo):                                           # Parte de la vista de la acción de guardar cómo
         if modo == 'nombre':
             return str(QtGui.QFileDialog.getSaveFileName(self, 'Guardar archivo', filter = 'Documentos de texto (*.txt);;Todos los archivos (*.*)'))
 
@@ -391,7 +568,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
             return QtGui.QMessageBox.information(self, 'Imposible guardar', texto)
 
 
-    def imprimir(self):                                                 # Acción de imprimir
+    def imprimir(self):                                                     # Acción de imprimir
         impresion = QtGui.QPrintDialog()
 
         if impresion.exec_() == QtGui.QDialog.Accepted:
@@ -402,9 +579,9 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
             pass
 
 
-    def __del__(self):                                                  # Parte de la vista del destructor de la clase
-        # if sys.version_info[0] >= 3:                                  # Llamada al método equivalente de la clase padre
-            # super().__del__()                                         # Comentado porque la clase padre (QtGui.QMainWindow) no parece tener un método destructor
+    def __del__(self):                                                      # Parte de la vista del destructor de la clase
+        # if sys.version_info[0] >= 3:                                      # Llamada al método equivalente de la clase padre
+            # super().__del__()                                             # Comentado porque la clase padre (QtGui.QMainWindow) no parece tener un método destructor
         # else:
             # super(ventana_vista, self).__del__()
 

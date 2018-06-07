@@ -35,8 +35,6 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
         self._modificado = False                                                    # Inicialización de variables de clase
 
-        self._n_hilos = 1000                                                        # Número de hilos a utilizar (soluciones posibles)
-
         self._soluciones = []
 
         self.__num_soluciones = 0                                                   # Usada para la condición de parada
@@ -175,9 +173,9 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
 
     def calculo(self):                                                              # Acción de realizar los cálculos
-        modelo.ventana_modelo.calcular(self, self._n_hilos)                         # Llamada al método equivalente de la clase vista
+        modelo.ventana_modelo.calcular(self)                                        # Llamada al método equivalente de la clase vista
 
-        texto = 'Se han generado ' + str(self._n_hilos) + " soluciones posibles\nDe ellas, se consideran candidatas:\n"
+        texto = 'Se han generado ' + str(self._num_hijos) + " soluciones posibles\nDe ellas, se consideran candidatas:\n"
 
         for i in range(len(self._soluciones_candidatas)):
             str_camino = ''
@@ -308,11 +306,19 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
     def limpiar(self, modo):                                                        # Acción de limpiar
         if modo == 'total':
+            self._num_hijos = 1000
+
+            self._prob_heuristica = 50
+
+            self.setWindowTitle(self._TITULO_APP)
+
+            self._slider_heuristica.setValue(self._prob_heuristica)
+
+            self._slider_hijos.setValue(self._num_hijos)
+
             self._text_ruta.clear()
 
             self._text_dominio.clear()
-
-            self.setWindowTitle(self._TITULO_APP)
 
             try:
                 del self._nombre_archivo
@@ -327,6 +333,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                 pass
 
         self._text_solucion.clear()
+
         self._text_desarrollo.clear()
 
         self.modificado(False)
