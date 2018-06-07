@@ -37,7 +37,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
         self._modificado = False                                 # Inicialización de variables de clase
 
-        self._n_hilos = 5000                                     # Número de hilos a utilizar (soluciones posibles)
+        self._n_hilos = 1000                                     # Número de hilos a utilizar (soluciones posibles)
 
         self._soluciones = []
 
