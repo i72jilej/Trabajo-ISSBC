@@ -155,13 +155,13 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                 if respuesta == vista.respuestas.diccionario[vista.respuestas.DESCARTAR]:
                     self.limpiar('parcial')
 
-                    self.calcular_bucle()
+                    self.calculo()
 
                 elif respuesta == vista.respuestas.diccionario[vista.respuestas.GUARDAR]:
                     if self.guardar():
                         self.limpiar('parcial')
 
-                        self.calcular_bucle()
+                        self.calculo()
 
                     else:
                         pass
@@ -172,38 +172,10 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
             else:
                 self.limpiar('parcial')
 
-                self.calcular_bucle()
+                self.calculo()
 
         finally:
             pass
-
-
-    def calcular_bucle(self):
-        self.calculo()
-
-        while len(self._soluciones) > self.__num_soluciones and len(self._soluciones) <= 10:
-            self.__num_soluciones += 1
-
-            self.calculo()
-
-        tam_soluciones = len(self._soluciones)
-
-        texto = 'Se han podido generar ' + str(tam_soluciones) + " soluciones válidas simultáneas:\n"
-
-        for i in range(tam_soluciones):
-            str_camino = ''
-            tiempo = self._soluciones[i].duracion()
-
-            for nodo in self._soluciones[i].camino():
-                if sys.version_info[0] >= 3:
-                    str_camino += str(nodo.nombre()) + ' - '
-
-                else:
-                    str_camino += nodo.nombre().toPython().encode('utf-8') + ' - '
-
-            texto += SANGRIA + str(i) + ': ' + str_camino[0:-3] + ', con una duración de ' + str(tiempo) + " seg.\n"
-
-        vista.ventana_vista.calcular(self, 'solucion', texto)
 
 
     def calculo(self):                                          # Acción de realizar los cálculos
