@@ -60,11 +60,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
 
     def apertura(self):                                                             # Procedimiento de apertura
-        if sys.version_info[0] >= 3:                                                # Llamada al método equivalente de la clase padre
-            nombre_archivo = super().apertura('abrir')
-
-        else:
-            nombre_archivo = super(ventana_principal, self).apertura('abrir')
+        nombre_archivo = vista.ventana_vista.apertura(self, 'abrir')                # Llamada al método equivalente de la clase vista
 
         if nombre_archivo != '':                                                    # Comprobando si se ha elegido algún archivo
             try:                                                                    # Si se ha elegido un archivo
@@ -197,7 +193,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
         del self._soluciones_candidatas
 
-        texto+='El resto se han descartado por ser inválidas\n'
+        texto += "El resto se han descartado por no ser válidas\n"
 
         texto_solucion = ''
 
