@@ -429,12 +429,13 @@ class ventana_modelo():                                                         
             if DEBUG:
                 print(fila.nombre, 'es una máquina con duración', fila.duracion)
 
-            #                                                                                                                           # Almacenando la máquina como un Element
             if sys.version_info[0] >= 3:
-                elemento = Element(len(elementos), str(fila.nombre), int(fila.duracion))
+                texto = str(fila.nombre)
 
             else:
-                elemento = Element(len(elementos), fila.nombre.toPython().encode('utf-8'), int(fila.duracion))
+                texto = fila.nombre.toPython().encode('utf-8')
+
+            elemento = Element(len(elementos), texto, int(fila.duracion))                                                               # Almacenando la máquina como un Element
 
             #                                                                                                                           # Buscando padres de la máquina...
             query = '''
@@ -455,13 +456,13 @@ class ventana_modelo():                                                         
                 if DEBUG:
                     print("\tPadre:", subfila.nombre_padre)
 
-                #                                                                                                                       # Almancenando el nombre del padre de la máquina en el Element
                 if sys.version_info[0] >= 3:
-                    elemento.padres(str(subfila.nombre_padre))
+                    texto = str(subfila.nombre_padre)
 
                 else:
-                    elemento.padres(subfila.nombre_padre.toPython().encode('utf-8'))
+                    texto = subfila.nombre_padre.toPython().encode('utf-8')
 
+                elemento.padres(texto)                                                                                                  # Almancenando el nombre del padre de la máquina en el Element
             #                                                                                                                           # Buscando las conexiones de la máquina
             query = '''
                         PREFIX    maquina:  <http://www.factory.fake/maquina/>
@@ -484,12 +485,13 @@ class ventana_modelo():                                                         
                 if DEBUG:
                     print("\tConexión: ", subfila.nombre_siguiente, ', ', subfila.duracion, sep = '')
 
-                #                                                                                                                       # Almacenando las conexiones en el Element
                 if sys.version_info[0] >= 3:
-                    elemento.conexiones((str(subfila.nombre_siguiente), int(subfila.duracion)))
+                    texto = str(subfila.nombre_siguiente)
 
                 else:
-                    elemento.conexiones((subfila.nombre_siguiente.toPython().encode('utf-8'), int(subfila.duracion)))
+                    texto = subfila.nombre_siguiente.toPython().encode('utf-8')
+
+                elemento.conexiones((texto, int(subfila.duracion)))                                                                     # Almacenando las conexiones en el Element
 
             elementos.append(elemento)                                                                                                  # Almacenando el Element elemento en la lista elementos -> Lista manejada
 
