@@ -82,27 +82,31 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                     for i in range(len(self._datos)):                               # Construyendo la descripción del dominio
                         texto = ' es una máquina con duración '
 
-                        if sys.version_info[0] < 3:
-                            texto = texto.decode('utf-8')
+                    for padre in self._datos[i].padres():
+                        if sys.version_info[0] >= 3:
+                            texto_archivo += SANGRIA + 'Requiere haber pasado por ' + padre.nombre() + '\n'
 
-                        texto_archivo += self._datos[i].nombre() + texto + str(self._datos[i].duracion()) + "\n"
+                        else:
+                            texto_archivo += SANGRIA + 'Requiere haber pasado por '
+                            texto_archivo += padre.nombre()
+                            texto_archivo += '\n'
 
-                        for padre in self._datos[i].padres():
-                            texto = SANGRIA + 'Requiere haber pasado por '
+                    for conexion in self._datos[i].conexiones():
+                        texto_archivo += SANGRIA + 'Puede enviar a ' + conexion['objeto'].nombre() + ' con una duración de ' + str(conexion['duracion']) + "\n"
 
-                            if sys.version_info[0] < 3:
-                                texto = texto.decode('utf-8')
+                    texto_archivo += "\n"
 
-                            texto_archivo += texto + padre.nombre() + '\n'
+                if sys.version_info[0] >= 3:                # Llamada al método equivalente de la clase padre
+                    super().apertura('dominio', texto_archivo, nombre_archivo)
 
-                        for conexion in self._datos[i].conexiones():
-                            texto = [SANGRIA + 'Puede enviar a ', ' con una duración de ']
+                else:
+                    super(ventana_principal, self).apertura('dominio', texto_archivo.decode('utf-8'), nombre_archivo)
 
-                            if sys.version_info[0] < 3:
-                                texto[0] = texto[0].decode('utf-8')
-                                texto[1] = texto[1].decode('utf-8')
+                res = True
 
-                            texto_archivo += texto[0] + conexion['objeto'].nombre() + texto[1] + str(conexion['duracion']) + '\n'
+            else:
+                if sys.version_info[0] >= 3:                # Llamada al método equivalente de la clase padre
+                    nombre_archivo = super().apertura('error')
 
                         texto_archivo += '\n'
 
@@ -118,21 +122,19 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                     if sys.version_info[0] >= 3:                                    # Llamada al método equivalente de la clase padre
                         nombre_archivo = super().apertura('error')
 
-                    else:
-                        nombre_archivo = super(ventana_principal, self).apertura('error')
+                self.limpiar()
 
-                    self.limpiar()
+                return False
 
-                    return False
+            # finally:
+            try:
+                archivo.close()
 
-            finally:
-                try:
-                    archivo.close()
+            except UnboundLocalError:
+                pass
 
-                except UnboundLocalError:
-                    pass
+            return res
 
-                return res
 
 
     def calcular(self):                                                             # Realiza los cálculos necesarios

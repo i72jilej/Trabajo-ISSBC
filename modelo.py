@@ -256,11 +256,7 @@ class ventana_modelo():                                                         
 
         if DEBUG == True:
             for una_solucion in self._soluciones_posibles:                                                                              # Recorriendo la lista con las soluciones dadas por los hijos
-                if sys.version_info[0] >= 3:
-                    print('Padre #', os.getpid(), "\tSolución posible: ", [str(nodo.nombre()) for nodo in una_solucion.camino()], sep = '')
-
-                else:
-                    print('Padre #', os.getpid(), "\tSolución posible: ", [nodo.nombre().toPython() for nodo in una_solucion.camino()], sep = '')
+                print('Padre #', os.getpid(), "\tSolución posible: ", [nodo.nombre() for nodo in una_solucion.camino()], sep = '')
 
             print()
             print()
@@ -433,12 +429,12 @@ class ventana_modelo():                                                         
             if DEBUG:
                 print(fila.nombre, 'es una máquina con duración', fila.duracion)
 
-                                                                # Almacenando la máquina como un Element
+            #                                                                                                                           # Almacenando la máquina como un Element
             if sys.version_info[0] >= 3:
                 elemento = Element(len(elementos), str(fila.nombre), int(fila.duracion))
 
             else:
-                elemento = Element(len(elementos), fila.nombre, int(fila.duracion))
+                elemento = Element(len(elementos), fila.nombre.toPython().encode('utf-8'), int(fila.duracion))
 
             #                                                                                                                           # Buscando padres de la máquina...
             query = '''
@@ -464,7 +460,7 @@ class ventana_modelo():                                                         
                     elemento.padres(str(subfila.nombre_padre))
 
                 else:
-                    elemento.padres(subfila.nombre_padre)
+                    elemento.padres(subfila.nombre_padre.toPython().encode('utf-8'))
 
             #                                                                                                                           # Buscando las conexiones de la máquina
             query = '''
@@ -493,7 +489,7 @@ class ventana_modelo():                                                         
                     elemento.conexiones((str(subfila.nombre_siguiente), int(subfila.duracion)))
 
                 else:
-                    elemento.conexiones((subfila.nombre_siguiente, int(subfila.duracion)))
+                    elemento.conexiones((subfila.nombre_siguiente.toPython().encode('utf-8'), int(subfila.duracion)))
 
             elementos.append(elemento)                                                                                                  # Almacenando el Element elemento en la lista elementos -> Lista manejada
 
