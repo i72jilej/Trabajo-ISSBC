@@ -15,7 +15,7 @@
 from __future__ import print_function
 
 
-DEBUG       = True
+DEBUG       = False
 DEBUG_HIJOS = False
 
 ESPERA = 1                                                                                                                              # Tiempo de espera para que el padre compruebe la finalización de sus hijos
