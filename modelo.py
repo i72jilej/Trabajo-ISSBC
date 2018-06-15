@@ -7,7 +7,7 @@
 # Author        : Julio Domingo Jiménez Ledesma
 # Author        : Rafael Carlos Méndez Rodríguez
 # Date          : 15-06-2018
-# Version       : 1.0.1
+# Version       : 1.1.0
 # Usage         : import modelo o from modelo import ...
 # Notes         : 
 
