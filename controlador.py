@@ -92,43 +92,43 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
                 texto_archivo = ''                          # Necesario para reutilizar la dichosa variable
 
-                    for i in range(len(self._datos)):           # Construyendo la descripción del dominio
+                for i in range(len(self._datos)):           # Construyendo la descripción del dominio
+                    if sys.version_info[0] >= 3:
+                        texto_archivo += self._datos[i].nombre() + textos[0] + str(self._datos[i].duracion()) + "\n"
+
+                    else:
+                        texto_archivo += self._datos[i].nombre()
+                        texto_archivo += textos[0]
+                        texto_archivo += str(self._datos[i].duracion())
+                        texto_archivo += "\n"
+
+                    for padre in self._datos[i].padres():
                         if sys.version_info[0] >= 3:
-                            texto_archivo += self._datos[i].nombre() + textos[0] + str(self._datos[i].duracion()) + "\n"
+                            texto_archivo += SANGRIA + 'Requiere haber pasado por ' + padre.nombre() + '\n'
 
                         else:
-                            texto_archivo += self._datos[i].nombre()
-                            texto_archivo += textos[0]
-                            texto_archivo += str(self._datos[i].duracion())
-                            texto_archivo += "\n"
+                            texto_archivo += SANGRIA + 'Requiere haber pasado por '
+                            texto_archivo += padre.nombre()
+                            texto_archivo += '\n'
 
-                        for padre in self._datos[i].padres():
-                            if sys.version_info[0] >= 3:
-                                texto_archivo += SANGRIA + 'Requiere haber pasado por ' + padre.nombre() + '\n'
+                    for conexion in self._datos[i].conexiones():
+                        if sys.version_info[0] >= 3:
+                            texto_archivo += SANGRIA + 'Puede enviar a ' + conexion['objeto'].nombre() + texto[3] + str(conexion['duracion']) + '\n'
 
-                            else:
-                                texto_archivo += SANGRIA + 'Requiere haber pasado por '
-                                texto_archivo += padre.nombre()
-                                texto_archivo += '\n'
+                        else:
+                            texto_archivo += SANGRIA + 'Puede enviar a '
+                            texto_archivo += conexion['objeto'].nombre()
+                            texto_archivo += textos[1]
+                            texto_archivo += str(conexion['duracion'])
+                            texto_archivo += '\n'
 
-                        for conexion in self._datos[i].conexiones():
-                            if sys.version_info[0] >= 3:
-                                texto_archivo += SANGRIA + 'Puede enviar a ' + conexion['objeto'].nombre() + texto[3] + str(conexion['duracion']) + '\n'
-
-                            else:
-                                texto_archivo += SANGRIA + 'Puede enviar a '
-                                texto_archivo += conexion['objeto'].nombre()
-                                texto_archivo += textos[1]
-                                texto_archivo += str(conexion['duracion'])
-                                texto_archivo += '\n'
-
-                        texto_archivo += '\n'
+                    texto_archivo += '\n'
 
                 if sys.version_info[0] >= 3:                # Llamada al método equivalente de la clase padre
                     super().apertura('dominio', texto_archivo, nombre_archivo)
 
-                    else:
-                        super(ventana_principal, self).apertura('dominio', texto_archivo.decode('utf-8'), nombre_archivo)
+                else:
+                    super(ventana_principal, self).apertura('dominio', texto_archivo.decode('utf-8'), nombre_archivo)
 
                 res = True
 
