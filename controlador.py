@@ -6,8 +6,8 @@
 # Description   : Controlador del programa
 # Author        : Julio Domingo Jiménez Ledesma
 # Author        : Rafael Carlos Méndez Rodríguez
-# Date          : 30-05-2018
-# Version       : 1.0.0
+# Date          : 15-06-2018
+# Version       : 1.0.1
 # Usage         : import controlador o from controlador import ...
 # Notes         : 
 

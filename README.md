@@ -18,8 +18,10 @@ El campo a cubrir es la planificación. La tarea a realizar es de planificación
 
 
 ## Historial de versiones
-- 1.0.0:
+- 1.0.0 -> 30/05/2018:
     - Implementación inicial de los sistemas y, en consecuencia, de la aplicación.
+- 1.0.1 -> 15/06/2018:
+    - Mejoras en el tratamiento de las cadenas en Python 2.
 
 
 ## Agradecimientos, fuentes consultadas y otros créditos
@@ -29,10 +31,10 @@ El campo a cubrir es la planificación. La tarea a realizar es de planificación
 * A la [documentación oficial de RDFLib](https://rdflib.readthedocs.io/en/stable/), porque ha facilitado enormemente su aplicación.
 * A *Matthew Lincoln*, por su ["Using SPARQL to access Linked Open Data"](https://programminghistorian.org/es/lecciones/sparql-datos-abiertos-enlazados), porque ha sido muy útil para optimizar las consultas SPARQL.
 * A *Oscar Campos*, por [la entrada sobre hilos en la web *www.genbetadev.com*](https://www.genbetadev.com/python/multiprocesamiento-en-python-threads-a-fondo-introduccion), la cual ha permitido llevar a cabo el procesamiento paralelo.
-* A *Pherkad*, por [la sección de "Control del acceso a los recursos. Bloqueos" en la web *python-para-impacientes.blogspot.com.es*](
 
 
 ## Por hacer (*TODO*)
-- [ ] Optimizar la compatibilidad con Python 2.
+- [x] Optimizar la compatibilidad con Python 2.
 - [ ] Añadir el procedimiento para generar múltiples soluciones.
 - [ ] Rehacer el comportamiento de los controles gráficos de control para que se puedan introducir datos también por texto.
+- [ ] Portar la interfaz gráfica a PyQt5.
