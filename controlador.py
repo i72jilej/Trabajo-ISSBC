@@ -7,7 +7,7 @@
 # Author        : Julio Domingo Jiménez Ledesma
 # Author        : Rafael Carlos Méndez Rodríguez
 # Date          : 15-06-2018
-# Version       : 1.0.1
+# Version       : 1.1.0
 # Usage         : import controlador o from controlador import ...
 # Notes         : 
 
@@ -15,7 +15,7 @@
 from __future__ import unicode_literals
 
 
-DEBUG = True
+DEBUG   = False
 SANGRIA = '        '
 
 
@@ -36,7 +36,9 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
         else:
             super(ventana_principal, self).__init__()
 
-        self._modificado = False                                                    # Inicialización de variables de clase
+        self._cronograma = None                                                     # Inicialización de variables de clase
+
+        self._modificado = False
 
         self._soluciones = []
 
@@ -137,13 +139,13 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                 if respuesta == vista.respuestas.diccionario[vista.respuestas.DESCARTAR]:
                     self.limpiar('parcial')
 
-                    self.calculo()
+                    self.calcular_bucle()
 
                 elif respuesta == vista.respuestas.diccionario[vista.respuestas.GUARDAR]:
                     if self.guardar():
                         self.limpiar('parcial')
 
-                        self.calculo()
+                        self.calcular_bucle()
 
                     else:
                         pass
@@ -154,10 +156,38 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
             else:
                 self.limpiar('parcial')
 
-                self.calculo()
+                self.calcular_bucle()
 
         finally:
             pass
+
+
+    def calcular_bucle(self):
+        self.calculo()
+
+        while len(self._soluciones) > self.__num_soluciones and len(self._soluciones) <= 10:
+            self.__num_soluciones += 1
+
+            self.calculo()
+
+        tam_soluciones = len(self._soluciones)
+
+        texto = 'Se han podido generar ' + str(tam_soluciones) + " soluciones válidas simultáneas:\n"
+
+        for i in range(tam_soluciones):
+            str_camino = ''
+            tiempo = self._soluciones[i].duracion()
+
+            for nodo in self._soluciones[i].camino():
+                if sys.version_info[0] >= 3:
+                    str_camino += str(nodo.nombre()) + ' - '
+
+                else:
+                    str_camino += nodo.nombre().toPython().encode('utf-8') + ' - '
+
+            texto += SANGRIA + str(i) + ': ' + str_camino[0:-3] + ', con una duración de ' + str(tiempo) + " seg.\n"
+
+        vista.ventana_vista.calcular(self, 'solucion', texto)
 
 
     def calculo(self):                                                              # Acción de realizar los cálculos
@@ -236,7 +266,6 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                 super(ventana_principal, self).guardado()
 
             res = False
-
 
         else:
             archivo.write(self._text_solucion.toPlainText())
@@ -336,6 +365,8 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
         except AttributeError:
             pass
+
+        self._cronograma = None
 
         self._soluciones = []
 

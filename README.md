@@ -22,6 +22,8 @@ El campo a cubrir es la planificación. La tarea a realizar es de planificación
     - Implementación inicial de los sistemas y, en consecuencia, de la aplicación.
 - 1.0.1 -> 15/06/2018:
     - Mejoras en el tratamiento de las cadenas en Python 2.
+- 1.1.0 -> 15/06/2018:
+    - Implementado finalmente el procedimiento para generar múltiples soluciones.
 
 
 ## Agradecimientos, fuentes consultadas y otros créditos
@@ -35,6 +37,6 @@ El campo a cubrir es la planificación. La tarea a realizar es de planificación
 
 ## Por hacer (*TODO*)
 - [x] Optimizar la compatibilidad con Python 2.
-- [ ] Añadir el procedimiento para generar múltiples soluciones.
+- [x] Añadir el procedimiento para generar múltiples soluciones.
 - [ ] Rehacer el comportamiento de los controles gráficos de control para que se puedan introducir datos también por texto.
 - [ ] Portar la interfaz gráfica a PyQt5.
