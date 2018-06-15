@@ -23,9 +23,7 @@ ESPERA = 1                                                                      
 
 import os                                                                                                                               # Funcionalidades varias del sistema operativo
 import random                                                                                                                           # Generación de números aleatorios
-
-if DEBUG:
-    import sys                                                                                                                          # Funcionalidades varias del sistema
+import sys                                                                                                                              # Funcionalidades varias del sistema
 
 from bisect import insort                                                                                                               # Insercción ordenada
 from threading import Thread                                                                                                            # Capacidades multihilo
