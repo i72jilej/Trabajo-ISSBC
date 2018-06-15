@@ -265,7 +265,7 @@ class ventana_modelo():                                                         
             print()
             print()
 
-        self._soluciones_candidatas = self.validar(self._soluciones_posibles)
+        self._soluciones_candidatas = self.validar(self._soluciones_posibles, self._cronograma)
 
         del self._soluciones_posibles
 
@@ -611,10 +611,24 @@ class ventana_modelo():                                                         
         tiempos = cronograma[maquina.id_elemento()]
 
         for i in range(len(tiempos)):
-            if tiempos[i] == tiempo or tiempos[i] + maquina.duracion() > tiempo or tiempos[i + 1] < tiempo + maquina.duracion():
+            if tiempos[i] <= tiempo and tiempos[i] + maquina.duracion() > tiempo:
                 res = False
 
                 break
+
+            else:
+                try:
+                    tiempos[i + 1]
+
+                except IndexError:
+                    res = True
+
+                else:
+                    res = tiempos[i + 1] > tiempo or tiempos[i + 1] + maquina.duracion() <= tiempo
+
+                finally:
+                    if res == False:
+                        break
 
         return res
 

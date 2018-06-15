@@ -139,13 +139,13 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                 if respuesta == vista.respuestas.diccionario[vista.respuestas.DESCARTAR]:
                     self.limpiar('parcial')
 
-                    self.calculo()
+                    self.calcular_bucle()
 
                 elif respuesta == vista.respuestas.diccionario[vista.respuestas.GUARDAR]:
                     if self.guardar():
                         self.limpiar('parcial')
 
-                        self.calculo()
+                        self.calcular_bucle()
 
                     else:
                         pass
@@ -156,7 +156,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
             else:
                 self.limpiar('parcial')
 
-                self.calculo()
+                self.calcular_bucle()
 
         finally:
             pass
@@ -366,6 +366,8 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
         except AttributeError:
             pass
+
+        self._cronograma = None
 
         self._soluciones = []
 
