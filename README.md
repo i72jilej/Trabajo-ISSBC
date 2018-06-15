@@ -3,6 +3,7 @@ Trabajo práctico de la asignatura Ingeniería de Sistemas Software Basados en C
 
 El campo a cubrir es la planificación. La tarea a realizar es de planificación, la cual consistirá en, dada la información de una hipotética frábica: sus máquinas y sus conexiones entre las mismas, se encargará de obtener la manera más óptima de utilizarlas.
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b646ed416c2449b59f1fa0047c3fd8a8)](https://www.codacy.com/app/veltys/Trabajo-ISSBC?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Veltys/Trabajo-ISSBC&amp;utm_campaign=Badge_Grade)
 
 ## Realizado por
 - Rafael Carlos Méndez Rodríguez (i82meror@uco.es / veltys@veltys.es)
@@ -14,7 +15,7 @@ El campo a cubrir es la planificación. La tarea a realizar es de planificación
 - **modelo.py**: Modelo de la aplicación. Se encarga de todas las funciones relacionadas con el procesamiento y obtención de datos a través de RDFLib
 - **vista.py**: Vista de la aplicación. Se encarga de toda la parte gráfica: ventana principal, cuadros de diálogo, ventanas modales, ventanas de aviso, etc.
 - **controlador.py**: Controlador de la aplicación. Se encarga de llevar a cabo la conexión del resto de sistemas. 
-- **maquinas*.nt**: Ejemplos de archivos de datos en formato NTriples que la aplicación necesita para llevar a cabo su función.
+- **maquinas\*.nt**: Ejemplos de archivos de datos en formato NTriples que la aplicación necesita para llevar a cabo su función.
 
 
 ## Historial de versiones
@@ -24,6 +25,8 @@ El campo a cubrir es la planificación. La tarea a realizar es de planificación
     - Mejoras en el tratamiento de las cadenas en Python 2.
 - 1.1.0 -> 15/06/2018:
     - Implementado finalmente el procedimiento para generar múltiples soluciones.
+- 1.1.1 -> 17/06/2018:
+    - Mejora de la calidad del código.
 
 
 ## Agradecimientos, fuentes consultadas y otros créditos

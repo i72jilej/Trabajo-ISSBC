@@ -9,7 +9,7 @@
 # Date          : 15-06-2018
 # Version       : 1.1.0
 # Usage         : import controlador o from controlador import ...
-# Notes         : 
+# Notes         : ...
 
 
 from __future__ import unicode_literals
@@ -107,7 +107,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                     if sys.version_info[0] >= 3:                                    # Llamada al método equivalente de la clase padre
                         nombre_archivo = super().apertura('error')
 
-                    self.limpiar()
+                    self.limpiar('total')
 
                     res = False
 
@@ -122,7 +122,9 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                     pass
 
                 finally:
-                    return res
+                    pass
+
+        return res
 
 
     def calcular(self):                                                             # Realiza los cálculos necesarios
@@ -277,7 +279,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
         finally:
             archivo.close()
 
-            return res
+        return res
 
 
     def guardar(self):                                                              # Acción de guardar
@@ -297,16 +299,18 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                 res = self.guardado()
 
         finally:
-            return res
+            pass
+
+        return res
 
 
     def guardar_como(self):                                                         # Acción de guardar cómo
         if self._soluciones != []:
             self._nombre_archivo = vista.ventana_vista.guardar_como(self, 'nombre') # Llamada al método equivalente de la clase vista
-    
+
             if self._nombre_archivo != '':
                 return self.guardado()
-    
+
             else:
                 return False
 

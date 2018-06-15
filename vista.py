@@ -7,9 +7,9 @@
 # Author        : Julio Domingo Jiménez Ledesma
 # Author        : Rafael Carlos Méndez Rodríguez
 # Date          : 15-06-2018
-# Version       : 1.0.1
+# Version       : 1.0.2
 # Usage         : import vista o from vista import ...
-# Notes         : 
+# Notes         : ...
 
 
 from __future__ import unicode_literals
@@ -84,7 +84,8 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 ''')
 
 
-    def acercaDeQt(self):                                                   # Ventana modal que muestra la información de "Acerca de Qt"
+    @staticmethod                                                           # Método estático
+    def acercaDeQt():                                                       # Ventana modal que muestra la información de "Acerca de Qt"
         QtGui.qApp.aboutQt()
 
 
@@ -139,11 +140,11 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
     def calcular(self, modo, *args):                                        # Parte de la vista de la realización de los cálculos necesarios
         if modo == 'error':
             QtGui.QMessageBox.warning(self, 'Imposible calcular', 'Aviso: No es posible calcular ya que aún no se ha cargado ningún archivo')
-        
+
         elif modo == 'desarrollo':
             self._text_desarrollo.setText(self._text_desarrollo.toPlainText() + args[0] + "\n")
-        elif modo == 'solucion':
 
+        elif modo == 'solucion':
             self._text_solucion.setText(self._text_solucion.toPlainText() + args[0] + "\n")
 
 
@@ -171,7 +172,8 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
             return QtGui.QMessageBox.Discard
 
 
-    def confirmar_valores(self):                                            # Confirmación de valores extermos
+    @staticmethod                                                           # Método estático
+    def confirmar_valores():                                                # Confirmación de valores extermos
         mensaje = QtGui.QMessageBox()
         mensaje.setIcon(QtGui.QMessageBox.Question)
         mensaje.setWindowTitle('Aviso')

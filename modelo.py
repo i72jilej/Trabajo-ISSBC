@@ -7,9 +7,9 @@
 # Author        : Julio Domingo Jiménez Ledesma
 # Author        : Rafael Carlos Méndez Rodríguez
 # Date          : 15-06-2018
-# Version       : 1.1.0
+# Version       : 1.1.1
 # Usage         : import modelo o from modelo import ...
-# Notes         : 
+# Notes         : ...
 
 
 from __future__ import print_function
@@ -30,6 +30,7 @@ from threading import Thread                                                    
 from time import sleep                                                                                                                  # Pausas
 
 from rdflib import Graph                                                                                                                # Grafos
+from rdflib.plugins.parsers.notation3 import BadSyntax                                                                                  # Manejador de excepciones propio
 
 
 class Element():                                                                                                                        # Representacion de un nodo en el grafo
@@ -122,7 +123,9 @@ class solucion():                                                               
             res = False                                                                                                                 #     Se prepara el "informe"
 
         finally:
-            return res                                                                                                                  # Se devuelve el informe del éxito (o no) del añadido
+            pass
+
+        return res                                                                                                                  # Se devuelve el informe del éxito (o no) del añadido
 
 
     def camino(self):                                                                                                                   # Observador de la variable
@@ -154,12 +157,13 @@ class solucion():                                                               
                         res = False
 
                     else:
-                        # res = True
-                        res = res and True
+                        res = True
 
                     finally:
-                        if res == False:
-                            break
+                        pass
+
+                    if res == False:
+                        break
 
             else:
                 pass
@@ -353,9 +357,9 @@ class ventana_modelo():                                                         
         res = []
 
         for conexion in conexiones:
-            for id_elemento in range(len(elementos)):
-                if elementos[id_elemento].nombre() == conexion[0]:
-                    objeto_conexion = {'objeto': elementos[id_elemento], 'duracion': conexion[1]}
+            for elemento in elementos:
+                if elemento.nombre() == conexion[0]:
+                    objeto_conexion = {'objeto': elemento, 'duracion': conexion[1]}
 
                     break
 
@@ -369,9 +373,9 @@ class ventana_modelo():                                                         
         res = []
 
         for padre in padres:
-            for id_elemento in range(len(elementos)):
-                if elementos[id_elemento].nombre() == padre:
-                    objeto_padre = elementos[id_elemento]
+            for elemento in elementos:
+                if elemento.nombre() == padre:
+                    objeto_padre = elemento
 
                     break
 
@@ -539,14 +543,16 @@ class ventana_modelo():                                                         
         try:
             grafo.parse(data = texto, format = 'n3')
 
-        except:
+        except BadSyntax:
             res = None
 
         else:
             res = grafo
 
         finally:
-            return res
+            pass
+
+        return res
 
 
     @staticmethod                                                                                                                       # Método estático
@@ -605,13 +611,13 @@ class ventana_modelo():                                                         
 
 
     @staticmethod                                                                                                                       # Método estáticovalidar
-    def validar_tiempo(cronograma, maquina, tiempo):
+    def validar_tiempo(cronograma, maquina, tiempo_inserccion):
         res = True
 
         tiempos = cronograma[maquina.id_elemento()]
 
-        for i in range(len(tiempos)):
-            if tiempos[i] <= tiempo and tiempos[i] + maquina.duracion() > tiempo:
+        for i, tiempo in enumerate(tiempos):
+            if tiempo <= tiempo_inserccion and tiempo + maquina.duracion() > tiempo_inserccion:
                 res = False
 
                 break
@@ -624,7 +630,7 @@ class ventana_modelo():                                                         
                     res = True
 
                 else:
-                    res = tiempos[i + 1] > tiempo or tiempos[i + 1] + maquina.duracion() <= tiempo
+                    res = tiempos[i + 1] > tiempo_inserccion or tiempos[i + 1] + maquina.duracion() <= tiempo_inserccion
 
                 finally:
                     if res == False:
