@@ -105,21 +105,19 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                     if sys.version_info[0] >= 3:                                    # Llamada al método equivalente de la clase padre
                         nombre_archivo = super().apertura('error')
 
-                    else:
-                        nombre_archivo = super(ventana_principal, self).apertura('error')
+                self.limpiar()
 
-                    self.limpiar()
+                return False
 
-                    return False
+            # finally:
+            try:
+                archivo.close()
 
-            finally:
-                try:
-                    archivo.close()
+            except UnboundLocalError:
+                pass
 
-                except UnboundLocalError:
-                    pass
+            return res
 
-                return res
 
 
     def calcular(self):                                                             # Realiza los cálculos necesarios

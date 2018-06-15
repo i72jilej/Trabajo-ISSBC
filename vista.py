@@ -142,8 +142,8 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         
         elif modo == 'desarrollo':
             self._text_desarrollo.setText(self._text_desarrollo.toPlainText() + args[0] + "\n")
-
         elif modo == 'solucion':
+
             self._text_solucion.setText(self._text_solucion.toPlainText() + args[0] + "\n")
 
 
