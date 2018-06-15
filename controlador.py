@@ -6,10 +6,13 @@
 # Description   : Controlador del programa
 # Author        : Julio Domingo Jiménez Ledesma
 # Author        : Rafael Carlos Méndez Rodríguez
-# Date          : 30-05-2018
-# Version       : 1.0.0
+# Date          : 15-06-2018
+# Version       : 1.0.1
 # Usage         : import controlador o from controlador import ...
 # Notes         : 
+
+
+from __future__ import unicode_literals
 
 
 DEBUG = True
@@ -80,31 +83,15 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                     texto_archivo = ''                                              # Necesario para reutilizar la dichosa variable
 
                     for i in range(len(self._datos)):                               # Construyendo la descripción del dominio
-                        texto = ' es una máquina con duración '
-
-                        if sys.version_info[0] < 3:
-                            texto = texto.decode('utf-8')
-
-                        texto_archivo += self._datos[i].nombre() + texto + str(self._datos[i].duracion()) + "\n"
+                        texto_archivo += self._datos[i].nombre() + ' es una máquina con duración ' + str(self._datos[i].duracion()) + "\n"
 
                         for padre in self._datos[i].padres():
-                            texto = SANGRIA + 'Requiere haber pasado por '
-
-                            if sys.version_info[0] < 3:
-                                texto = texto.decode('utf-8')
-
-                            texto_archivo += texto + padre.nombre() + '\n'
+                            texto_archivo += SANGRIA + 'Requiere haber pasado por ' + padre.nombre() + '\n'
 
                         for conexion in self._datos[i].conexiones():
-                            texto = [SANGRIA + 'Puede enviar a ', ' con una duración de ']
+                            texto_archivo += SANGRIA + 'Puede enviar a ' + conexion['objeto'].nombre() + ' con una duración de ' + str(conexion['duracion']) + "\n"
 
-                            if sys.version_info[0] < 3:
-                                texto[0] = texto[0].decode('utf-8')
-                                texto[1] = texto[1].decode('utf-8')
-
-                            texto_archivo += texto[0] + conexion['objeto'].nombre() + texto[1] + str(conexion['duracion']) + '\n'
-
-                        texto_archivo += '\n'
+                        texto_archivo += "\n"
 
                     if sys.version_info[0] >= 3:                                    # Llamada al método equivalente de la clase padre
                         super().apertura('dominio', texto_archivo, nombre_archivo)
@@ -118,12 +105,9 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                     if sys.version_info[0] >= 3:                                    # Llamada al método equivalente de la clase padre
                         nombre_archivo = super().apertura('error')
 
-                    else:
-                        nombre_archivo = super(ventana_principal, self).apertura('error')
-
                     self.limpiar()
 
-                    return False
+                    res = False
 
             finally:
                 try:
@@ -132,7 +116,11 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                 except UnboundLocalError:
                     pass
 
-                return res
+                else:
+                    pass
+
+                finally:
+                    return res
 
 
     def calcular(self):                                                             # Realiza los cálculos necesarios
@@ -251,12 +239,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
 
         else:
-            texto = self._text_solucion.toPlainText()
-
-            if sys.version_info[0] < 3:
-                texto = str(texto.toUtf8()).decode("utf-8")
-
-            archivo.write(texto)
+            archivo.write(self._text_solucion.toPlainText())
 
             self.modificado(False)
 
@@ -312,7 +295,6 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
             vista.ventana_vista.imprimir(self, 'error')                             # Llamada al método equivalente de la clase vista
 
             return False
-
 
 
     def limpiar(self, modo):                                                        # Acción de limpiar

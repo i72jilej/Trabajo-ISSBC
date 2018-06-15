@@ -18,8 +18,10 @@ El campo a cubrir es la planificación. La tarea a realizar es de planificación
 
 
 ## Historial de versiones
-- 1.0.0:
+- 1.0.0 -> 30/05/2018:
     - Implementación inicial de los sistemas y, en consecuencia, de la aplicación.
+- 1.0.1 -> 15/06/2018:
+    - Mejoras en el tratamiento de las cadenas en Python 2.
 
 
 ## Agradecimientos, fuentes consultadas y otros créditos
@@ -32,6 +34,7 @@ El campo a cubrir es la planificación. La tarea a realizar es de planificación
 
 
 ## Por hacer (*TODO*)
-- [ ] Optimizar la compatibilidad con Python 2.
+- [x] Optimizar la compatibilidad con Python 2.
 - [ ] Añadir el procedimiento para generar múltiples soluciones.
 - [ ] Rehacer el comportamiento de los controles gráficos de control para que se puedan introducir datos también por texto.
+- [ ] Portar la interfaz gráfica a PyQt5.

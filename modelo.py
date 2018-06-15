@@ -6,8 +6,8 @@
 # Description   : Modelo del programa
 # Author        : Julio Domingo Jiménez Ledesma
 # Author        : Rafael Carlos Méndez Rodríguez
-# Date          : 30-05-2018
-# Version       : 1.0.0
+# Date          : 15-06-2018
+# Version       : 1.0.1
 # Usage         : import modelo o from modelo import ...
 # Notes         : 
 
@@ -256,11 +256,7 @@ class ventana_modelo():                                                         
 
         if DEBUG == True:
             for una_solucion in self._soluciones_posibles:                                                                              # Recorriendo la lista con las soluciones dadas por los hijos
-                if sys.version_info[0] >= 3:
-                    print('Padre #', os.getpid(), "\tSolución posible: ", [str(nodo.nombre()) for nodo in una_solucion.camino()], sep = '')
-
-                else:
-                    print('Padre #', os.getpid(), "\tSolución posible: ", [nodo.nombre().toPython() for nodo in una_solucion.camino()], sep = '')
+                print('Padre #', os.getpid(), "\tSolución posible: ", [nodo.nombre() for nodo in una_solucion.camino()], sep = '')
 
             print()
             print()
@@ -433,12 +429,13 @@ class ventana_modelo():                                                         
             if DEBUG:
                 print(fila.nombre, 'es una máquina con duración', fila.duracion)
 
-                                                                # Almacenando la máquina como un Element
             if sys.version_info[0] >= 3:
-                elemento = Element(len(elementos), str(fila.nombre), int(fila.duracion))
+                texto = str(fila.nombre)
 
             else:
-                elemento = Element(len(elementos), fila.nombre, int(fila.duracion))
+                texto = fila.nombre.toPython().encode('utf-8')
+
+            elemento = Element(len(elementos), texto, int(fila.duracion))                                                               # Almacenando la máquina como un Element
 
             #                                                                                                                           # Buscando padres de la máquina...
             query = '''
@@ -459,13 +456,13 @@ class ventana_modelo():                                                         
                 if DEBUG:
                     print("\tPadre:", subfila.nombre_padre)
 
-                #                                                                                                                       # Almancenando el nombre del padre de la máquina en el Element
                 if sys.version_info[0] >= 3:
-                    elemento.padres(str(subfila.nombre_padre))
+                    texto = str(subfila.nombre_padre)
 
                 else:
-                    elemento.padres(subfila.nombre_padre)
+                    texto = subfila.nombre_padre.toPython().encode('utf-8')
 
+                elemento.padres(texto)                                                                                                  # Almancenando el nombre del padre de la máquina en el Element
             #                                                                                                                           # Buscando las conexiones de la máquina
             query = '''
                         PREFIX    maquina:  <http://www.factory.fake/maquina/>
@@ -488,12 +485,13 @@ class ventana_modelo():                                                         
                 if DEBUG:
                     print("\tConexión: ", subfila.nombre_siguiente, ', ', subfila.duracion, sep = '')
 
-                #                                                                                                                       # Almacenando las conexiones en el Element
                 if sys.version_info[0] >= 3:
-                    elemento.conexiones((str(subfila.nombre_siguiente), int(subfila.duracion)))
+                    texto = str(subfila.nombre_siguiente)
 
                 else:
-                    elemento.conexiones((subfila.nombre_siguiente, int(subfila.duracion)))
+                    texto = subfila.nombre_siguiente.toPython().encode('utf-8')
+
+                elemento.conexiones((texto, int(subfila.duracion)))                                                                     # Almacenando las conexiones en el Element
 
             elementos.append(elemento)                                                                                                  # Almacenando el Element elemento en la lista elementos -> Lista manejada
 
