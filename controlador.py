@@ -12,6 +12,9 @@
 # Notes         : 
 
 
+from __future__ import unicode_literals
+
+
 SANGRIA = '        '
 
 
@@ -59,19 +62,11 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
 
     def apertura(self):                                         # Procedimiento de apertura
-        textos = [
-                    ' es una máquina con duración ',
-                    ' con una duración de '
-                 ]
-
         if sys.version_info[0] >= 3:                            # Llamada al método equivalente de la clase padre
             nombre_archivo = super().apertura('abrir')
 
         else:
             nombre_archivo = super(ventana_principal, self).apertura('abrir')
-
-            for texto in textos:
-                texto = texto.decode('utf-8')
 
         if nombre_archivo != '':                                # Comprobando si se ha elegido algún archivo
             # try:                                                # Si se ha elegido un archivo
@@ -93,14 +88,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                 texto_archivo = ''                          # Necesario para reutilizar la dichosa variable
 
                 for i in range(len(self._datos)):           # Construyendo la descripción del dominio
-                    if sys.version_info[0] >= 3:
-                        texto_archivo += self._datos[i].nombre() + textos[0] + str(self._datos[i].duracion()) + "\n"
-
-                    else:
-                        texto_archivo += self._datos[i].nombre()
-                        texto_archivo += textos[0]
-                        texto_archivo += str(self._datos[i].duracion())
-                        texto_archivo += "\n"
+                    texto_archivo += self._datos[i].nombre() + ' es una máquina con duración ' + str(self._datos[i].duracion()) + "\n"
 
                     for padre in self._datos[i].padres():
                         if sys.version_info[0] >= 3:
@@ -112,17 +100,9 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                             texto_archivo += '\n'
 
                     for conexion in self._datos[i].conexiones():
-                        if sys.version_info[0] >= 3:
-                            texto_archivo += SANGRIA + 'Puede enviar a ' + conexion['objeto'].nombre() + texto[3] + str(conexion['duracion']) + '\n'
+                        texto_archivo += SANGRIA + 'Puede enviar a ' + conexion['objeto'].nombre() + ' con una duración de ' + str(conexion['duracion']) + "\n"
 
-                        else:
-                            texto_archivo += SANGRIA + 'Puede enviar a '
-                            texto_archivo += conexion['objeto'].nombre()
-                            texto_archivo += textos[1]
-                            texto_archivo += str(conexion['duracion'])
-                            texto_archivo += '\n'
-
-                    texto_archivo += '\n'
+                    texto_archivo += "\n"
 
                 if sys.version_info[0] >= 3:                # Llamada al método equivalente de la clase padre
                     super().apertura('dominio', texto_archivo, nombre_archivo)
@@ -204,7 +184,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
             i += 1
 
-            texto = texto + SANGRIA + str(i) + ': ' + str_camino[0:-3] + ' con una duración de ' + str(tiempo) + " seg.\n"
+            texto += SANGRIA + str(i) + ': ' + str_camino[0:-3] + ' con una duración de ' + str(tiempo) + " seg.\n"
 
         vista.ventana_vista.calcular(self, 'desarrollo', texto)
 

@@ -12,6 +12,9 @@
 # Notes         : 
 
 
+from __future__ import unicode_literals
+
+
 import sys                                                              # Funcionalidades varias del sistema
 
 from PyQt4 import QtGui                                                 # Módulo de interfaz de usuario de PyQt4
@@ -65,19 +68,14 @@ class ventana_vista(QtGui.QMainWindow):                                 # Parte 
 
 
     def acercaDe(self):                                                 # Ventana modal que muestra la información de "Acerca de"
-        texto = '''<p>Trabajo de planificación creada por Julio Domingo Jiménez Ledesma (i72jilej) y Rafael Carlos Méndez Rodríguez (i82meror)</p>
+        QtGui.QMessageBox.about(self, 'Acerca de', '''<p>Trabajo de planificación creada por Julio Domingo Jiménez Ledesma (i72jilej) y Rafael Carlos Méndez Rodríguez (i82meror)</p>
 <p>Icono usado en "Nuevo" por <a href="https://www.flaticon.com/authors/yannick">Yannick</a><br />
 Icono usado en "Abrir" por <a href="https://www.flaticon.com/authors/simpleicon">SimpleIcon</a><br />
 Iconos usados en la ventana principal, "Guardar", "Calcular", "Acerca de" y "Acerca de Qt" por <a href="https://www.flaticon.com/authors/freepik">Freepic</a><br />
 Iconos usados en "Guardar como" y "Salir" por <a href="https://www.flaticon.com/authors/smashicons">Smashicons</a><br />
 Icono usado en "Imprimir" por <a href="https://www.flaticon.com/authors/dave-gandy">Dave Gandy</a><br />
 Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a></p>
-'''
-
-        if sys.version_info[0] < 3:
-            texto = texto.decode('utf-8')
-
-        QtGui.QMessageBox.about(self, 'Acerca de', texto)
+''')
 
 
     def acercaDeQt(self):                                               # Ventana modal que muestra la información de "Acerca de Qt"
@@ -107,33 +105,18 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
     def calcular(self, modo, *args):                                    # Parte de la vista de la realización de los cálculos necesarios
         if modo == 'error':
-            texto = 'Error de cálculo'
-
-            if sys.version_info[0] < 3:
-                texto = texto.decode('utf-8')
-
-            QtGui.QMessageBox.warning(self, texto, 'Aviso: No se ha cargado ningún archivo')
+            QtGui.QMessageBox.warning(self, 'Error de cálculo', 'Aviso: No se ha cargado ningún archivo')
         
         elif modo == 'desarrollo':
-            texto = args[0]
-
-            if sys.version_info[0] < 3:
-                texto = texto.decode('utf-8')
-
-            self._text_desarrollo.setText(self._text_desarrollo.toPlainText() + texto + "\n")
+            self._text_desarrollo.setText(self._text_desarrollo.toPlainText() + args[0] + "\n")
 
 
     def confirmar_modificado(self, accion):                             # Confirmación de las modificaciones antes de realizar una operación que pueda destruirlas
         if self.modificado():
-            texto = 'Hay cálculos no guardados. ¿Desea guardarlos antes de ' + accion + '?'
-    
-            if sys.version_info[0] < 3:
-                texto = texto.decode('utf-8')
-
             mensaje = QtGui.QMessageBox()
             mensaje.setIcon(QtGui.QMessageBox.Question)
             mensaje.setWindowTitle('Aviso')
-            mensaje.setText(texto)
+            mensaje.setText('Hay cálculos no guardados. ¿Desea guardarlos antes de ' + accion + '?')
             mensaje.setStandardButtons(QtGui.QMessageBox.Discard | QtGui.QMessageBox.Save | QtGui.QMessageBox.Cancel)
             mensaje.setDefaultButton(QtGui.QMessageBox.Cancel)
 
@@ -153,25 +136,15 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
 
     def crearAcciones(self):                                	       	# Creación de las acciones asociadas al menú y a la barra de herramientas
-        textos = [
-                    'Sale de la aplicación',
-                    'Comienza los cálculos',
-                    'Muestra la ventana "Acerca de" de la librería Qt',
-                 ]
-
-        if sys.version_info[0] < 3:
-            for texto in textos:
-                texto = texto.decode('unicode-escape')
-
         self.nuevoAcc           = QtGui.QAction('&Nuevo',           self, shortcut = QtGui.QKeySequence.New,    statusTip = 'Crea un nuevo archivo',                                triggered = self.nuevo          )
         self.abrirAcc           = QtGui.QAction('&Abrir...',        self, shortcut = QtGui.QKeySequence.Open,   statusTip = 'Abre un archivo existente',                            triggered = self.abrir          )
         self.guardarAcc         = QtGui.QAction('&Guardar',         self, shortcut = QtGui.QKeySequence.Save,   statusTip = 'Guarda el archivo',                                    triggered = self.guardar        )
         self.guardarComoAcc     = QtGui.QAction('Guardar c&omo',    self, shortcut = QtGui.QKeySequence.SaveAs, statusTip = 'Guarda el archivo con un nombre distinto',             triggered = self.guardar_como   )
         self.imprimirAcc        = QtGui.QAction('Im&primir',        self, shortcut = QtGui.QKeySequence.Print,  statusTip = 'Imprime el archivo',                                   triggered = self.imprimir       )
-        self.salirAcc           = QtGui.QAction('&Salir',           self, shortcut = 'Alt+F4',                  statusTip = textos[0],                                              triggered = self.close          )
-        self.calcularAcc        = QtGui.QAction('&Calcular',        self, shortcut = 'F4',                      statusTip = textos[1],                                              triggered = self.calcular       )
+        self.salirAcc = QtGui.QAction('&Salir', self, shortcut = 'Alt+F4', statusTip = 'Sale de la aplicación', triggered = self.close)
+        self.calcularAcc = QtGui.QAction('&Calcular', self, shortcut = 'F4', statusTip = 'Comienza los cálculos', triggered = self.calcular)
         self.acercaDeAcc        = QtGui.QAction('&Acerca de',       self, shortcut = 'F1',                      statusTip = 'Muestra la ventana "Acerca de"',                       triggered = self.acercaDe       )
-        self.acercaDeQtAcc      = QtGui.QAction('Acerca de &Qt',    self,                                       statusTip = textos[2],                                              triggered = self.acercaDeQt     )
+        self.acercaDeQtAcc = QtGui.QAction('Acerca de &Qt', self, statusTip = 'Muestra la ventana "Acerca de" de la librería Qt', triggered = self.acercaDeQt)
 
         self.nuevoAcc.          setIcon(QtGui.QIcon('./iconos/001-add-new-document.png')                            )
         self.abrirAcc.          setIcon(QtGui.QIcon('./iconos/002-folder-black-open-shape.png')                     )
@@ -199,11 +172,6 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
 
     def crearMenus(self):                                   	        # Creación de los menús
-        texto = 'A&cción'
-
-        if sys.version_info[0] < 3:
-            texto = texto.decode('utf-8')
-
         self._menu_archivo = self.menuBar().addMenu('&Archivo')
         self._menu_archivo.addAction(self.nuevoAcc)
         self._menu_archivo.addAction(self.abrirAcc)
@@ -214,7 +182,7 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
         self._menu_archivo.addSeparator()
         self._menu_archivo.addAction(self.salirAcc)
 
-        self._menu_accion = self.menuBar().addMenu(texto)
+        self._menu_accion = self.menuBar().addMenu('A&cción')
         self._menu_accion.addAction(self.calcularAcc)
 
         self._menu_ayuda = self.menuBar().addMenu("A&yuda")
@@ -236,12 +204,6 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
         disenyo.addWidget(self.dibujar_interfaz_mitad_inferior_mitad_izquierda_dominio())
         disenyo.addWidget(self.dibujar_interfaz_mitad_inferior_mitad_derecha())
-
-        '''
-        disenyo.addWidget(self.dibujar_interfaz_mitad_inferior_dominio())
-        disenyo.addWidget(self.dibujar_interfaz_mitad_inferior_solucion())
-        disenyo.addWidget(self.dibujar_interfaz_mitad_inferior_desarrollo())
-        '''
 
         # Widget
         mitad_inferior = QtGui.QGroupBox('Resultados')
@@ -312,13 +274,8 @@ Todos ellos autores de <a href="https://www.flaticon.com/">www.flaticon.com</a><
 
 
     def dibujar_interfaz_mitad_inferior_mitad_derecha_solucion(self):   # Dibujo de la parte de solución de la mitad inferior de la interfaz
-        texto = 'Solución:'
-
-        if sys.version_info[0] < 3:
-            texto = texto.decode('utf-8')
-
         # Etiquetas
-        label_solucion = QtGui.QLabel(texto)
+        label_solucion = QtGui.QLabel('Solución:')
 
         # Controles de edición
         self._text_solucion = QtGui.QTextEdit()
