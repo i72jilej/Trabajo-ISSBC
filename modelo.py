@@ -6,8 +6,8 @@
 # Description   : Modelo del programa
 # Author        : Julio Domingo Jiménez Ledesma
 # Author        : Rafael Carlos Méndez Rodríguez
-# Date          : 30-05-2018
-# Version       : 1.0.0
+# Date          : 15-06-2018
+# Version       : 1.0.1
 # Usage         : import modelo o from modelo import ...
 # Notes         : 
 
@@ -218,23 +218,18 @@ class ventana_modelo():                                                         
         self._soluciones.append(self._solucion_elegida)
 
 
-    def calcular(self, hilos):                                                                                                          # Cálculo de soluciones
-        if DEBUG_HIJOS:
-            hilos = 10
-
+    def calcular(self):                                                                                                                 # Cálculo de soluciones
         hijos = list()
-        prob_heuristica = 50
-        # FIXME: Hacer ajustable
 
-        self._soluciones_posibles = [solucion() for i in range(hilos)]                                                                  # Inicialización de la lista de soluciones
+        self._soluciones_posibles = [solucion() for i in range(self._num_hijos)]                                                                  # Inicialización de la lista de soluciones
 
         nodos_iniciales = self.iniciales(self._datos)                                                                                   # Precáculo de los nodos iniciales
 
-        for i in range(hilos):
+        for i in range(self._num_hijos):
             if DEBUG_HIJOS:
                 print('Padre #', os.getpid(), "\tPreparando hijo ", i, sep = '')
 
-            hijos.append(Thread(target = ventana_modelo.calcular_hijos, args = (self, i, nodos_iniciales, prob_heuristica,)))                            # Declarando los hijos; ejecutarán ventana_modelo.calcular_hijos
+            hijos.append(Thread(target = ventana_modelo.calcular_hijos, args = (self, i, nodos_iniciales,)))                            # Declarando los hijos; ejecutarán ventana_modelo.calcular_hijos
 
             if DEBUG_HIJOS:
                 print('Padre #', os.getpid(), "\tArrancando hijo ", i, sep = '')
@@ -267,16 +262,12 @@ class ventana_modelo():                                                         
 
         if DEBUG == True:
             for una_solucion in self._soluciones_posibles:                                                                              # Recorriendo la lista con las soluciones dadas por los hijos
-                if sys.version_info[0] >= 3:
-                    print('Padre #', os.getpid(), "\tSolución posible: ", [str(nodo.nombre()) for nodo in una_solucion.camino()], sep = '')
-
-                else:
-                    print('Padre #', os.getpid(), "\tSolución posible: ", [nodo.nombre().toPython() for nodo in una_solucion.camino()], sep = '')
+                print('Padre #', os.getpid(), "\tSolución posible: ", [nodo.nombre() for nodo in una_solucion.camino()], sep = '')
 
             print()
             print()
 
-        self._soluciones_candidatas = self.validar(self._soluciones_posibles, self._cronograma)
+        self._soluciones_candidatas = self.validar(self._soluciones_posibles)
 
         del self._soluciones_posibles
 
@@ -293,7 +284,7 @@ class ventana_modelo():                                                         
                 print()
 
 
-            self._solucion_elegida = self.elegir(self._soluciones_candidatas, prob_heuristica)
+            self._solucion_elegida = self.elegir(self._soluciones_candidatas, self._prob_heuristica)
 
             self.anyadir_solucion()
 
@@ -309,13 +300,13 @@ class ventana_modelo():                                                         
             print()
 
 
-    def calcular_hijos(self, id_hijo, nodos_iniciales, prob_heuristica):                                                                # Cálculo de cada solución (ejecutada por cada hijo)
+    def calcular_hijos(self, id_hijo, nodos_iniciales):                                                                                 # Cálculo de cada solución (ejecutada por cada hijo)
         if DEBUG_HIJOS:
             print('Hijo  #', id_hijo, "\tHe sido llamado", sep = '')
 
         longitud_datos = len(self._datos)                                                                                               # Precarga de la longitud del camino
 
-        nodo_elegido = self.elegir(nodos_iniciales, prob_heuristica)
+        nodo_elegido = self.elegir(nodos_iniciales, self._prob_heuristica)
 
         self._soluciones_posibles[id_hijo].anyadir(nodo_elegido)                                                                        # Se añade un nodo inicial en función del la probabilidad de emplear la heurística
 
@@ -332,7 +323,7 @@ class ventana_modelo():                                                         
 
             nodos_conexiones = [conexion['objeto'] for conexion in conexiones]                                                          # "Desempaquetado" en dos listas
 
-            nodo_elegido = self.elegir(nodos_conexiones, prob_heuristica)
+            nodo_elegido = self.elegir(nodos_conexiones, self._prob_heuristica)
 
             if DEBUG_HIJOS:
                 print('Hijo  #', id_hijo, "\tIntentando añadir al camino el nodo ", nodo_elegido.nombre(), sep = '')
@@ -346,7 +337,7 @@ class ventana_modelo():                                                         
                 nodos_conexiones.remove(nodo_elegido)
 
                 if nodos_conexiones != []:
-                    nodo_elegido = self.elegir(nodos_conexiones, prob_heuristica)
+                    nodo_elegido = self.elegir(nodos_conexiones, self._prob_heuristica)
 
                     if DEBUG_HIJOS:
                         print('Hijo  #', id_hijo, "\tIntentando añadir al camino el nodo ", nodo_elegido.nombre(), sep = '')
@@ -444,12 +435,13 @@ class ventana_modelo():                                                         
             if DEBUG:
                 print(fila.nombre, 'es una máquina con duración', fila.duracion)
 
-                                                                # Almacenando la máquina como un Element
             if sys.version_info[0] >= 3:
-                elemento = Element(len(elementos), str(fila.nombre), int(fila.duracion))
+                texto = str(fila.nombre)
 
             else:
-                elemento = Element(len(elementos), fila.nombre, int(fila.duracion))
+                texto = fila.nombre.toPython().encode('utf-8')
+
+            elemento = Element(len(elementos), texto, int(fila.duracion))                                                               # Almacenando la máquina como un Element
 
             #                                                                                                                           # Buscando padres de la máquina...
             query = '''
@@ -470,13 +462,13 @@ class ventana_modelo():                                                         
                 if DEBUG:
                     print("\tPadre:", subfila.nombre_padre)
 
-                #                                                                                                                       # Almancenando el nombre del padre de la máquina en el Element
                 if sys.version_info[0] >= 3:
-                    elemento.padres(str(subfila.nombre_padre))
+                    texto = str(subfila.nombre_padre)
 
                 else:
-                    elemento.padres(subfila.nombre_padre)
+                    texto = subfila.nombre_padre.toPython().encode('utf-8')
 
+                elemento.padres(texto)                                                                                                  # Almancenando el nombre del padre de la máquina en el Element
             #                                                                                                                           # Buscando las conexiones de la máquina
             query = '''
                         PREFIX    maquina:  <http://www.factory.fake/maquina/>
@@ -499,12 +491,13 @@ class ventana_modelo():                                                         
                 if DEBUG:
                     print("\tConexión: ", subfila.nombre_siguiente, ', ', subfila.duracion, sep = '')
 
-                #                                                                                                                       # Almacenando las conexiones en el Element
                 if sys.version_info[0] >= 3:
-                    elemento.conexiones((str(subfila.nombre_siguiente), int(subfila.duracion)))
+                    texto = str(subfila.nombre_siguiente)
 
                 else:
-                    elemento.conexiones((subfila.nombre_siguiente, int(subfila.duracion)))
+                    texto = subfila.nombre_siguiente.toPython().encode('utf-8')
+
+                elemento.conexiones((texto, int(subfila.duracion)))                                                                     # Almacenando las conexiones en el Element
 
             elementos.append(elemento)                                                                                                  # Almacenando el Element elemento en la lista elementos -> Lista manejada
 
