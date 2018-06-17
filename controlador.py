@@ -83,22 +83,21 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
                     texto_archivo = ''                                              # Necesario para reutilizar la dichosa variable
 
-                    for i in range(len(self._datos)):                               # Construyendo la descripción del dominio
+                    for dato in self._datos:                                        # Construyendo la descripción del dominio
                         if sys.version_info[0] >= 3:
-                            texto_archivo += self._datos[i].nombre() + ' es una máquina con duración ' + str(self._datos[i].duracion()) + "\n"
+                            texto_archivo += dato.nombre() + ' es una máquina con duración ' + str(dato.duracion()) + "\n"
 
                         else:
-                            texto_archivo += self._datos[i].nombre().decode('utf-8') + ' es una máquina con duración ' + str(self._datos[i].duracion()) + "\n"
+                            texto_archivo += dato.nombre().decode('utf-8') + ' es una máquina con duración ' + str(dato.duracion()) + "\n"
 
-                        for padre in self._datos[i].padres():
+                        for padre in dato.padres():
                             if sys.version_info[0] >= 3:
                                 texto_archivo += SANGRIA + 'Requiere haber pasado por ' + padre.nombre() + '\n'
 
                             else:
                                 texto_archivo += SANGRIA + 'Requiere haber pasado por ' + padre.nombre().decode('utf-8') + '\n'
 
-
-                        for conexion in self._datos[i].conexiones():
+                        for conexion in dato.conexiones():
                             if sys.version_info[0] >= 3:
                                 texto_archivo += SANGRIA + 'Puede enviar a ' + conexion['objeto'].nombre() + ' con una duración de ' + str(conexion['duracion']) + "\n"
 
@@ -194,7 +193,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
             for nodo in self._soluciones[i].camino():
                 if sys.version_info[0] >= 3:
-                    str_camino += str(nodo.nombre()) + ' - '
+                    str_camino += nodo.nombre() + ' - '
 
                 else:
                     str_camino += nodo.nombre().decode('utf-8') + ' - '
@@ -214,7 +213,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
             for nodo in self._soluciones_candidatas[i].camino():
                 if sys.version_info[0] >= 3:
-                    str_camino += str(nodo.nombre()) + ' - '
+                    str_camino += nodo.nombre() + ' - '
 
                 else:
                     str_camino += nodo.nombre().decode('utf-8') + ' - '
@@ -234,7 +233,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
             for nodo in self._solucion_elegida.camino():
                 if sys.version_info[0] >= 3:
-                    texto_camino += str(nodo.nombre()) + ' - '
+                    texto_camino += nodo.nombre() + ' - '
 
                 else:
                     texto_camino += nodo.nombre().decode('utf-8') + ' - '
