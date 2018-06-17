@@ -1,9 +1,12 @@
+# Trabajo planificación ISSBC
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5aa83923bd764a4a88409ab522830d75)](https://www.codacy.com/app/veltys/Trabajo-ISSBC?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Veltys/Trabajo-ISSBC&amp;utm_campaign=Badge_Grade)
+
+
 ## Descripción
 Trabajo práctico de la asignatura Ingeniería de Sistemas Software Basados en Conocimiento (en adelante ISSBC), de la Universidad de Córdoba (UCO)
 
 El campo a cubrir es la planificación. La tarea a realizar es de planificación, la cual consistirá en, dada la información de una hipotética frábica: sus máquinas y sus conexiones entre las mismas, se encargará de obtener la manera más óptima de utilizarlas.
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b646ed416c2449b59f1fa0047c3fd8a8)](https://www.codacy.com/app/veltys/Trabajo-ISSBC?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Veltys/Trabajo-ISSBC&amp;utm_campaign=Badge_Grade)
 
 ## Realizado por
 - Rafael Carlos Méndez Rodríguez (i82meror@uco.es / veltys@veltys.es)
