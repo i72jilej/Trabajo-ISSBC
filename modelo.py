@@ -199,6 +199,10 @@ class solucion():                                                               
 
 
 class ventana_modelo():                                                                                                                 # Parte del modelo de la ventana
+    def __init__(self):                                                                                                                 # Constructor de la clase
+        self._cronograma = None                                                                                                         # Inicialización de variables de clase
+
+
     def anyadir_solucion(self):                                                                                                         # Añade una solución a la lista de soluciones
         tiempo = 0
 
@@ -633,8 +637,10 @@ class ventana_modelo():                                                         
                     res = tiempos[i + 1] > tiempo_inserccion or tiempos[i + 1] + maquina.duracion() <= tiempo_inserccion
 
                 finally:
-                    if res == False:
-                        break
+                    pass
+
+                if res == False:
+                    break
 
         return res
 
