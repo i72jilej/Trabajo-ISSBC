@@ -228,12 +228,12 @@ class ventana_modelo():                                                         
         nodos_iniciales = self.iniciales(self._datos)                                                                                   # Precáculo de los nodos iniciales
 
         for i in range(self._num_hijos):
-            if DEBUG_HIJOS:
+            if DEBUG_HIJOS == True:
                 print('Padre #', os.getpid(), "\tPreparando hijo ", i, sep = '')
 
             hijos.append(Thread(target = ventana_modelo.calcular_hijos, args = (self, i, nodos_iniciales,)))                            # Declarando los hijos; ejecutarán ventana_modelo.calcular_hijos
 
-            if DEBUG_HIJOS:
+            if DEBUG_HIJOS == True:
                 print('Padre #', os.getpid(), "\tArrancando hijo ", i, sep = '')
 
             hijos[i].start()
@@ -290,7 +290,7 @@ class ventana_modelo():                                                         
 
             self.anyadir_solucion()
 
-            if DEBUG:
+            if DEBUG == True:
                 for una_solucion in self._soluciones:
                     if sys.version_info[0] >= 3:
                         print('Padre #', os.getpid(), "\tSolución definitiva: ", [str(nodo.nombre()) for nodo in una_solucion.camino()], sep = '')
@@ -303,7 +303,7 @@ class ventana_modelo():                                                         
 
 
     def calcular_hijos(self, id_hijo, nodos_iniciales):                                                                                 # Cálculo de cada solución (ejecutada por cada hijo)
-        if DEBUG_HIJOS:
+        if DEBUG_HIJOS == True:
             print('Hijo  #', id_hijo, "\tHe sido llamado", sep = '')
 
         longitud_datos = len(self._datos)                                                                                               # Precarga de la longitud del camino
@@ -312,11 +312,11 @@ class ventana_modelo():                                                         
 
         self._soluciones_posibles[id_hijo].anyadir(nodo_elegido)                                                                        # Se añade un nodo inicial en función del la probabilidad de emplear la heurística
 
-        if DEBUG_HIJOS:
+        if DEBUG_HIJOS == True:
             print('Hijo  #', id_hijo, "\tAñadido al camino el nodo ", nodo_elegido.nombre(), sep = '')
 
         while len(self._soluciones_posibles[id_hijo].camino()) < longitud_datos:                                                        # Mientras queden máquinas por las que pasar
-            if DEBUG_HIJOS:
+            if DEBUG_HIJOS == True:
                 print('Hijo  #', id_hijo, "\tEl tamaño del árbol es de ", longitud_datos, ' nodos', sep = '')
                 print('Hijo  #', id_hijo, "\tEl tamaño del camino es de ", len(self._soluciones_posibles[id_hijo].camino()), ' nodos', sep = '')
 
@@ -327,13 +327,13 @@ class ventana_modelo():                                                         
 
             nodo_elegido = self.elegir(nodos_conexiones, self._prob_heuristica)
 
-            if DEBUG_HIJOS:
+            if DEBUG_HIJOS == True:
                 print('Hijo  #', id_hijo, "\tIntentando añadir al camino el nodo ", nodo_elegido.nombre(), sep = '')
 
             valido = self._soluciones_posibles[id_hijo].anyadir(nodo_elegido)
 
             while not valido:
-                if DEBUG_HIJOS:
+                if DEBUG_HIJOS == True:
                     print('Hijo  #', id_hijo, "\tNo es posible", sep = '')
 
                 nodos_conexiones.remove(nodo_elegido)
@@ -341,7 +341,7 @@ class ventana_modelo():                                                         
                 if nodos_conexiones != []:
                     nodo_elegido = self.elegir(nodos_conexiones, self._prob_heuristica)
 
-                    if DEBUG_HIJOS:
+                    if DEBUG_HIJOS == True:
                         print('Hijo  #', id_hijo, "\tIntentando añadir al camino el nodo ", nodo_elegido.nombre(), sep = '')
 
                     valido = self._soluciones_posibles[id_hijo].anyadir(nodo_elegido)                                                   # Se añade un nodo siguiente en función del la probabilidad de emplear la heurística
@@ -411,7 +411,7 @@ class ventana_modelo():                                                         
 
     @staticmethod                                                                                                                       # Método estático
     def interpretar(grafo):                                                                                                             # Interpreta un grafo dado: extrae la información necesaria para su posterior uso
-        if DEBUG:
+        if DEBUG == True:
             print('Listando datos antes de ser almacenados en memoria...')
 
         elementos = []
@@ -434,7 +434,7 @@ class ventana_modelo():                                                         
         resultado = grafo.query(query)
 
         for fila in resultado:                                                                                                          # Para cada máquina...
-            if DEBUG:
+            if DEBUG == True:
                 print(fila.nombre, 'es una máquina con duración', fila.duracion)
 
             if sys.version_info[0] >= 3:
@@ -461,7 +461,7 @@ class ventana_modelo():                                                         
             subresultado = grafo.query(query % fila.nombre)
 
             for subfila in subresultado:                                                                                                # Recorriendo la lista de padres
-                if DEBUG:
+                if DEBUG == True:
                     print("\tPadre:", subfila.nombre_padre)
 
                 if sys.version_info[0] >= 3:
@@ -490,7 +490,7 @@ class ventana_modelo():                                                         
             subresultado = grafo.query(query % fila.nombre)
 
             for subfila in subresultado:                                                                                                # Recorriendo la lista de conexiones
-                if DEBUG:
+                if DEBUG == True:
                     print("\tConexión: ", subfila.nombre_siguiente, ', ', subfila.duracion, sep = '')
 
                 if sys.version_info[0] >= 3:
@@ -503,7 +503,7 @@ class ventana_modelo():                                                         
 
             elementos.append(elemento)                                                                                                  # Almacenando el Element elemento en la lista elementos -> Lista manejada
 
-        if DEBUG:
+        if DEBUG == True:
             print()
             print()
 
@@ -518,7 +518,7 @@ class ventana_modelo():                                                         
             if conexiones != []:
                 elemento.conexiones(ventana_modelo.convertir_conexiones_a_elementos(elementos, conexiones), True)
 
-        if DEBUG:
+        if DEBUG == True:
             print('Listando datos después de ser almacenados en memoria...')
 
             for elemento in elementos:
