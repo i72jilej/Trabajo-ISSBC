@@ -15,7 +15,6 @@
 from __future__ import unicode_literals
 
 
-DEBUG   = False
 SANGRIA = '        '
 
 
