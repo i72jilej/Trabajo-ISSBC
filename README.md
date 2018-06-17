@@ -27,6 +27,7 @@ El campo a cubrir es la planificación. La tarea a realizar es de planificación
     - Implementado finalmente el procedimiento para generar múltiples soluciones.
 - 1.1.1 -> 17/06/2018:
     - Mejora de la calidad del código.
+    - Arreglo de compatibilidad con Python 2.
 
 
 ## Agradecimientos, fuentes consultadas y otros créditos

@@ -85,13 +85,26 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                     texto_archivo = ''                                              # Necesario para reutilizar la dichosa variable
 
                     for i in range(len(self._datos)):                               # Construyendo la descripción del dominio
-                        texto_archivo += self._datos[i].nombre() + ' es una máquina con duración ' + str(self._datos[i].duracion()) + "\n"
+                        if sys.version_info[0] >= 3:
+                            texto_archivo += self._datos[i].nombre() + ' es una máquina con duración ' + str(self._datos[i].duracion()) + "\n"
+
+                        else:
+                            texto_archivo += self._datos[i].nombre().decode('utf-8') + ' es una máquina con duración ' + str(self._datos[i].duracion()) + "\n"
 
                         for padre in self._datos[i].padres():
-                            texto_archivo += SANGRIA + 'Requiere haber pasado por ' + padre.nombre() + '\n'
+                            if sys.version_info[0] >= 3:
+                                texto_archivo += SANGRIA + 'Requiere haber pasado por ' + padre.nombre() + '\n'
+
+                            else:
+                                texto_archivo += SANGRIA + 'Requiere haber pasado por ' + padre.nombre().decode('utf-8') + '\n'
+
 
                         for conexion in self._datos[i].conexiones():
-                            texto_archivo += SANGRIA + 'Puede enviar a ' + conexion['objeto'].nombre() + ' con una duración de ' + str(conexion['duracion']) + "\n"
+                            if sys.version_info[0] >= 3:
+                                texto_archivo += SANGRIA + 'Puede enviar a ' + conexion['objeto'].nombre() + ' con una duración de ' + str(conexion['duracion']) + "\n"
+
+                            else:
+                                texto_archivo += SANGRIA + 'Puede enviar a ' + conexion['objeto'].nombre().decode('utf-8') + ' con una duración de ' + str(conexion['duracion']) + "\n"
 
                         texto_archivo += "\n"
 
@@ -185,7 +198,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                     str_camino += str(nodo.nombre()) + ' - '
 
                 else:
-                    str_camino += nodo.nombre().toPython().encode('utf-8') + ' - '
+                    str_camino += nodo.nombre().decode('utf-8') + ' - '
 
             texto += SANGRIA + str(i) + ': ' + str_camino[0:-3] + ', con una duración de ' + str(tiempo) + " seg.\n"
 
@@ -205,7 +218,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                     str_camino += str(nodo.nombre()) + ' - '
 
                 else:
-                    str_camino += nodo.nombre().toPython().encode('utf-8') + ' - '
+                    str_camino += nodo.nombre().decode('utf-8') + ' - '
 
             texto += SANGRIA + str(i) + ': ' + str_camino[0:-3] + ', con una duración de ' + str(self._soluciones_candidatas[i].duracion()) + " seg.\n"
 
@@ -225,7 +238,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                     texto_camino += str(nodo.nombre()) + ' - '
 
                 else:
-                    texto_camino += nodo.nombre().toPython().encode('utf-8') + ' - '
+                    texto_camino += nodo.nombre().decode('utf-8') + ' - '
 
             texto_solucion += SANGRIA + texto_camino[0:-3] + ', con una duración de ' + str(self._solucion_elegida.duracion()) + " seg.\n"
 
