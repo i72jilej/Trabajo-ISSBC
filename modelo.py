@@ -7,9 +7,9 @@
 # Author        : Julio Domingo Jiménez Ledesma
 # Author        : Rafael Carlos Méndez Rodríguez
 # Date          : 15-06-2018
-# Version       : 1.1.0
+# Version       : 1.1.1
 # Usage         : import modelo o from modelo import ...
-# Notes         : 
+# Notes         : ...
 
 
 from __future__ import print_function
@@ -30,6 +30,7 @@ from threading import Thread                                                    
 from time import sleep                                                                                                                  # Pausas
 
 from rdflib import Graph                                                                                                                # Grafos
+from rdflib.plugins.parsers.notation3 import BadSyntax                                                                                  # Manejador de excepciones propio
 
 
 class Element():                                                                                                                        # Representacion de un nodo en el grafo
@@ -122,7 +123,9 @@ class solucion():                                                               
             res = False                                                                                                                 #     Se prepara el "informe"
 
         finally:
-            return res                                                                                                                  # Se devuelve el informe del éxito (o no) del añadido
+            pass
+
+        return res                                                                                                                  # Se devuelve el informe del éxito (o no) del añadido
 
 
     def camino(self):                                                                                                                   # Observador de la variable
@@ -154,12 +157,13 @@ class solucion():                                                               
                         res = False
 
                     else:
-                        # res = True
-                        res = res and True
+                        res = True
 
                     finally:
-                        if res == False:
-                            break
+                        pass
+
+                    if res == False:
+                        break
 
             else:
                 pass
@@ -195,6 +199,10 @@ class solucion():                                                               
 
 
 class ventana_modelo():                                                                                                                 # Parte del modelo de la ventana
+    def __init__(self):                                                                                                                 # Constructor de la clase
+        self._cronograma = None                                                                                                         # Inicialización de variables de clase
+
+
     def anyadir_solucion(self):                                                                                                         # Añade una solución a la lista de soluciones
         tiempo = 0
 
@@ -224,12 +232,12 @@ class ventana_modelo():                                                         
         nodos_iniciales = self.iniciales(self._datos)                                                                                   # Precáculo de los nodos iniciales
 
         for i in range(self._num_hijos):
-            if DEBUG_HIJOS:
+            if DEBUG_HIJOS == True:
                 print('Padre #', os.getpid(), "\tPreparando hijo ", i, sep = '')
 
             hijos.append(Thread(target = ventana_modelo.calcular_hijos, args = (self, i, nodos_iniciales,)))                            # Declarando los hijos; ejecutarán ventana_modelo.calcular_hijos
 
-            if DEBUG_HIJOS:
+            if DEBUG_HIJOS == True:
                 print('Padre #', os.getpid(), "\tArrancando hijo ", i, sep = '')
 
             hijos[i].start()
@@ -286,7 +294,7 @@ class ventana_modelo():                                                         
 
             self.anyadir_solucion()
 
-            if DEBUG:
+            if DEBUG == True:
                 for una_solucion in self._soluciones:
                     if sys.version_info[0] >= 3:
                         print('Padre #', os.getpid(), "\tSolución definitiva: ", [str(nodo.nombre()) for nodo in una_solucion.camino()], sep = '')
@@ -299,7 +307,7 @@ class ventana_modelo():                                                         
 
 
     def calcular_hijos(self, id_hijo, nodos_iniciales):                                                                                 # Cálculo de cada solución (ejecutada por cada hijo)
-        if DEBUG_HIJOS:
+        if DEBUG_HIJOS == True:
             print('Hijo  #', id_hijo, "\tHe sido llamado", sep = '')
 
         longitud_datos = len(self._datos)                                                                                               # Precarga de la longitud del camino
@@ -308,11 +316,11 @@ class ventana_modelo():                                                         
 
         self._soluciones_posibles[id_hijo].anyadir(nodo_elegido)                                                                        # Se añade un nodo inicial en función del la probabilidad de emplear la heurística
 
-        if DEBUG_HIJOS:
+        if DEBUG_HIJOS == True:
             print('Hijo  #', id_hijo, "\tAñadido al camino el nodo ", nodo_elegido.nombre(), sep = '')
 
         while len(self._soluciones_posibles[id_hijo].camino()) < longitud_datos:                                                        # Mientras queden máquinas por las que pasar
-            if DEBUG_HIJOS:
+            if DEBUG_HIJOS == True:
                 print('Hijo  #', id_hijo, "\tEl tamaño del árbol es de ", longitud_datos, ' nodos', sep = '')
                 print('Hijo  #', id_hijo, "\tEl tamaño del camino es de ", len(self._soluciones_posibles[id_hijo].camino()), ' nodos', sep = '')
 
@@ -323,13 +331,13 @@ class ventana_modelo():                                                         
 
             nodo_elegido = self.elegir(nodos_conexiones, self._prob_heuristica)
 
-            if DEBUG_HIJOS:
+            if DEBUG_HIJOS == True:
                 print('Hijo  #', id_hijo, "\tIntentando añadir al camino el nodo ", nodo_elegido.nombre(), sep = '')
 
             valido = self._soluciones_posibles[id_hijo].anyadir(nodo_elegido)
 
             while not valido:
-                if DEBUG_HIJOS:
+                if DEBUG_HIJOS == True:
                     print('Hijo  #', id_hijo, "\tNo es posible", sep = '')
 
                 nodos_conexiones.remove(nodo_elegido)
@@ -337,7 +345,7 @@ class ventana_modelo():                                                         
                 if nodos_conexiones != []:
                     nodo_elegido = self.elegir(nodos_conexiones, self._prob_heuristica)
 
-                    if DEBUG_HIJOS:
+                    if DEBUG_HIJOS == True:
                         print('Hijo  #', id_hijo, "\tIntentando añadir al camino el nodo ", nodo_elegido.nombre(), sep = '')
 
                     valido = self._soluciones_posibles[id_hijo].anyadir(nodo_elegido)                                                   # Se añade un nodo siguiente en función del la probabilidad de emplear la heurística
@@ -353,9 +361,9 @@ class ventana_modelo():                                                         
         res = []
 
         for conexion in conexiones:
-            for id_elemento in range(len(elementos)):
-                if elementos[id_elemento].nombre() == conexion[0]:
-                    objeto_conexion = {'objeto': elementos[id_elemento], 'duracion': conexion[1]}
+            for elemento in elementos:
+                if elemento.nombre() == conexion[0]:
+                    objeto_conexion = {'objeto': elemento, 'duracion': conexion[1]}
 
                     break
 
@@ -369,9 +377,9 @@ class ventana_modelo():                                                         
         res = []
 
         for padre in padres:
-            for id_elemento in range(len(elementos)):
-                if elementos[id_elemento].nombre() == padre:
-                    objeto_padre = elementos[id_elemento]
+            for elemento in elementos:
+                if elemento.nombre() == padre:
+                    objeto_padre = elemento
 
                     break
 
@@ -407,7 +415,7 @@ class ventana_modelo():                                                         
 
     @staticmethod                                                                                                                       # Método estático
     def interpretar(grafo):                                                                                                             # Interpreta un grafo dado: extrae la información necesaria para su posterior uso
-        if DEBUG:
+        if DEBUG == True:
             print('Listando datos antes de ser almacenados en memoria...')
 
         elementos = []
@@ -430,7 +438,7 @@ class ventana_modelo():                                                         
         resultado = grafo.query(query)
 
         for fila in resultado:                                                                                                          # Para cada máquina...
-            if DEBUG:
+            if DEBUG == True:
                 print(fila.nombre, 'es una máquina con duración', fila.duracion)
 
             if sys.version_info[0] >= 3:
@@ -457,7 +465,7 @@ class ventana_modelo():                                                         
             subresultado = grafo.query(query % fila.nombre)
 
             for subfila in subresultado:                                                                                                # Recorriendo la lista de padres
-                if DEBUG:
+                if DEBUG == True:
                     print("\tPadre:", subfila.nombre_padre)
 
                 if sys.version_info[0] >= 3:
@@ -486,7 +494,7 @@ class ventana_modelo():                                                         
             subresultado = grafo.query(query % fila.nombre)
 
             for subfila in subresultado:                                                                                                # Recorriendo la lista de conexiones
-                if DEBUG:
+                if DEBUG == True:
                     print("\tConexión: ", subfila.nombre_siguiente, ', ', subfila.duracion, sep = '')
 
                 if sys.version_info[0] >= 3:
@@ -499,7 +507,7 @@ class ventana_modelo():                                                         
 
             elementos.append(elemento)                                                                                                  # Almacenando el Element elemento en la lista elementos -> Lista manejada
 
-        if DEBUG:
+        if DEBUG == True:
             print()
             print()
 
@@ -514,7 +522,7 @@ class ventana_modelo():                                                         
             if conexiones != []:
                 elemento.conexiones(ventana_modelo.convertir_conexiones_a_elementos(elementos, conexiones), True)
 
-        if DEBUG:
+        if DEBUG == True:
             print('Listando datos después de ser almacenados en memoria...')
 
             for elemento in elementos:
@@ -539,14 +547,16 @@ class ventana_modelo():                                                         
         try:
             grafo.parse(data = texto, format = 'n3')
 
-        except:
+        except BadSyntax:
             res = None
 
         else:
             res = grafo
 
         finally:
-            return res
+            pass
+
+        return res
 
 
     @staticmethod                                                                                                                       # Método estático
@@ -605,13 +615,13 @@ class ventana_modelo():                                                         
 
 
     @staticmethod                                                                                                                       # Método estáticovalidar
-    def validar_tiempo(cronograma, maquina, tiempo):
+    def validar_tiempo(cronograma, maquina, tiempo_inserccion):
         res = True
 
         tiempos = cronograma[maquina.id_elemento()]
 
-        for i in range(len(tiempos)):
-            if tiempos[i] <= tiempo and tiempos[i] + maquina.duracion() > tiempo:
+        for i, tiempo in enumerate(tiempos):
+            if tiempo <= tiempo_inserccion and tiempo + maquina.duracion() > tiempo_inserccion:
                 res = False
 
                 break
@@ -624,11 +634,13 @@ class ventana_modelo():                                                         
                     res = True
 
                 else:
-                    res = tiempos[i + 1] > tiempo or tiempos[i + 1] + maquina.duracion() <= tiempo
+                    res = tiempos[i + 1] > tiempo_inserccion or tiempos[i + 1] + maquina.duracion() <= tiempo_inserccion
 
                 finally:
-                    if res == False:
-                        break
+                    pass
+
+                if res == False:
+                    break
 
         return res
 
