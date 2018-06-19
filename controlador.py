@@ -67,6 +67,8 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                 res = False
 
             else:
+                self.limpiar('total')
+
                 texto_archivo = archivo.read()
 
                 self.modificado(False)
