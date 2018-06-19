@@ -129,6 +129,9 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
                 finally:
                     pass
+                
+        else:
+            res = False
 
         return res
 
