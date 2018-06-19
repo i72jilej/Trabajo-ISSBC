@@ -32,6 +32,9 @@ El campo a cubrir es la planificación. La tarea a realizar es de planificación
     - Arreglos de compatibilidad con Python 2.
     - Limpieza de código.
     - Mejoras de la calidad del código.
+- 1.1.2 -> 19/06/2018:
+	- Arreglo de fallo de no asignación de valor en caso de no elegir archivo.
+	- Limpieza pre-apertura de archivo.
 
 
 ## Agradecimientos, fuentes consultadas y otros créditos
