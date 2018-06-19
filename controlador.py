@@ -29,17 +29,17 @@ if sys.version_info[0] < 3:
 
 class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
     def __init__(self):                                                             # Constructor de la clase
-        vista.ventana_vista.__init__(self)  # Llamada a los métodos equivalentes de las clases padres
+        vista.ventana_vista.__init__(self)                                          # Llamada a los métodos equivalentes de las clases padres
         modelo.ventana_modelo.__init__(self)
 
-        self._modificado = False  # Inicialización de variables de clase
+        self._modificado = False                                                    # Inicialización de variables de clase
 
         self._soluciones = []
 
-        self.__num_soluciones = 0  # Usada para la condición de parada
+        self.__num_soluciones = 0                                                   # Usada para la condición de parada
 
 
-    def abrir(self):  # Acción de abrir
+    def abrir(self):                                                                # Acción de abrir
         respuesta = self.confirmar_modificado('cargar uno nuevo')
 
         if respuesta == vista.respuestas.diccionario[vista.respuestas.DESCARTAR]:
@@ -57,9 +57,9 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
 
     def apertura(self):                                                             # Procedimiento de apertura
-        nombre_archivo = vista.ventana_vista.apertura(self, 'abrir')  # Llamada al método equivalente de la clase vista
+        nombre_archivo = vista.ventana_vista.apertura(self, 'abrir')                # Llamada al método equivalente de la clase vista
 
-        if nombre_archivo != '':  # Comprobando si se ha elegido algún archivo
+        if nombre_archivo != '':                                                    # Comprobando si se ha elegido algún archivo
             try:                                                                    # Si se ha elegido un archivo
                 archivo = open(file = nombre_archivo, mode = 'r', encoding = 'utf-8')
 
@@ -80,7 +80,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
                     texto_archivo = ''                                              # Necesario para reutilizar la dichosa variable
 
-                    for dato in self._datos:  # Construyendo la descripción del dominio
+                    for dato in self._datos:                                        # Construyendo la descripción del dominio
                         if sys.version_info[0] >= 3:
                             texto_archivo += dato.nombre() + ' es una máquina con duración ' + str(dato.duracion()) + "\n"
 
@@ -103,7 +103,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
                         texto_archivo += "\n"
 
-                    if sys.version_info[0] >= 3:  # Llamada al método equivalente de la clase padre
+                    if sys.version_info[0] >= 3:                                    # Llamada al método equivalente de la clase padre
                         super().apertura('dominio', texto_archivo, nombre_archivo)
 
                     else:
@@ -112,7 +112,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                     res = True
 
                 else:
-                    if sys.version_info[0] >= 3:  # Llamada al método equivalente de la clase padre
+                    if sys.version_info[0] >= 3:                                    # Llamada al método equivalente de la clase padre
                         nombre_archivo = super().apertura('error')
 
                     self.limpiar('total')
@@ -131,19 +131,19 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
                 finally:
                     pass
-
+                
         else:
             res = False
 
         return res
 
 
-    def calcular(self):  # Realiza los cálculos necesarios
+    def calcular(self):                                                             # Realiza los cálculos necesarios
         try:
             self._datos
 
         except AttributeError:
-            vista.ventana_vista.calcular(self, 'error')  # Llamada al método equivalente de la clase vista
+            vista.ventana_vista.calcular(self, 'error')                             # Llamada al método equivalente de la clase vista
 
         else:
             if self._modificado == True:
@@ -203,8 +203,8 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
         vista.ventana_vista.calcular(self, 'solucion', texto)
 
 
-    def calculo(self):  # Acción de realizar los cálculos
-        modelo.ventana_modelo.calcular(self)  # Llamada al método equivalente de la clase vista
+    def calculo(self):                                                              # Acción de realizar los cálculos
+        modelo.ventana_modelo.calcular(self)                                        # Llamada al método equivalente de la clase vista
 
         texto = 'Se han generado ' + str(self._num_hijos) + " soluciones posibles\nDe ellas, se consideran candidatas:\n"
 
@@ -272,7 +272,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
             archivo = open(file = self._nombre_archivo, mode = 'w', encoding = 'utf-8')
 
         except IOError:
-            if sys.version_info[0] >= 3:  # Llamada al método equivalente de la clase padre
+            if sys.version_info[0] >= 3:                                            # Llamada al método equivalente de la clase padre
                 super().guardado()
 
             else:
@@ -293,7 +293,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
         return res
 
 
-    def guardar(self):  # Acción de guardar
+    def guardar(self):                                                              # Acción de guardar
         try:
             self._nombre_archivo
 
@@ -315,9 +315,9 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
         return res
 
 
-    def guardar_como(self):  # Acción de guardar cómo
+    def guardar_como(self):                                                         # Acción de guardar cómo
         if self._soluciones != []:
-            self._nombre_archivo = vista.ventana_vista.guardar_como(self, 'nombre')  # Llamada al método equivalente de la clase vista
+            self._nombre_archivo = vista.ventana_vista.guardar_como(self, 'nombre') # Llamada al método equivalente de la clase vista
 
             if self._nombre_archivo != '':
                 return self.guardado()
@@ -326,22 +326,22 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
                 return False
 
         else:
-            vista.ventana_vista.guardar_como(self, 'error')  # Llamada al método equivalente de la clase vista
+            vista.ventana_vista.guardar_como(self, 'error')                         # Llamada al método equivalente de la clase vista
 
             return False
 
 
-    def imprimir(self):  # Acción de imprimir
+    def imprimir(self):                                                             # Acción de imprimir
         if self._soluciones != []:
-            vista.ventana_vista.imprimir(self, 'imprimir')  # Llamada al método equivalente de la clase vista
+            vista.ventana_vista.imprimir(self, 'imprimir')                          # Llamada al método equivalente de la clase vista
 
         else:
-            vista.ventana_vista.imprimir(self, 'error')  # Llamada al método equivalente de la clase vista
+            vista.ventana_vista.imprimir(self, 'error')                             # Llamada al método equivalente de la clase vista
 
             return False
 
 
-    def limpiar(self, modo):  # Acción de limpiar
+    def limpiar(self, modo):                                                        # Acción de limpiar
         if modo == 'total':
             self._num_hijos = 1000
 
@@ -388,7 +388,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
         self.__num_soluciones = 0
 
 
-    def modificado(self, *args):  # Función "sobrecargada": modificador / observador de la variable self._modificado
+    def modificado(self, *args):                                                    # Función "sobrecargada": modificador / observador de la variable self._modificado
         if args != ():
             self._modificado = args[0]
 
@@ -398,7 +398,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
         return self._modificado
 
 
-    def nuevo(self):  # Acción de nuevo
+    def nuevo(self):                                                                # Acción de nuevo
         respuesta = self.confirmar_modificado('cargar un modelo nuevo')
 
         if respuesta == vista.respuestas.diccionario[vista.respuestas.DESCARTAR]:
@@ -416,7 +416,7 @@ class ventana_principal(modelo.ventana_modelo, vista.ventana_vista):
 
 
     def __del__(self):                                                              # Constructor de la clase
-        if sys.version_info[0] >= 3:  # Llamada al método equivalente de la clase padre
+        if sys.version_info[0] >= 3:                                                # Llamada al método equivalente de la clase padre
             super().__del__()
 
         else:
