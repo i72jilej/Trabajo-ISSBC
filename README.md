@@ -1,5 +1,5 @@
 # Trabajo planificación ISSBC
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5aa83923bd764a4a88409ab522830d75)](https://www.codacy.com/app/veltys/Trabajo-ISSBC?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Veltys/Trabajo-ISSBC&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/d795afbd2cee493486bb8aa11f0cc3e1)](https://www.codacy.com/gh/Veltys/ISSBC-Trabajo/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Veltys/ISSBC-Trabajo&amp;utm_campaign=Badge_Grade)
 
 
 ## Descripción
@@ -22,19 +22,23 @@ El campo a cubrir es la planificación. La tarea a realizar es de planificación
 
 
 ## Historial de versiones
-- 1.0.0 -> 30/05/2018:
-    - Implementación inicial de los sistemas y, en consecuencia, de la aplicación.
-- 1.0.1 -> 15/06/2018:
-    - Mejoras en el tratamiento de las cadenas en Python 2.
-- 1.1.0 -> 15/06/2018:
-    - Implementado finalmente el procedimiento para generar múltiples soluciones.
-- 1.1.1 -> 17/06/2018:
+- 1.1.3 ➡ 2022/12/18:
+	- Mejora en el formato de este documento.
+	- Fechas en el estándar ISO 8601.
+	- Actualizado el *badge* de Codacy.
+- 1.1.2 ➡ 2018/06/19:
+	- Arreglo de fallo de no asignación de valor en caso de no elegir archivo.
+	- Limpieza pre-apertura de archivo.
+- 1.1.1 ➡ 2018/06/17:
     - Arreglos de compatibilidad con Python 2.
     - Limpieza de código.
     - Mejoras de la calidad del código.
-- 1.1.2 -> 19/06/2018:
-	- Arreglo de fallo de no asignación de valor en caso de no elegir archivo.
-	- Limpieza pre-apertura de archivo.
+- 1.1.0 ➡ 2018/06/15:
+    - Implementado finalmente el procedimiento para generar múltiples soluciones.
+- 1.0.1 ➡ 2018/06/15:
+    - Mejoras en el tratamiento de las cadenas en Python 2.
+- 1.0.0 ➡ 2018/05/30:
+    - Implementación inicial de los sistemas y, en consecuencia, de la aplicación.
 
 
 ## Agradecimientos, fuentes consultadas y otros créditos
